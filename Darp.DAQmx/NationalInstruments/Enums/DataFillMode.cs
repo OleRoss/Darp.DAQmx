@@ -1,6 +1,6 @@
 ﻿namespace Darp.DAQmx.NationalInstruments.Enums;
 
-public enum DaqMxFillMode
+public enum DataFillMode
 {
     /// <summary>
     /// Group by channel (non-interleaved)

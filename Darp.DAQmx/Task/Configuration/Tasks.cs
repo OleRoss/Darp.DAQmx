@@ -51,7 +51,7 @@ public class DigitalInputTask : DaqMxTask<DigitalInputTask>
             .Max(x => x.PortWidth);
     }
 
-    public void ReadDigitalU8(int numSamplesPerChannel, DaqMxFillMode fillMode, Span<byte> dataBuffer, int timeout = 10)
+    public void ReadDigitalU8(int numSamplesPerChannel, DataFillMode fillMode, Span<byte> dataBuffer, int timeout = 10)
     {
         int requiredSpanSize = numSamplesPerChannel * LinesCount;
         if (dataBuffer.Length < requiredSpanSize)
@@ -66,7 +66,7 @@ public class DigitalInputTask : DaqMxTask<DigitalInputTask>
         if (actualNumSamplesPerChannel != numSamplesPerChannel)
             throw new DaqMxException("Could not read requested number of samples");
     }
-    public void ReadDigitalU16(int numSamplesPerChannel, DaqMxFillMode fillMode, Span<byte> dataBuffer, int timeout = 10)
+    public void ReadDigitalU16(int numSamplesPerChannel, DataFillMode fillMode, Span<byte> dataBuffer, int timeout = 10)
     {
         int requiredSpanSize = numSamplesPerChannel * LinesCount;
         if (dataBuffer.Length < requiredSpanSize)
@@ -81,7 +81,7 @@ public class DigitalInputTask : DaqMxTask<DigitalInputTask>
         if (actualNumSamplesPerChannel != numSamplesPerChannel)
             throw new DaqMxException("Could not read requested number of samples");
     }
-    public void ReadDigitalU32(int numSamplesPerChannel, DaqMxFillMode fillMode, Span<byte> dataBuffer, int timeout = 10)
+    public void ReadDigitalU32(int numSamplesPerChannel, DataFillMode fillMode, Span<byte> dataBuffer, int timeout = 10)
     {
         int requiredSpanSize = numSamplesPerChannel * LinesCount;
         if (dataBuffer.Length < requiredSpanSize)
@@ -102,13 +102,13 @@ public class DigitalInputTask : DaqMxTask<DigitalInputTask>
         switch (PortWidth)
         {
             case <= 8:
-                ReadDigitalU8(numSamplesPerChannel, DaqMxFillMode.GroupByScanNumber, dataBuffer, timeout);
+                ReadDigitalU8(numSamplesPerChannel, DataFillMode.GroupByScanNumber, dataBuffer, timeout);
                 break;
             case <= 16:
-                ReadDigitalU16(numSamplesPerChannel, DaqMxFillMode.GroupByScanNumber, dataBuffer, timeout);
+                ReadDigitalU16(numSamplesPerChannel, DataFillMode.GroupByScanNumber, dataBuffer, timeout);
                 break;
             default:
-                ReadDigitalU32(numSamplesPerChannel, DaqMxFillMode.GroupByScanNumber, dataBuffer, timeout);
+                ReadDigitalU32(numSamplesPerChannel, DataFillMode.GroupByScanNumber, dataBuffer, timeout);
                 break;
         }
         var array = new byte[numSamplesPerChannel][];
@@ -127,13 +127,13 @@ public class DigitalInputTask : DaqMxTask<DigitalInputTask>
         switch (PortWidth)
         {
             case <= 8:
-                ReadDigitalU8(numSamplesPerChannel, DaqMxFillMode.GroupByChannel, dataBuffer, timeout);
+                ReadDigitalU8(numSamplesPerChannel, DataFillMode.GroupByChannel, dataBuffer, timeout);
                 break;
             case <= 16:
-                ReadDigitalU16(numSamplesPerChannel, DaqMxFillMode.GroupByChannel, dataBuffer, timeout);
+                ReadDigitalU16(numSamplesPerChannel, DataFillMode.GroupByChannel, dataBuffer, timeout);
                 break;
             default:
-                ReadDigitalU32(numSamplesPerChannel, DaqMxFillMode.GroupByChannel, dataBuffer, timeout);
+                ReadDigitalU32(numSamplesPerChannel, DataFillMode.GroupByChannel, dataBuffer, timeout);
                 break;
         }
         var array = new bool[LinesCount][];
@@ -156,7 +156,7 @@ public class AnalogInputTask : DaqMxTask<AnalogInputTask>
     {
     }
 
-    public void ReadDoubles(int numSamplesPerChannel, DaqMxFillMode fillMode, Span<double> dataBuffer, int timeout = 10)
+    public void ReadDoubles(int numSamplesPerChannel, DataFillMode fillMode, Span<double> dataBuffer, int timeout = 10)
     {
         int requiredSpanSize = numSamplesPerChannel * ChannelCount;
         if (dataBuffer.Length < requiredSpanSize)
@@ -178,7 +178,7 @@ public class AnalogInputTask : DaqMxTask<AnalogInputTask>
     public IEnumerable<double[]> ReadDoublesPerScanNumber(int numSamplesPerChannel, int timeout = 10)
     {
         Span<double> dataBuffer = stackalloc double[numSamplesPerChannel * ChannelCount];
-        ReadDoubles(numSamplesPerChannel, DaqMxFillMode.GroupByScanNumber, dataBuffer, timeout);
+        ReadDoubles(numSamplesPerChannel, DataFillMode.GroupByScanNumber, dataBuffer, timeout);
         var array = new double[numSamplesPerChannel][];
         for (var i = 0; i < numSamplesPerChannel; i++)
         {
@@ -192,7 +192,7 @@ public class AnalogInputTask : DaqMxTask<AnalogInputTask>
     public IEnumerable<double[]> ReadDoublesByChannel(int numSamplesPerChannel, int timeout = 10)
     {
         Span<double> dataBuffer = stackalloc double[numSamplesPerChannel * ChannelCount];
-        ReadDoubles(numSamplesPerChannel, DaqMxFillMode.GroupByChannel, dataBuffer, timeout);
+        ReadDoubles(numSamplesPerChannel, DataFillMode.GroupByChannel, dataBuffer, timeout);
         var array = new double[ChannelCount][];
         for (var i = 0; i < ChannelCount; i++)
         {

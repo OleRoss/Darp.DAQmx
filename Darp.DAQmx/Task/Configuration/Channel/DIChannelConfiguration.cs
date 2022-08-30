@@ -1,6 +1,7 @@
 ﻿using System;
 using Darp.DAQmx.NationalInstruments.Enums;
 using Darp.DAQmx.NationalInstruments.Functions;
+using Darp.DAQmx.Task.Channel;
 
 namespace Darp.DAQmx.Task.Configuration.Channel;
 
@@ -18,7 +19,7 @@ public record DIChannelLinesConfiguration(string ChannelName,
     int PortWidth) : IDIChannelConfiguration
 {
     public string ChannelName { get; set; } = ChannelName;
-    public DaqMxLines LineGrouping { get; init; } = DaqMxLines.ChannelsPerLine;
+    public ChannelLineMode LineGrouping { get; init; } = ChannelLineMode.ChannelsPerLine;
     int IChannelConfiguration.Create(IntPtr taskHandle) => Interop.DAQmxCreateDIChan(
         taskHandle,
         PhysicalChannel,
@@ -41,7 +42,7 @@ public record DIChannelPortLinesConfiguration(string ChannelName,
     string DeviceIdentifier,
     int FirstLine,
     int LastLine,
-    DaqMxLines LineGrouping) : IDIChannelConfiguration
+    ChannelLineMode LineGrouping) : IDIChannelConfiguration
 {
     public string ChannelName { get; set; } = ChannelName;
     int IChannelConfiguration.Create(IntPtr taskHandle) => Interop.DAQmxCreateDIChan(

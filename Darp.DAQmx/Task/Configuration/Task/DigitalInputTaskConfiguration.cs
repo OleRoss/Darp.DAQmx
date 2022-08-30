@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Darp.DAQmx.NationalInstruments.Enums;
+using Darp.DAQmx.Task.Channel;
 using Darp.DAQmx.Task.Configuration.Channel;
 
 namespace Darp.DAQmx.Task.Configuration.Task;
@@ -49,7 +50,7 @@ public static class DigitalInputTaskConfigurationExtensions
             config.Device.Identifier,
             0,
             channel.Width,
-            DaqMxLines.ChannelsPerLine
+            ChannelLineMode.ChannelsPerLine
         );
         configuration?.Invoke(channelConfiguration);
         config.ChannelConfigurations.Add(channelConfiguration);
@@ -57,7 +58,7 @@ public static class DigitalInputTaskConfigurationExtensions
         return new DigitalInputTaskConfiguration(config.TaskName, config.Device, config.ChannelConfigurations);
     }
 
-    public static DigitalInputTaskConfiguration WithDIChannel<TConfiguration>(
+    public static DigitalInputTaskConfiguration WithDILines<TConfiguration>(
         this TConfiguration config,
         int firstLine,
         int lastLine,
@@ -92,7 +93,7 @@ public static class DigitalInputTaskConfigurationExtensions
             config.Device.Identifier,
             firstLine,
             lastLine,
-            DaqMxLines.ChannelsPerLine
+            ChannelLineMode.ChannelsPerLine
         );
         configuration?.Invoke(channelConfiguration);
         config.ChannelConfigurations.Add(channelConfiguration);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Darp.DAQmx.NationalInstruments.Enums;
+using Darp.DAQmx.Task.Channel;
 using Darp.DAQmx.Task.Configuration.Channel;
 
 namespace Darp.DAQmx.Task.Configuration.Task;
@@ -41,12 +42,18 @@ public static class AnalogInputTaskConfigurationExtensions
     /// <para>
     /// Most measurement devices are designed for measuring, or reading, voltage. Two common voltage measurements are DC and AC.
     /// <list type="bullet">
-    /// <item>
-    /// DC voltages are useful for measuring phenomena that change slowly with time, such as temperature, pressure, or strain.
-    /// </item>
-    /// <item>
-    /// AC voltages, on the other hand, are waveforms that constantly increase, decrease, and reverse polarity. Most powerlines deliver AC voltage.
-    /// </item>
+    /// <item> DC voltages are useful for measuring phenomena that change slowly with time, such as temperature, pressure, or strain. </item>
+    /// <item> AC voltages, on the other hand, are waveforms that constantly increase, decrease, and reverse polarity. Most powerlines deliver AC voltage. </item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// Default configuration
+    /// <list type="table">
+    /// <item> <term><see cref="AIVoltageChannelConfiguration.ChannelName"/>:</term><description>Random guid string</description> </item>
+    /// <item> <term><see cref="AIVoltageChannelConfiguration.MinVoltage"/> [V]:</term><description>-10</description> </item>
+    /// <item> <term><see cref="AIVoltageChannelConfiguration.MaxVoltage"/> [V]:</term><description>10</description> </item>
+    /// <item> <term><see cref="AIVoltageChannelConfiguration.TerminalConfiguration"/>:</term><description><see cref="InputTerminalConfiguration.Differential"/></description> </item>
+    /// <item> <term><see cref="AIVoltageChannelConfiguration.Unit"/>:</term><description><see cref="DaqMxUnit.Volts"/></description> </item>
     /// </list>
     /// </para>
     /// </summary>
@@ -64,7 +71,7 @@ public static class AnalogInputTaskConfigurationExtensions
             Guid.NewGuid().ToString(),
             channel,
             config.Device.Identifier,
-            DaqMxInputTerminalConfiguration.Differential,
+            InputTerminalConfiguration.Differential,
             -10,
             10,
             DaqMxUnit.Volts
