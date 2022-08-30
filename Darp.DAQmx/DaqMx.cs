@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Darp.DAQmx.NationalInstruments.Functions;
-using Darp.DAQmx.Task.Configuration;
-using Darp.DAQmx.Task.Configuration.Channel;
-using Darp.DAQmx.Task.Configuration.Task;
+using Darp.DAQmx.Task.Common;
+using Darp.DAQmx.Task.Common.Configuration;
 
 namespace Darp.DAQmx;
 
@@ -12,7 +11,7 @@ public static class DaqMx
 {
     public static TaskConfiguration CreateTaskFromDevice(string deviceIdentifier) => new(
         Guid.NewGuid().ToString(),
-        new Device(deviceIdentifier),
+        new Device.Device(deviceIdentifier),
         new List<IChannelConfiguration>()
     );
 
