@@ -1,9 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>.net6.0</TargetFramework>
+        <TargetFrameworks>.netstandard2.1;net6.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>nullable</WarningsAsErrors>
+        <LangVersion>10</LangVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+        <DefineConstants>_WINDOWS</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Toolkit.HighPerformance" Version="7.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Channel\CounterInput" />
+      <Folder Include="Channel\DigitalInput" />
+      <Folder Include="Channel\DigitalOutput" />
+      <Folder Include="Reader" />
+      <Folder Include="Timing" />
+    </ItemGroup>
 
 </Project>

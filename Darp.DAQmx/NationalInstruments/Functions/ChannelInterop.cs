@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Darp.DAQmx.Channel.AnalogInput;
 
 namespace Darp.DAQmx.NationalInstruments.Functions;
 
@@ -7,9 +8,8 @@ internal partial class Interop
 {
     /// int32 __CFUNC     DAQmxCreateAIVoltageChan       (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[], int32 terminalConfig, float64 minVal, float64 maxVal, int32 units, const char customScaleName[]);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxCreateAIVoltageChan(IntPtr taskHandle, string physicalChannel,
-        string nameToAssignToChannel, int terminalConfig, double minVal, double maxVal, int units,
-        string customScaleName);
+    internal static extern int DAQmxCreateAIVoltageChan(IntPtr taskHandle, string physicalChannel, string nameToAssignToChannel,
+        AITerminalConfiguration terminalConfig, double minVal, double maxVal, AIVoltageUnits units, string customScaleName);
 
     /// int32 __CFUNC     DAQmxCreateDIChan              (TaskHandle taskHandle, const char lines[], const char nameToAssignToLines[], int32 lineGrouping);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
