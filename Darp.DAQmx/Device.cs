@@ -50,6 +50,8 @@ public class Device
     public DeviceDigitalOutputs DigitalOutputs { get; }
     public DeviceCounterInputs CounterInputs { get; }
     public DeviceCounterOutputs CounterOutputs { get; }
+
+    public static implicit operator string(Device device) => device.DeviceName;
 }
 
 public class DeviceAnalogInputs

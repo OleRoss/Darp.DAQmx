@@ -18,9 +18,8 @@
 
     <ItemGroup>
       <Folder Include="Channel\CounterInput" />
-      <Folder Include="Channel\DigitalInput" />
       <Folder Include="Channel\DigitalOutput" />
-      <Folder Include="Reader" />
+      <Folder Include="NationalInstruments\Constants" />
       <Folder Include="Timing" />
     </ItemGroup>
 

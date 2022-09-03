@@ -1,8 +1,10 @@
 ﻿using Darp.DAQmx;
 using Darp.DAQmx.Channel;
 using Darp.DAQmx.Channel.AnalogInput;
-using Darp.DAQmx.Channel.AnalogOutput;
+using Darp.DAQmx.Channel.DigitalInput;
+using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;
+using Microsoft.Toolkit.HighPerformance;
 
 Console.WriteLine("Hello, World!");
 
@@ -25,25 +27,27 @@ Console.WriteLine("Hello, World!");
 */
 
 IReadOnlyList<Device> devices = DaqMx.GetDevices();
-var analogTask = new AnalogInputTask();
+Device deviceOne = devices
+    .First(x => x.ProductType is "USB-6210");
+AnalogInputTask analogTask = new AnalogInputTask()
+    .Channels.AddVoltageChannel(deviceOne, 0)
+    .Channels.AddVoltageChannel(deviceOne, 1)
+    .Channels.AddVoltageChannel(deviceOne, 2)
+    .Channels.AddVoltageChannel(deviceOne, 3);
 
-try
-{
-    analogTask
-        .Channels.AddVoltageChannel("Dev3", 0)
-        .Channels.AddVoltageChannel("Dev3", 1)
-        .Channels.AddVoltageChannel("Dev3", 2)
-        .Channels.AddVoltageChannel("Dev3", 3);
-}
-catch (Exception e)
-{
-    Console.WriteLine(e);
-}
+DigitalInputTask digitalTask = new DigitalInputTask()
+    .Channels.AddChannel(deviceOne, 0, 1)
+    .Channels.AddChannel(deviceOne, 0, 2, 3);
 
-MultiChannelReader<AnalogInputTask, IAnalogInputChannel> singleChannelReader = analogTask.GetReader();
-var doubleArray = new double[100];
-singleChannelReader.ReadAnalogF64(2, doubleArray);
-Console.WriteLine(string.Join('\n', doubleArray.Select(x => string.Join(',', x))));
+var aiMultiReader = analogTask.Channels.GetMultiReader();
+var doubleArray = new double[10, 10];
+aiMultiReader.ReadDoublesByScanNumber(7, doubleArray);
+for (var i = 0; i < doubleArray.AsSpan2D().Height; i++)
+    Console.WriteLine(string.Join(',', doubleArray.GetRow(i).ToArray()));
+
+var diMultiArray = digitalTask.Channels.GetMultiReader();
+var byteArray = new byte[100];
+diMultiArray.ReadDigitalU8(7, byteArray, DIFillMode.GroupByChannel);
 
 // var channels = analogTask.Channels;
 // 

@@ -1,6 +1,8 @@
 ﻿using System;
-using Darp.DAQmx.NationalInstruments.Functions;
+using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;
+using static Darp.DAQmx.DaqMxException;
+using static Darp.DAQmx.NationalInstruments.Functions.Interop;
 
 namespace Darp.DAQmx.Channel.AnalogInput;
 
@@ -20,7 +22,7 @@ public class AIVoltageChannel : IAnalogInputChannel
     {
         _taskHandle = taskHandle;
         PhysicalChannel = $"{deviceIdentifier}/ai{analogInputId}";
-        DaqMxException.ThrowIfFailed(Interop.DAQmxCreateAIVoltageChan(
+        ThrowIfFailed(DAQmxCreateAIVoltageChan(
             taskHandle,
             PhysicalChannel,
             nameToAssignToChannel,
@@ -31,48 +33,41 @@ public class AIVoltageChannel : IAnalogInputChannel
             customScaleName));
     }
 
-    public AITerminalConfiguration TerminalConfiguration => DaqMxException.ThrowIfFailedOrReturn(
-        Interop.DAQmxGetPhysicalChanAITermCfgs(PhysicalChannel, out int terminalConfig), (AITerminalConfiguration)terminalConfig);
+    public AITerminalConfiguration TerminalConfiguration => ThrowIfFailedOrReturn(DAQmxGetPhysicalChanAITermCfgs(
+        PhysicalChannel, out int terminalConfig), (AITerminalConfiguration)terminalConfig);
 
     public double MinValue
     {
-        get => DaqMxException.ThrowIfFailedOrReturn(Interop.DAQmxGetAIMin(_taskHandle, PhysicalChannel, out double minValue), minValue);
-        set => DaqMxException.ThrowIfFailed(Interop.DAQmxSetAIMin(_taskHandle, PhysicalChannel, value));
+        get => ThrowIfFailedOrReturn(DAQmxGetAIMin(_taskHandle, PhysicalChannel, out double minValue), minValue);
+        set => ThrowIfFailed(DAQmxSetAIMin(_taskHandle, PhysicalChannel, value));
     }
-    public void ResetMinValue() => DaqMxException.ThrowIfFailed(Interop.DAQmxResetAIMin(_taskHandle, PhysicalChannel));
+    public void ResetMinValue() => ThrowIfFailed(DAQmxResetAIMin(_taskHandle, PhysicalChannel));
     public double MaxValue
     {
-        get => DaqMxException.ThrowIfFailedOrReturn(Interop.DAQmxGetAIMax(_taskHandle, PhysicalChannel, out double maxVoltage), maxVoltage);
-        set => DaqMxException.ThrowIfFailed(Interop.DAQmxSetAIMax(_taskHandle, PhysicalChannel, value));
+        get => ThrowIfFailedOrReturn(DAQmxGetAIMax(_taskHandle, PhysicalChannel, out double maxVoltage), maxVoltage);
+        set => ThrowIfFailed(DAQmxSetAIMax(_taskHandle, PhysicalChannel, value));
     }
-    public void ResetMaxValue() => DaqMxException.ThrowIfFailed(Interop.DAQmxResetAIMax(_taskHandle, PhysicalChannel));
+    public void ResetMaxValue() => ThrowIfFailed(DAQmxResetAIMax(_taskHandle, PhysicalChannel));
 
     public AIVoltageUnits Units
     {
-        get => DaqMxException.ThrowIfFailedOrReturn(Interop.DAQmxGetAIVoltageUnits(_taskHandle, PhysicalChannel, out int units), (AIVoltageUnits)units);
-        set => DaqMxException.ThrowIfFailed(Interop.DAQmxSetAIVoltageUnits(_taskHandle, PhysicalChannel, (int)value));
+        get => ThrowIfFailedOrReturn(DAQmxGetAIVoltageUnits(_taskHandle, PhysicalChannel, out int units), (AIVoltageUnits)units);
+        set => ThrowIfFailed(DAQmxSetAIVoltageUnits(_taskHandle, PhysicalChannel, (int)value));
     }
-    public void ResetUnits() => DaqMxException.ThrowIfFailed(Interop.DAQmxResetAIVoltageUnits(_taskHandle, PhysicalChannel));
+    public void ResetUnits() => ThrowIfFailed(DAQmxResetAIVoltageUnits(_taskHandle, PhysicalChannel));
 
+    public string CustomScaleName => ThrowIfFailedOrReturnString((in byte pointer, uint length) =>
+        DAQmxGetAICustomScaleName(_taskHandle, PhysicalChannel, pointer, length));
 
-    public string CustomScaleName
-    {
-        get {
-            var buffer = new char[128];
-            return DaqMxException.ThrowIfFailedOrReturn(
-                Interop.DAQmxGetAICustomScaleName(_taskHandle, PhysicalChannel, buffer, (uint)buffer.Length),
-                new string(buffer));
-        }
-    }
     public void SetCustomScale(string customScaleName)
     {
-        DaqMxException.ThrowIfFailed(Interop.DAQmxSetAIVoltageUnits(_taskHandle, PhysicalChannel, (int)AIVoltageUnits.FromCustomScale));
-        DaqMxException.ThrowIfFailed(Interop.DAQmxSetAICustomScaleName(_taskHandle, PhysicalChannel, customScaleName.ToCharArray()));
+        ThrowIfFailed(DAQmxSetAIVoltageUnits(_taskHandle, PhysicalChannel, (int)AIVoltageUnits.FromCustomScale));
+        ThrowIfFailed(DAQmxSetAICustomScaleName(_taskHandle, PhysicalChannel, customScaleName.ToCharArray()));
     }
     public void ResetCustomScale()
     {
-        DaqMxException.ThrowIfFailed(Interop.DAQmxResetAIVoltageUnits(_taskHandle, PhysicalChannel));
-        DaqMxException.ThrowIfFailed(Interop.DAQmxResetAICustomScaleName(_taskHandle, PhysicalChannel));
+        ThrowIfFailed(DAQmxResetAIVoltageUnits(_taskHandle, PhysicalChannel));
+        ThrowIfFailed(DAQmxResetAICustomScaleName(_taskHandle, PhysicalChannel));
     }
 
 }
@@ -109,4 +104,10 @@ public static class AIVoltageChannelExtensions
         channelCollection.Add(channel);
         return channelCollection.Task;
     }
+
+    public static SingleChannelReader<AnalogInputTask, IAnalogInputChannel> GetSingleReader(
+        this ChannelCollection<AnalogInputTask, IAnalogInputChannel> channel) => new(channel.Task);
+    public static MultiChannelReader<AnalogInputTask, IAnalogInputChannel> GetMultiReader(
+        this ChannelCollection<AnalogInputTask, IAnalogInputChannel> channel) => new(channel.Task);
+
 }
