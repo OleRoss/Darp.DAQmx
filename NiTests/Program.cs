@@ -1,32 +1,26 @@
-﻿using Darp.DAQmx;
-using Darp.DAQmx.Channel;
-using Darp.DAQmx.Channel.AnalogInput;
-using Darp.DAQmx.Channel.CounterInput;
-using Darp.DAQmx.Channel.DigitalInput;
-using Darp.DAQmx.Task;
-using Microsoft.Toolkit.HighPerformance;
+﻿using System.IO.Ports;
+using Darp.Smc;
 
 Console.WriteLine("Hello, World!");
 
 
-
-// AnalogInputTask : InputTask<IAnalogChannel>
-// IInputTask : ITask
-// Device device = Device.Find("Dev1");
-
-/*
+using var serialPort = new SerialPort
 {
-    Channels: [
-        Voltage: {
-            PhysicalChannel: "Dev1/ao1",
-            MinVoltage: -10,
-            MaxVoltage: 10
-        }
-    ]
-}
-*/
+    PortName = "COM7",
+    DtrEnable = true,
+    BaudRate = 115200
+};
+serialPort.Open();
+await serialPort.WaitUntilInitializedAsync();
 
-IReadOnlyList<Device> devices = DaqMx.GetDevices();
+Console.WriteLine(await serialPort.GetStateAsync());
+Console.WriteLine(await serialPort.GetStateAndTempAsync());
+Console.WriteLine(await serialPort.GetBme280DataAsync());
+await serialPort.StartSamplingAsync();
+serialPort.SubscribeToSamples(Console.WriteLine);
+await Task.Delay(1000);
+await serialPort.StopSamplingAsync();
+/*IReadOnlyList<Device> devices = DaqMx.GetDevices();
 Device deviceOne = devices
     .First(x => x.ProductType is "USB-6210");
 AnalogInputTask analogTask = new AnalogInputTask()
@@ -56,26 +50,7 @@ CounterInputTask counterTask = new CounterInputTask()
 var ciSingleReader = counterTask.Channels.GetSingleReader();
 ciSingleReader.ReadScalar(out double doubleValue);
 Console.WriteLine(doubleValue);
-
-
-// var channels = analogTask.Channels;
-// 
-// Span<double> doubleSpan = stackalloc double[100];
-// Span2D<double> doubles = Span2D<double>.DangerousCreate(ref doubleSpan[0], 10, 10, 0);
-// 
-// using DigitalInputTask digitalTask = DaqMx.CreateTaskFromDevice("Dev1")
-//     .WithDIChannel(Usb6001.P0, 0, 2)
-//     .CreateTask();
-// 
-// using CounterInputTask counterTask = DaqMx.CreateTaskFromDevice("Dev1")
-//     .WithCountEdges(Usb6001.PFI0)
-//     .CreateTask();
-// 
-// IEnumerable<double[]> analogRows = analogTask.ReadDoublesByChannel(3);
-// Console.WriteLine(string.Join('\n', analogRows.Select(x => string.Join(",", x))));
-// 
-// IEnumerable<bool[]> digitalRows = digitalTask.ReadBitsByChannel(3);
-// Console.WriteLine(string.Join('\n', digitalRows.Select(x => string.Join(",", x))));
+*/
 
 Console.WriteLine("Done!");
 

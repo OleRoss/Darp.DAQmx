@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="System.IO.Ports" Version="6.0.0" />
+    </ItemGroup>
+</Project>
