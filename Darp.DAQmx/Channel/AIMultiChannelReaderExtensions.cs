@@ -51,7 +51,7 @@ public static class AIMultiChannelReaderExtensions
         double timeout = 10) =>
         reader.Read(Interop.DAQmxReadAnalogF64, numSamplesPerChannel, dataBuffer, fillMode, timeout);
 
-    public static void ReadDoublesByScanNumber(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadByScanNumber(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
         int numSamplesPerChannel,
         in Span2D<double> dataBuffer,
         double timeout = 10)
@@ -68,7 +68,7 @@ public static class AIMultiChannelReaderExtensions
             buffer[(i * reader.ChannelCount)..((i + 1) * reader.ChannelCount)].CopyTo(dataBuffer.GetRowSpan(i));
     }
 
-    public static void ReadDoublesByChannel(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadByChannel(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
         int numSamplesPerChannel,
         in Span2D<double> dataBuffer,
         int timeout = 10

@@ -1,5 +1,4 @@
 ﻿using System;
-using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;
 using static Darp.DAQmx.DaqMxException;
 using static Darp.DAQmx.NationalInstruments.Functions.Interop;
@@ -109,9 +108,4 @@ public static class AIVoltageChannelExtensions
         channelCollection.Add(channel);
         return channelCollection.Task;
     }
-
-    public static SingleChannelReader<AnalogInputTask, IAnalogInputChannel> GetSingleReader(
-        this ChannelCollection<AnalogInputTask, IAnalogInputChannel> channel) => new(channel.Task);
-    public static MultiChannelReader<AnalogInputTask, IAnalogInputChannel> GetMultiReader(
-        this ChannelCollection<AnalogInputTask, IAnalogInputChannel> channel) => new(channel.Task);
 }

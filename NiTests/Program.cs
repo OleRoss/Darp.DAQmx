@@ -1,6 +1,7 @@
 ﻿using Darp.DAQmx;
 using Darp.DAQmx.Channel;
 using Darp.DAQmx.Channel.AnalogInput;
+using Darp.DAQmx.Channel.CounterInput;
 using Darp.DAQmx.Channel.CounterOutput;
 using Darp.DAQmx.Channel.DigitalInput;
 using Darp.DAQmx.Reader;
@@ -36,21 +37,29 @@ AnalogInputTask analogTask = new AnalogInputTask()
     .Channels.AddVoltageChannel(deviceOne, 2)
     .Channels.AddVoltageChannel(deviceOne, 3);
 
-DigitalInputTask digitalTask = new DigitalInputTask()
-    .Channels.AddChannel(deviceOne, 0, 1)
-    .Channels.AddChannel(deviceOne, 0, 0);
-
 var aiMultiReader = analogTask.Channels.GetMultiReader();
-Span2D<double> doubleArray = new double[10, 10];
-aiMultiReader.ReadDoublesByScanNumber(7, doubleArray);
+Span2D<double> doubleArray = new double[4, 5];
+aiMultiReader.ReadByChannel(3, doubleArray);
 for (var i = 0; i < doubleArray.Height; i++)
     Console.WriteLine(string.Join(',', doubleArray.GetRow(i).ToArray()));
 
+DigitalInputTask digitalTask = new DigitalInputTask()
+    .Channels.AddChannel(deviceOne, 0, 1, 3);
+
 var diMultiArray = digitalTask.Channels.GetMultiReader();
-Span2D<bool> byteArray = new bool[7, 4];
+Span2D<bool> byteArray = new bool[5, 3];
 diMultiArray.ReadByScanNumber(4, byteArray);
 for (var i = 0; i < byteArray.Height; i++)
     Console.WriteLine(string.Join(',', byteArray.GetRow(i).ToArray()));
+
+CounterInputTask counterTask = new CounterInputTask()
+    .Channels.AddCountEdgesChannel(deviceOne, 0);
+
+var ciSingleReader = counterTask.Channels.GetSingleReader();
+ciSingleReader.Read(out double doubleValue);
+Console.WriteLine(doubleValue);
+
+
 // var channels = analogTask.Channels;
 // 
 // Span<double> doubleSpan = stackalloc double[100];

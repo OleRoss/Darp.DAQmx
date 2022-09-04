@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Darp.DAQmx.Channel.AnalogInput;
+using Darp.DAQmx.Channel.CounterInput;
 using Darp.DAQmx.Channel.DigitalInput;
 
 namespace Darp.DAQmx.NationalInstruments.Functions;
@@ -92,7 +93,7 @@ internal partial class Interop
 
     /// int32 __CFUNC     DAQmxCreateCICountEdgesChan    (TaskHandle taskHandle, const char counter[], const char nameToAssignToChannel[], int32 edge, uInt32 initialCount, int32 countDirection);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxCreateCICountEdgesChan(IntPtr taskHandle, string counter, string nameToAssignToChannel, int edge, uint initialCount, int countDirection);
+    internal static extern int DAQmxCreateCICountEdgesChan(IntPtr taskHandle, string counter, string nameToAssignToChannel, CIActiveEdge edge, uint initialCount, CICountDirection countDirection);
 
     // int32 __CFUNC     DAQmxCreateCIDutyCycleChan     (TaskHandle taskHandle, const char counter[], const char nameToAssignToChannel[], float64 minFreq, float64 maxFreq, int32 edge, const char customScaleName[]);
     // int32 __CFUNC     DAQmxCreateCIPulseWidthChan    (TaskHandle taskHandle, const char counter[], const char nameToAssignToChannel[], float64 minVal, float64 maxVal, int32 units, int32 startingEdge, const char customScaleName[]);

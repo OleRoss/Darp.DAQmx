@@ -17,7 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Channel\CounterInput" />
       <Folder Include="Channel\DigitalOutput" />
       <Folder Include="NationalInstruments\Constants" />
       <Folder Include="Timing" />
