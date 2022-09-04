@@ -690,4 +690,163 @@ internal static partial class Interop
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxRegisterSignalEvent(IntPtr task, int signalID, uint options, DAQmxSignalEventCallbackPtr callbackFunction, IntPtr callbackData);
 
+        //*** Set/Get functions for DAQmx_DI_InvertLines ***
+    /// int32 __CFUNC DAQmxGetDIInvertLines(TaskHandle taskHandle, const char channel[], bool32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIInvertLines(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDIInvertLines(TaskHandle taskHandle, const char channel[], bool32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIInvertLines(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDIInvertLines(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIInvertLines(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_NumLines ***
+    /// int32 __CFUNC DAQmxGetDINumLines(TaskHandle taskHandle, const char channel[], uInt32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDINumLines(IntPtr taskHandle, string channel, out uint data);
+    //*** Set/Get functions for DAQmx_DI_DigFltr_Enable ***
+    /// int32 __CFUNC DAQmxGetDIDigFltrEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIDigFltrEnable(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDIDigFltrEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIDigFltrEnable(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDIDigFltrEnable(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIDigFltrEnable(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_DigFltr_MinPulseWidth ***
+    /// int32 __CFUNC DAQmxGetDIDigFltrMinPulseWidth(TaskHandle taskHandle, const char channel[], float64 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIDigFltrMinPulseWidth(IntPtr taskHandle, string channel, out double data);
+    /// int32 __CFUNC DAQmxSetDIDigFltrMinPulseWidth(TaskHandle taskHandle, const char channel[], float64 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIDigFltrMinPulseWidth(IntPtr taskHandle, string channel, double data);
+    /// int32 __CFUNC DAQmxResetDIDigFltrMinPulseWidth(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIDigFltrMinPulseWidth(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_DigFltr_EnableBusMode ***
+    /// int32 __CFUNC DAQmxGetDIDigFltrEnableBusMode(TaskHandle taskHandle, const char channel[], bool32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIDigFltrEnableBusMode(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDIDigFltrEnableBusMode(TaskHandle taskHandle, const char channel[], bool32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIDigFltrEnableBusMode(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDIDigFltrEnableBusMode(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIDigFltrEnableBusMode(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_DigFltr_TimebaseSrc ***
+    /// int32 __CFUNC DAQmxGetDIDigFltrTimebaseSrc(TaskHandle taskHandle, const char channel[], char *data, uInt32 bufferSize);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIDigFltrTimebaseSrc(IntPtr taskHandle, string channel, in byte data, uint bufferSize);
+    /// int32 __CFUNC DAQmxSetDIDigFltrTimebaseSrc(TaskHandle taskHandle, const char channel[], const char *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIDigFltrTimebaseSrc(IntPtr taskHandle, string channel, string data);
+    /// int32 __CFUNC DAQmxResetDIDigFltrTimebaseSrc(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIDigFltrTimebaseSrc(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_DigFltr_TimebaseRate ***
+    /// int32 __CFUNC DAQmxGetDIDigFltrTimebaseRate(TaskHandle taskHandle, const char channel[], float64 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIDigFltrTimebaseRate(IntPtr taskHandle, string channel, out double data);
+    /// int32 __CFUNC DAQmxSetDIDigFltrTimebaseRate(TaskHandle taskHandle, const char channel[], float64 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIDigFltrTimebaseRate(IntPtr taskHandle, string channel, double data);
+    /// int32 __CFUNC DAQmxResetDIDigFltrTimebaseRate(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIDigFltrTimebaseRate(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_DigSync_Enable ***
+    /// int32 __CFUNC DAQmxGetDIDigSyncEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIDigSyncEnable(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDIDigSyncEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIDigSyncEnable(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDIDigSyncEnable(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIDigSyncEnable(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_Tristate ***
+    /// int32 __CFUNC DAQmxGetDITristate(TaskHandle taskHandle, const char channel[], bool32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDITristate(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDITristate(TaskHandle taskHandle, const char channel[], bool32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDITristate(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDITristate(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDITristate(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_LogicFamily ***
+    // Uses value set LogicFamily
+    /// int32 __CFUNC DAQmxGetDILogicFamily(TaskHandle taskHandle, const char channel[], int32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDILogicFamily(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDILogicFamily(TaskHandle taskHandle, const char channel[], int32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDILogicFamily(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDILogicFamily(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDILogicFamily(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_DataXferMech ***
+    // Uses value set DataTransferMechanism
+    /// int32 __CFUNC DAQmxGetDIDataXferMech(TaskHandle taskHandle, const char channel[], int32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIDataXferMech(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDIDataXferMech(TaskHandle taskHandle, const char channel[], int32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIDataXferMech(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDIDataXferMech(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIDataXferMech(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_DataXferReqCond ***
+    // Uses value set InputDataTransferCondition
+    /// int32 __CFUNC DAQmxGetDIDataXferReqCond(TaskHandle taskHandle, const char channel[], int32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIDataXferReqCond(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDIDataXferReqCond(TaskHandle taskHandle, const char channel[], int32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIDataXferReqCond(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDIDataXferReqCond(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIDataXferReqCond(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_UsbXferReqSize ***
+    /// int32 __CFUNC DAQmxGetDIUsbXferReqSize(TaskHandle taskHandle, const char channel[], uInt32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIUsbXferReqSize(IntPtr taskHandle, string channel, out uint data);
+    /// int32 __CFUNC DAQmxSetDIUsbXferReqSize(TaskHandle taskHandle, const char channel[], uInt32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIUsbXferReqSize(IntPtr taskHandle, string channel, uint data);
+    /// int32 __CFUNC DAQmxResetDIUsbXferReqSize(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIUsbXferReqSize(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_UsbXferReqCount ***
+    /// int32 __CFUNC DAQmxGetDIUsbXferReqCount(TaskHandle taskHandle, const char channel[], uInt32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIUsbXferReqCount(IntPtr taskHandle, string channel, out uint data);
+    /// int32 __CFUNC DAQmxSetDIUsbXferReqCount(TaskHandle taskHandle, const char channel[], uInt32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIUsbXferReqCount(IntPtr taskHandle, string channel, uint data);
+    /// int32 __CFUNC DAQmxResetDIUsbXferReqCount(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIUsbXferReqCount(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_MemMapEnable ***
+    /// int32 __CFUNC DAQmxGetDIMemMapEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIMemMapEnable(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDIMemMapEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIMemMapEnable(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDIMemMapEnable(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIMemMapEnable(IntPtr taskHandle, string channel);
+    //*** Set/Get functions for DAQmx_DI_AcquireOn ***
+    // Uses value set SampleClockActiveOrInactiveEdgeSelection
+    /// int32 __CFUNC DAQmxGetDIAcquireOn(TaskHandle taskHandle, const char channel[], int32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetDIAcquireOn(IntPtr taskHandle, string channel, out int data);
+    /// int32 __CFUNC DAQmxSetDIAcquireOn(TaskHandle taskHandle, const char channel[], int32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetDIAcquireOn(IntPtr taskHandle, string channel, int data);
+    /// int32 __CFUNC DAQmxResetDIAcquireOn(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetDIAcquireOn(IntPtr taskHandle, string channel);
+
 }

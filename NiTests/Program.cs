@@ -1,6 +1,7 @@
 ﻿using Darp.DAQmx;
 using Darp.DAQmx.Channel;
 using Darp.DAQmx.Channel.AnalogInput;
+using Darp.DAQmx.Channel.CounterOutput;
 using Darp.DAQmx.Channel.DigitalInput;
 using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;
@@ -37,18 +38,19 @@ AnalogInputTask analogTask = new AnalogInputTask()
 
 DigitalInputTask digitalTask = new DigitalInputTask()
     .Channels.AddChannel(deviceOne, 0, 1)
-    .Channels.AddChannel(deviceOne, 0, 2, 3);
+    .Channels.AddChannel(deviceOne, 0, 0);
 
 var aiMultiReader = analogTask.Channels.GetMultiReader();
-var doubleArray = new double[10, 10];
+Span2D<double> doubleArray = new double[10, 10];
 aiMultiReader.ReadDoublesByScanNumber(7, doubleArray);
-for (var i = 0; i < doubleArray.AsSpan2D().Height; i++)
+for (var i = 0; i < doubleArray.Height; i++)
     Console.WriteLine(string.Join(',', doubleArray.GetRow(i).ToArray()));
 
 var diMultiArray = digitalTask.Channels.GetMultiReader();
-var byteArray = new byte[100];
-diMultiArray.ReadDigitalU8(7, byteArray, DIFillMode.GroupByChannel);
-
+Span2D<bool> byteArray = new bool[7, 4];
+diMultiArray.ReadByScanNumber(4, byteArray);
+for (var i = 0; i < byteArray.Height; i++)
+    Console.WriteLine(string.Join(',', byteArray.GetRow(i).ToArray()));
 // var channels = analogTask.Channels;
 // 
 // Span<double> doubleSpan = stackalloc double[100];

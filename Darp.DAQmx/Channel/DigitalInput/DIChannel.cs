@@ -9,6 +9,14 @@ namespace Darp.DAQmx.Channel.DigitalInput;
 
 public class DIChannel : IDigitalInputChannel
 {
+    private readonly IntPtr _taskHandle;
+    public string PhysicalChannel { get; }
+    public int NumberOfVirtualChannels { get; }
+    public string Name { get; }
+    public int Port { get; }
+    public int FirstLine { get; }
+    public int LastLine { get; }
+
     public DIChannel(IntPtr taskHandle,
         string deviceIdentifier,
         int port,
@@ -17,6 +25,7 @@ public class DIChannel : IDigitalInputChannel
         string nameToAssignToChannel,
         ChannelLineGrouping lineGrouping)
     {
+        _taskHandle = taskHandle;
         Port = port;
         FirstLine = firstLine;
         LastLine = lastLine;
@@ -24,6 +33,10 @@ public class DIChannel : IDigitalInputChannel
             ? $"line{firstLine}"
             : $"line{firstLine}:{lastLine}";
         PhysicalChannel = $"{deviceIdentifier}/port{port}/{lineStr}";
+        NumberOfVirtualChannels = lineGrouping is ChannelLineGrouping.OneChannelForAllLines
+            ? 1
+            : lastLine - firstLine + 1;
+        Name = nameToAssignToChannel;
 
         ThrowIfFailed(DAQmxCreateDIChan(
             taskHandle,
@@ -32,10 +45,12 @@ public class DIChannel : IDigitalInputChannel
             lineGrouping));
     }
 
-    public string PhysicalChannel { get; }
-    public int Port { get; }
-    public int FirstLine { get; }
-    public int LastLine { get; }
+    public bool InvertLines
+    {
+        get => ThrowIfFailedOrReturn(DAQmxGetDIInvertLines(_taskHandle, Name, out int data), data == 1);
+        set => ThrowIfFailed(DAQmxSetDIInvertLines(_taskHandle, Name, value ? 1 : 0));
+    }
+    public void ResetInvertLines() => ThrowIfFailed(DAQmxResetDIInvertLines(_taskHandle, Name));
 }
 
 public static class DIChannelExtensions
@@ -61,7 +76,7 @@ public static class DIChannelExtensions
             firstLine,
             lastLine,
             Guid.NewGuid().ToString(),
-            ChannelLineGrouping.OneChannelForAllLines);
+            ChannelLineGrouping.OneChannelForEachLine);
         configuration?.Invoke(channel);
         channelCollection.Add(channel);
         return channelCollection.Task;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Darp.DAQmx.Channel;
 using Darp.DAQmx.Task;
 
@@ -12,13 +13,16 @@ public class SingleChannelReader<TTask, TChannel> : IReader<TTask, TChannel>
 {
     public SingleChannelReader(TTask task)
     {
-        if (task.Channels.Count != 1)
-            throw new ArgumentOutOfRangeException(nameof(task),
-                $"Expected task to have 1 channel, but found {task.Channels.Count}");
         Task = task;
         Channels = new ReadOnlyCollection<TChannel>(task.Channels);
+        ChannelCount = Channels.Sum(x => x.NumberOfVirtualChannels);
+
+        if (ChannelCount != 1)
+            throw new ArgumentOutOfRangeException(nameof(task),
+                $"Expected task to have 1 channel, but found {ChannelCount}");
     }
 
     public IReadOnlyList<TChannel> Channels { get; }
     public TTask Task { get; }
+    public int ChannelCount { get; }
 }

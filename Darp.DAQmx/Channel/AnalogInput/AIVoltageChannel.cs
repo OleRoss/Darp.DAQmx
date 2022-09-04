@@ -10,6 +10,9 @@ public class AIVoltageChannel : IAnalogInputChannel
 {
     private readonly IntPtr _taskHandle;
     public string PhysicalChannel { get; }
+    public int NumberOfVirtualChannels => 1;
+    public string Name { get; }
+
     public AIVoltageChannel(IntPtr taskHandle,
         string deviceIdentifier,
         int analogInputId,
@@ -22,6 +25,8 @@ public class AIVoltageChannel : IAnalogInputChannel
     {
         _taskHandle = taskHandle;
         PhysicalChannel = $"{deviceIdentifier}/ai{analogInputId}";
+        Name = nameToAssignToChannel;
+
         ThrowIfFailed(DAQmxCreateAIVoltageChan(
             taskHandle,
             PhysicalChannel,
@@ -109,5 +114,4 @@ public static class AIVoltageChannelExtensions
         this ChannelCollection<AnalogInputTask, IAnalogInputChannel> channel) => new(channel.Task);
     public static MultiChannelReader<AnalogInputTask, IAnalogInputChannel> GetMultiReader(
         this ChannelCollection<AnalogInputTask, IAnalogInputChannel> channel) => new(channel.Task);
-
 }
