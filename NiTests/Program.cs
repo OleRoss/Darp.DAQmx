@@ -2,9 +2,7 @@
 using Darp.DAQmx.Channel;
 using Darp.DAQmx.Channel.AnalogInput;
 using Darp.DAQmx.Channel.CounterInput;
-using Darp.DAQmx.Channel.CounterOutput;
 using Darp.DAQmx.Channel.DigitalInput;
-using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;
 using Microsoft.Toolkit.HighPerformance;
 
@@ -56,7 +54,7 @@ CounterInputTask counterTask = new CounterInputTask()
     .Channels.AddCountEdgesChannel(deviceOne, 0);
 
 var ciSingleReader = counterTask.Channels.GetSingleReader();
-ciSingleReader.Read(out double doubleValue);
+ciSingleReader.ReadScalar(out double doubleValue);
 Console.WriteLine(doubleValue);
 
 

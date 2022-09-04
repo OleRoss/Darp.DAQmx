@@ -40,12 +40,12 @@ public static class CICountEdgesChannelExtensions
 {
     public static CounterInputTask AddCountEdgesChannel(this ChannelCollection<CounterInputTask, ICounterInputChannel> channelCollection,
         string deviceIdentifier,
-        int analogInputId,
+        int counterId,
         Action<CICountEdgesChannel>? configuration = null)
     {
         var channel = new CICountEdgesChannel(channelCollection.Task.Handle,
             deviceIdentifier,
-            analogInputId,
+            counterId,
             Guid.NewGuid().ToString(),
             CIActiveEdge.Rising,
             0,

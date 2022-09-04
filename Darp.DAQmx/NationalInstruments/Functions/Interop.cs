@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using Darp.DAQmx.Channel.AnalogInput;
 using Darp.DAQmx.Channel.AnalogOutput;
+using Darp.DAQmx.Channel.CounterInput;
 using Darp.DAQmx.Channel.CounterOutput;
 using Darp.DAQmx.Channel.DigitalInput;
 using Darp.DAQmx.Task;
@@ -126,47 +127,47 @@ internal static partial class Interop
     /// int32 __CFUNC     DAQmxReadDigitalU32            (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadDigitalU32(IntPtr taskHandle, int numSampsPerChan, double timeout, DIFillMode fillMode, in uint readArray, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadDigitalScalarU32      (TaskHandle taskHandle, float64 timeout, uInt32 *value, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadDigitalScalarU32      (TaskHandle taskHandle, float64 timeout, uInt32 *value, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadDigitalScalarU32(IntPtr taskHandle, double timeout, out uint value, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadDigitalLines          (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, uInt8 readArray[], uInt32 arraySizeInBytes, int32 *sampsPerChanRead, int32 *numBytesPerSamp, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadDigitalLines          (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, uInt8 readArray[], uInt32 arraySizeInBytes, int32 *sampsPerChanRead, int32 *numBytesPerSamp, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadDigitalLines(IntPtr taskHandle, int numSampsPerChan, double timeout, int fillMode, in byte readArray, uint arraySizeInBytes, out int sampsPerChanRead, out int numBytesPerSamp, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCounterF64            (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCounterF64            (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCounterF64(IntPtr taskHandle, int numSampsPerChan, double timeout, in double readArray, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCounterU32            (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, uInt32 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCounterU32            (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, uInt32 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCounterU32(IntPtr taskHandle, int numSampsPerChan, double timeout, in uint readArray, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCounterF64Ex          (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxReadCounterF64Ex(IntPtr taskHandle, int numSampsPerChan, double timeout, int fillMode, in double readArray, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCounterU32Ex          (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxReadCounterU32Ex(IntPtr taskHandle, int numSampsPerChan, double timeout, int fillMode, in uint readArray, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCounterScalarF64      (TaskHandle taskHandle, float64 timeout, float64 *value, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCounterF64Ex          (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxReadCounterF64Ex(IntPtr taskHandle, int numSampsPerChan, double timeout, CIFillMode fillMode, in double readArray, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
+    /// int32 __CFUNC     DAQmxReadCounterU32Ex          (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxReadCounterU32Ex(IntPtr taskHandle, int numSampsPerChan, double timeout, CIFillMode fillMode, in uint readArray, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
+    /// int32 __CFUNC     DAQmxReadCounterScalarF64      (TaskHandle taskHandle, float64 timeout, float64 *value, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCounterScalarF64(IntPtr taskHandle, double timeout, out double value, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCounterScalarU32      (TaskHandle taskHandle, float64 timeout, uInt32 *value, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCounterScalarU32      (TaskHandle taskHandle, float64 timeout, uInt32 *value, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCounterScalarU32(IntPtr taskHandle, double timeout, out uint value, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCtrFreq               (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCtrFreq               (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCtrFreq(IntPtr taskHandle, int numSampsPerChan, double timeout, int interleaved, in double readArrayFrequency, in double readArrayDutyCycle, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCtrTime               (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 interleaved, float64 readArrayHighTime[], float64 readArrayLowTime[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCtrTime               (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 interleaved, float64 readArrayHighTime[], float64 readArrayLowTime[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCtrTime(IntPtr taskHandle, int numSampsPerChan, double timeout, int interleaved, in double readArrayHighTime, in double readArrayLowTime, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCtrTicks              (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 interleaved, uInt32 readArrayHighTicks[], uInt32 readArrayLowTicks[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCtrTicks              (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 interleaved, uInt32 readArrayHighTicks[], uInt32 readArrayLowTicks[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCtrTicks(IntPtr taskHandle, int numSampsPerChan, double timeout, int interleaved, in uint readArrayHighTicks, in uint readArrayLowTicks, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCtrFreqScalar         (TaskHandle taskHandle, float64 timeout, float64 *frequency, float64 *dutyCycle, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCtrFreqScalar         (TaskHandle taskHandle, float64 timeout, float64 *frequency, float64 *dutyCycle, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCtrFreqScalar(IntPtr taskHandle, double timeout, out double frequency, out double dutyCycle, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCtrTimeScalar         (TaskHandle taskHandle, float64 timeout, float64 *highTime, float64 *lowTime, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCtrTimeScalar         (TaskHandle taskHandle, float64 timeout, float64 *highTime, float64 *lowTime, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCtrTimeScalar(IntPtr taskHandle, double timeout, out double highTime, out double lowTime, IntPtr reserved);
-/// int32 __CFUNC     DAQmxReadCtrTicksScalar        (TaskHandle taskHandle, float64 timeout, uInt32 *highTicks, uInt32 *lowTicks, bool32 *reserved);
-[DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    /// int32 __CFUNC     DAQmxReadCtrTicksScalar        (TaskHandle taskHandle, float64 timeout, uInt32 *highTicks, uInt32 *lowTicks, bool32 *reserved);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxReadCtrTicksScalar(IntPtr taskHandle, double timeout, out uint highTicks, out uint lowTicks, IntPtr reserved);
 // /// int32 __CFUNC     DAQmxReadRaw                   (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, void *readArray, uInt32 arraySizeInBytes, int32 *sampsRead, int32 *numBytesPerSamp, bool32 *reserved);
 // [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
