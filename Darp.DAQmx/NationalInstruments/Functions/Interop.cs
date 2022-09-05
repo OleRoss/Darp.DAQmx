@@ -5,7 +5,10 @@ using Darp.DAQmx.Channel.AnalogOutput;
 using Darp.DAQmx.Channel.CounterInput;
 using Darp.DAQmx.Channel.CounterOutput;
 using Darp.DAQmx.Channel.DigitalInput;
+using Darp.DAQmx.Event;
 using Darp.DAQmx.Task;
+using Darp.DAQmx.Timing;
+
 // ReSharper disable InconsistentNaming
 
 // ReSharper disable CommentTypo
@@ -537,7 +540,7 @@ internal static partial class Interop
     /// // Uses value set AcquisitionType
     /// int32 __CFUNC DAQmxGetDevCOSampModes(const char device[], int32 *data, uInt32 arraySizeInElements)
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int D(string device, int[] data, uint arraySizeInElements);
+    internal static extern int DAQmxGetDevCOSampModes(string device, int[] data, uint arraySizeInElements);
     /// *** Set/Get functions for DAQmx_Dev_CO_TrigUsage ***
     /// // Uses bits from enum TriggerUsageTypeBits
     /// int32 __CFUNC DAQmxGetDevCOTrigUsage(const char device[], int32 *data)
@@ -675,7 +678,7 @@ internal static partial class Interop
     // internal static extern int DAQmxGetTaskAttribute(IntPtr taskHandle, int attribute, void *value, ...);
 
     /// typedef int32 (CVICALLBACK *DAQmxEveryNSamplesEventCallbackPtr)(TaskHandle taskHandle, int32 everyNsamplesEventType, uInt32 nSamples, void *callbackData);
-    internal delegate int DAQmxEveryNSamplesEventCallbackPtr(IntPtr taskHandle, int everyNsamplesEventType, uint nSamples, IntPtr callbackData);
+    internal delegate int DAQmxEveryNSamplesEventCallbackPtr(IntPtr taskHandle, EveryNSamplesEventType everyNsamplesEventType, uint nSamples, IntPtr callbackData);
     /// typedef int32 (CVICALLBACK *DAQmxDoneEventCallbackPtr)(TaskHandle taskHandle, int32 status, void *callbackData);
     internal delegate int DAQmxDoneEventCallbackPtr(IntPtr taskHandle, int status, IntPtr callbackData);
     /// typedef int32 (CVICALLBACK *DAQmxSignalEventCallbackPtr)(TaskHandle taskHandle, int32 signalID, void *callbackData);
@@ -683,7 +686,7 @@ internal static partial class Interop
 
     /// int32 __CFUNC     DAQmxRegisterEveryNSamplesEvent(TaskHandle task, int32 everyNsamplesEventType, uInt32 nSamples, uInt32 options, DAQmxEveryNSamplesEventCallbackPtr callbackFunction, void *callbackData);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxRegisterEveryNSamplesEvent(IntPtr task, int everyNsamplesEventType, uint nSamples, uint options, DAQmxEveryNSamplesEventCallbackPtr callbackFunction, IntPtr callbackData);
+    internal static extern int DAQmxRegisterEveryNSamplesEvent(IntPtr task, EveryNSamplesEventType everyNsamplesEventType, uint nSamples, uint options, DAQmxEveryNSamplesEventCallbackPtr callbackFunction, IntPtr callbackData);
     /// int32 __CFUNC     DAQmxRegisterDoneEvent         (TaskHandle task, uInt32 options, DAQmxDoneEventCallbackPtr callbackFunction, void *callbackData);i
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxRegisterDoneEvent(IntPtr task, uint options, DAQmxDoneEventCallbackPtr callbackFunction, IntPtr callbackData);
@@ -849,5 +852,60 @@ internal static partial class Interop
     /// int32 __CFUNC DAQmxResetDIAcquireOn(TaskHandle taskHandle, const char channel[]);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxResetDIAcquireOn(IntPtr taskHandle, string channel);
+
+
+/******************************************************/
+/***                    Timing                      ***/
+/******************************************************/
+
+
+// (Analog/Counter Timing)
+    /// int32 __CFUNC     DAQmxCfgSampClkTiming          (TaskHandle taskHandle, const char source[], float64 rate, int32 activeEdge, int32 sampleMode, uInt64 sampsPerChan);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxCfgSampClkTiming(IntPtr taskHandle, string source, double rate, SampleClockActiveEdge edge, SampleQuantityMode sampleMode, ulong samsPerChan);
+// (Digital Timing)
+    /// int32 __CFUNC     DAQmxCfgHandshakingTiming      (TaskHandle taskHandle, int32 sampleMode, uInt64 sampsPerChan);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxCfgHandshakingTiming(IntPtr taskHandle, SampleQuantityMode sampleMode, uint sampsPerChan);
+// (Burst Import Clock Timing)
+    /// int32 __CFUNC     DAQmxCfgBurstHandshakingTimingImportClock(TaskHandle taskHandle, int32 sampleMode, uInt64 sampsPerChan, float64 sampleClkRate, const char sampleClkSrc[], int32 sampleClkActiveEdge, int32 pauseWhen, int32 readyEventActiveLevel);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxCfgBurstHandshakingTimingImportClock(IntPtr taskHandle, SampleQuantityMode sampleMode, ulong samsPerChan, double sampleClkRate, string sampleClkSrc, SampleClockActiveEdge sampleClkActiveEdge, int readyEventActiveLevel);
+// (Burst Export Clock Timing)
+    /// int32 __CFUNC     DAQmxCfgBurstHandshakingTimingExportClock(TaskHandle taskHandle, int32 sampleMode, uInt64 sampsPerChan, float64 sampleClkRate, const char sampleClkOutpTerm[], int32 sampleClkPulsePolarity, int32 pauseWhen, int32 readyEventActiveLevel);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxCfgBurstHandshakingTimingExportClock(IntPtr taskHandle, SampleQuantityMode sampleMode, ulong samsPerChan, double sampleClkRate, string sampleClkOutpTerm, int sampleClkPulsePolarity, int pauseWhen, int readyEventActiveLevel);
+    /// int32 __CFUNC     DAQmxCfgChangeDetectionTiming  (TaskHandle taskHandle, const char risingEdgeChan[], const char fallingEdgeChan[], int32 sampleMode, uInt64 sampsPerChan);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxCfgChangeDetectionTiming(IntPtr taskHandle, string risingEdgeChan, string fallingEdgeChan, SampleQuantityMode sampleMode, ulong samsPerChan);
+// (Counter Timing)
+    /// int32 __CFUNC     DAQmxCfgImplicitTiming         (TaskHandle taskHandle, int32 sampleMode, uInt64 sampsPerChan);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxCfgImplicitTiming(IntPtr taskHandle, SampleQuantityMode sampleMode, ulong sampsPerChan);
+// (Pipelined Sample Clock Timing)
+    /// int32 __CFUNC     DAQmxCfgPipelinedSampClkTiming (TaskHandle taskHandle, const char source[], float64 rate, int32 activeEdge, int32 sampleMode, uInt64 sampsPerChan);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxCfgPipelinedSampClkTiming(IntPtr taskHandle, string source, double rate, SampleClockActiveEdge activeEdge, SampleQuantityMode sampleMode, ulong samsPerChan);
+
+    // /// int32 __CFUNC_C   DAQmxGetTimingAttribute        (TaskHandle taskHandle, int32 attribute, void *value, ...);
+    // [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    // internal static extern int DAQmxGetTimingAttribute(IntPtr taskHandle);
+    // /// int32 __CFUNC_C   DAQmxSetTimingAttribute        (TaskHandle taskHandle, int32 attribute, ...);
+    // [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    // internal static extern int DAQmxSetTimingAttribute(IntPtr taskHandle);
+    // /// int32 __CFUNC     DAQmxResetTimingAttribute      (TaskHandle taskHandle, int32 attribute);
+    // [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    // internal static extern int DAQmxResetTimingAttribute(IntPtr taskHandle, int attribute);
+
+    // /// int32 __CFUNC_C   DAQmxGetTimingAttributeEx      (TaskHandle taskHandle, const char deviceNames[], int32 attribute, void *value, ...);
+    // [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    // internal static extern int DAQmxGetTimingAttributeEx(IntPtr taskHandle);
+    // /// int32 __CFUNC_C   DAQmxSetTimingAttributeEx      (TaskHandle taskHandle, const char deviceNames[], int32 attribute, ...);
+    // [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    // internal static extern int DAQmxSetTimingAttributeEx(IntPtr taskHandle);
+    // /// int32 __CFUNC     DAQmxResetTimingAttributeEx    (TaskHandle taskHandle, const char deviceNames[], int32 attribute);
+    // [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    // internal static extern int DAQmxResetTimingAttributeEx(IntPtr taskHandle, string deviceNames, int attribute);
+
 
 }

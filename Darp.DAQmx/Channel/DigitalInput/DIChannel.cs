@@ -81,9 +81,4 @@ public static class DIChannelExtensions
         channelCollection.Add(channel);
         return channelCollection.Task;
     }
-
-    public static SingleChannelReader<DigitalInputTask, IDigitalInputChannel> GetSingleReader(
-        this ChannelCollection<DigitalInputTask, IDigitalInputChannel> channel) => new(channel.Task);
-    public static MultiChannelReader<DigitalInputTask, IDigitalInputChannel> GetMultiReader(
-        this ChannelCollection<DigitalInputTask, IDigitalInputChannel> channel) => new(channel.Task);
 }

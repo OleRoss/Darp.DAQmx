@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;
 
 namespace Darp.DAQmx.Channel;
@@ -16,7 +17,8 @@ public class ChannelCollection<TTask, TChannel> : IList<TChannel>
     }
 
     public TTask Task { get; }
-
+    public MultiChannelReader<TTask, TChannel> GetReader() => new(Task);
+    public SingleChannelReader<TTask, TChannel> GetSingleReader() => new(Task);
     public IEnumerator<TChannel> GetEnumerator() => _channels.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     public void Add(TChannel item) => _channels.Add(item);

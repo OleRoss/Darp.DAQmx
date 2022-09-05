@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Darp.DAQmx.Channel.AnalogOutput;
 using Darp.DAQmx.Channel.CounterOutput;
 using static Darp.DAQmx.NationalInstruments.Functions.Interop;

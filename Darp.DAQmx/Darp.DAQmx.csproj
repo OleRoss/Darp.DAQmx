@@ -19,7 +19,6 @@
     <ItemGroup>
       <Folder Include="Channel\DigitalOutput" />
       <Folder Include="NationalInstruments\Constants" />
-      <Folder Include="Timing" />
     </ItemGroup>
 
 </Project>

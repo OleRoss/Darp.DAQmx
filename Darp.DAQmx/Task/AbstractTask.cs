@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Darp.DAQmx.Channel;
+using Darp.DAQmx.Event;
 using Darp.DAQmx.NationalInstruments.Functions;
+using Darp.DAQmx.Reader;
+using Darp.DAQmx.Timing;
 using static Darp.DAQmx.DaqMxException;
 using static Darp.DAQmx.NationalInstruments.Functions.Interop;
 
@@ -10,15 +14,19 @@ public abstract class AbstractTask<TTask, TChannel> : ITask<TTask, TChannel>
     where TTask : ITask<TTask, TChannel>
     where TChannel : IChannel
 {
+    /// Collection to store delegates to prevent GC
+    private readonly ICollection<DAQmxEveryNSamplesEventCallbackPtr> _callbackPtrs;
     public AbstractTask(string taskName)
     {
         Channels = new ChannelCollection<TTask, TChannel>((TTask)(object)this);
+        Timing = new Timing<TTask>((TTask)(object)this);
         ThrowIfFailed(DAQmxCreateTask(taskName, out IntPtr handle));
         Handle = handle;
+        _callbackPtrs = new List<DAQmxEveryNSamplesEventCallbackPtr>();
     }
     public IntPtr Handle { get; }
     public ChannelCollection<TTask, TChannel> Channels { get; }
-
+    public Timing<TTask> Timing { get; }
     public bool IsTaskDone() => ThrowIfFailedOrReturn(DAQmxIsTaskDone(Handle, out int isTaskDone), isTaskDone == 1);
     public void Control(TaskAction action) => ThrowIfFailed(DAQmxTaskControl(Handle, action));
 
@@ -34,6 +42,26 @@ public abstract class AbstractTask<TTask, TChannel> : ITask<TTask, TChannel>
     /// <seealso cref="Interop.DAQmxClearTask"/>
     public void Dispose()
     {
+        Stop();
         ThrowIfFailed(DAQmxClearTask(Handle));
+    }
+
+    public delegate void SampleCallback(MultiChannelReader<TTask, TChannel> reader, int numberOfSamples);
+    public TTask OnEveryNSamplesRead(int nSamples, SampleCallback callback)
+    {
+        MultiChannelReader<TTask, TChannel> reader = Channels.GetReader();
+
+        // It is important to create the delegate like this and save add it to the _callbackPtrs list to prevent garbage collection of the delegate
+        DAQmxEveryNSamplesEventCallbackPtr callbackDelegate = (_, _, samples, _) =>
+        {
+            callback(reader, (int) samples);
+            return 0;
+        };
+        _callbackPtrs.Add(callbackDelegate);
+
+        ThrowIfFailed(DAQmxRegisterEveryNSamplesEvent(Handle,
+            EveryNSamplesEventType.AcquiredIntoBuffer, (uint) nSamples, 0,
+            callbackDelegate, IntPtr.Zero));
+        return (TTask)(object)this;
     }
 }

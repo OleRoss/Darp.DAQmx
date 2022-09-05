@@ -1,5 +1,4 @@
 ﻿using System;
-using Darp.DAQmx.Channel.AnalogInput;
 using Darp.DAQmx.NationalInstruments.Functions;
 using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;

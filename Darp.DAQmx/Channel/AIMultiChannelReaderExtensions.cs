@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Darp.DAQmx.Channel.AnalogInput;
 using Darp.DAQmx.NationalInstruments.Functions;
 using Darp.DAQmx.Reader;
@@ -71,8 +72,7 @@ public static class AIMultiChannelReaderExtensions
     public static void ReadByChannel(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
         int numSamplesPerChannel,
         in Span2D<double> dataBuffer,
-        int timeout = 10
-        )
+        double timeout = 10)
     {
         if (dataBuffer.Width < numSamplesPerChannel)
             throw new ArgumentOutOfRangeException(nameof(dataBuffer),
@@ -84,6 +84,15 @@ public static class AIMultiChannelReaderExtensions
         reader.ReadAnalogF64(numSamplesPerChannel, buffer, AIFillMode.GroupByChannel, timeout);
         for (var i = 0; i < reader.ChannelCount; i++)
             buffer[(i * numSamplesPerChannel)..((i + 1) * numSamplesPerChannel)].CopyTo(dataBuffer.GetRowSpan(i));
+    }
+
+    public static double[,] ReadByChannel(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+        int numSamplesPerChannel,
+        double timeout = 10)
+    {
+        var dataBuffer = new double[reader.ChannelCount, numSamplesPerChannel];
+        reader.ReadByChannel(numSamplesPerChannel, dataBuffer, timeout);
+        return dataBuffer;
     }
 
     public static void ReadBinaryU16(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
