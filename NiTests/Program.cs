@@ -14,8 +14,7 @@ Console.WriteLine("Hello, World!");
 IReadOnlyList<Device> devices = DaqMx.GetDevices();
 Device device = devices
     .First(x => x.ProductType is "USB-6210");
-var nSamples = 1000;
-var i = 0;
+Console.WriteLine($"Using device {device}");
 using AnalogInputTask torqueTask = new AnalogInputTask()
     .Channels.AddVoltageChannel(device, 6, terminalConfiguration:AITerminalConfiguration.Rse, configuration:channel =>
     {
