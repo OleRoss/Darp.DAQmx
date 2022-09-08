@@ -46,15 +46,15 @@ public abstract class AbstractTask<TTask, TChannel> : ITask<TTask, TChannel>
         ThrowIfFailed(DAQmxClearTask(Handle));
     }
 
-    public delegate void SampleCallback(MultiChannelReader<TTask, TChannel> reader, int numberOfSamples);
+    public delegate void SampleCallback(IChannelReader<TTask, TChannel> channelReader, int numberOfSamples);
     public TTask OnEveryNSamplesRead(int nSamples, SampleCallback callback)
     {
-        MultiChannelReader<TTask, TChannel> reader = Channels.GetReader();
+        IChannelReader<TTask, TChannel> channelReader = Channels.GetReader();
 
         // It is important to create the delegate like this and save add it to the _callbackPtrs list to prevent garbage collection of the delegate
         DAQmxEveryNSamplesEventCallbackPtr callbackDelegate = (_, _, samples, _) =>
         {
-            callback(reader, (int) samples);
+            callback(channelReader, (int) samples);
             return 0;
         };
         _callbackPtrs.Add(callbackDelegate);

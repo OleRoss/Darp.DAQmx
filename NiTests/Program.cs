@@ -6,14 +6,53 @@ using Darp.DAQmx.Channel.DigitalInput;
 using Darp.DAQmx.Event;
 using Darp.DAQmx.Task;
 using Darp.DAQmx.Timing;
+using FftSharp;
 using Microsoft.Toolkit.HighPerformance;
 
 Console.WriteLine("Hello, World!");
 
 IReadOnlyList<Device> devices = DaqMx.GetDevices();
-Device deviceOne = devices
+Device device = devices
     .First(x => x.ProductType is "USB-6210");
-var bytes = new double[4, 1000];
+var nSamples = 1000;
+var i = 0;
+using AnalogInputTask torqueTask = new AnalogInputTask()
+    .Channels.AddVoltageChannel(device, 6, terminalConfiguration:AITerminalConfiguration.Rse, configuration:channel =>
+    {
+        channel.ADCTimingMode = ADCTimingMode.HighSpeed;
+    })
+    .Channels.AddVoltageChannel(device, 7, terminalConfiguration: AITerminalConfiguration.Rse, configuration:channel =>
+    {
+        channel.ADCTimingMode = ADCTimingMode.HighSpeed;
+    })
+    .Timing.ConfigureSampleClock(1000, 100, SampleQuantityMode.ContinuousSamples)
+    .OnEveryNSamplesRead(100, (reader, samples) =>
+    {
+        Span2D<double> values = new double[2,512];
+        reader.ReadByChannel(samples, values);
+        double[] buffer = values.GetRowSpan(0).ToArray().Select<double, double>(x => x > 2 ? 1 : 0).ToArray();
+
+        // Console.WriteLine(string.Join(",", values.GetRowSpan(0).ToArray()));
+        double[] x = Transform.FFTmagnitude(buffer);
+        double diff = Transform.FFTfreqPeriod(100000, 512);
+        double max = 0;
+        int maxI = -1;
+        for (var n = 0; n < x.Length; n++)
+        {
+            if (x[n] > max)
+            {
+                max = x[n];
+                maxI = n;
+            }
+        }
+        Console.WriteLine($"{maxI} - {diff * maxI / 60}");
+        // Console.WriteLine(string.Join(",", values.GetRow(0).ToArray().Select(x => x > 2)));
+        // Console.WriteLine(string.Join(",", values.GetRow(1).ToArray().Select(x => x > 2)));
+    });
+torqueTask.Start();
+
+await Task.Delay(100000);
+/*var bytes = new double[4, 1000];
 using AnalogInputTask analogTask = new AnalogInputTask()
     .Channels.AddVoltageChannel(deviceOne, 0)
     .Channels.AddVoltageChannel(deviceOne, 1)
@@ -34,7 +73,7 @@ analogTask.Start();
 await Task.Delay(10000);
 
 analogTask.Stop();
-await Task.Delay(10);
+await Task.Delay(10);*/
 /*
 var aiMultiReader = analogTask.Channels.GetMultiReader();
 Span2D<double> doubleArray = new double[4, 5];

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Darp.DAQmx.Channel.AnalogInput;
 using Darp.DAQmx.NationalInstruments.Functions;
 using Darp.DAQmx.Reader;
@@ -11,7 +10,7 @@ namespace Darp.DAQmx.Channel;
 public static class AIMultiChannelReaderExtensions
 {
     private delegate int DaQmxRead<T>(IntPtr taskHandle, int numSampsPerChan, double timeout, AIFillMode fillMode, in T readArray, uint arraySizeInSamps, out int sampsPerChanRead, IntPtr reserved);
-    private static void Read<T>(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    private static void Read<T>(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         DaQmxRead<T> readCallback,
         int numSamplesPerChannel,
         in Span<T> dataBuffer,
@@ -19,11 +18,11 @@ public static class AIMultiChannelReaderExtensions
         double timeout)
         where T : struct
     {
-        int requiredSpanSize = numSamplesPerChannel * reader.ChannelCount;
+        int requiredSpanSize = numSamplesPerChannel * channelReader.ChannelCount;
         if (dataBuffer.Length < requiredSpanSize)
             throw new ArgumentOutOfRangeException(nameof(dataBuffer),
                 $"Span length too short. (Span length: {dataBuffer.Length}, required length: {requiredSpanSize})");
-        DaqMxException.ThrowIfFailed(readCallback(reader.Task.Handle,
+        DaqMxException.ThrowIfFailed(readCallback(channelReader.Task.Handle,
             numSamplesPerChannel,
             timeout,
             fillMode,
@@ -38,38 +37,38 @@ public static class AIMultiChannelReaderExtensions
     /// <summary>
     /// Reads multiple floating-point samples from a task that contains one or more analog input channels.
     /// </summary>
-    /// <param name="reader">The reader to be read from</param>
+    /// <param name="channelReader">The reader to be read from</param>
     /// <param name="numSamplesPerChannel">The number of samples to be read</param>
     /// <param name="dataBuffer">The memory to be written to</param>
     /// <param name="fillMode">The fill mode to be used</param>
     /// <param name="timeout">The communication timeout</param>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if the given memory is not big enough</exception>
     /// <exception cref="DaqMxException">Thrown if reading did not work</exception>
-    public static void ReadAnalogF64(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadAnalogF64(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         int numSamplesPerChannel,
         in Span<double> dataBuffer,
         AIFillMode fillMode,
         double timeout = 10) =>
-        reader.Read(Interop.DAQmxReadAnalogF64, numSamplesPerChannel, dataBuffer, fillMode, timeout);
+        channelReader.Read(Interop.DAQmxReadAnalogF64, numSamplesPerChannel, dataBuffer, fillMode, timeout);
 
-    public static void ReadByScanNumber(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadByScanNumber(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         int numSamplesPerChannel,
         in Span2D<double> dataBuffer,
         double timeout = 10)
     {
-        if (dataBuffer.Width < reader.ChannelCount)
+        if (dataBuffer.Width < channelReader.ChannelCount)
             throw new ArgumentOutOfRangeException(nameof(dataBuffer),
-                $"Width of buffer is too small! Need space for {reader.ChannelCount} channels, but only got {dataBuffer.Width}");
+                $"Width of buffer is too small! Need space for {channelReader.ChannelCount} channels, but only got {dataBuffer.Width}");
         if (dataBuffer.Height < numSamplesPerChannel)
             throw new ArgumentOutOfRangeException(nameof(dataBuffer),
                 $"Height of buffer is too small! Need space for {numSamplesPerChannel} samples, but only got {dataBuffer.Height}");
         Span<double> buffer = stackalloc double[(int)dataBuffer.Length];
-        reader.ReadAnalogF64(numSamplesPerChannel, buffer, AIFillMode.GroupByScanNumber, timeout);
+        channelReader.ReadAnalogF64(numSamplesPerChannel, buffer, AIFillMode.GroupByScanNumber, timeout);
         for (var i = 0; i < numSamplesPerChannel; i++)
-            buffer[(i * reader.ChannelCount)..((i + 1) * reader.ChannelCount)].CopyTo(dataBuffer.GetRowSpan(i));
+            buffer[(i * channelReader.ChannelCount)..((i + 1) * channelReader.ChannelCount)].CopyTo(dataBuffer.GetRowSpan(i));
     }
 
-    public static void ReadByChannel(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadByChannel(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         int numSamplesPerChannel,
         in Span2D<double> dataBuffer,
         double timeout = 10)
@@ -77,49 +76,49 @@ public static class AIMultiChannelReaderExtensions
         if (dataBuffer.Width < numSamplesPerChannel)
             throw new ArgumentOutOfRangeException(nameof(dataBuffer),
                 $"Width of buffer is too small! Need space for {numSamplesPerChannel} samples, but only got {dataBuffer.Width}");
-        if (dataBuffer.Height < reader.ChannelCount)
+        if (dataBuffer.Height < channelReader.ChannelCount)
             throw new ArgumentOutOfRangeException(nameof(dataBuffer),
-                $"Height of buffer is too small! Need space for {reader.ChannelCount} channels, but only got {dataBuffer.Height}");
+                $"Height of buffer is too small! Need space for {channelReader.ChannelCount} channels, but only got {dataBuffer.Height}");
         Span<double> buffer = stackalloc double[(int)dataBuffer.Length];
-        reader.ReadAnalogF64(numSamplesPerChannel, buffer, AIFillMode.GroupByChannel, timeout);
-        for (var i = 0; i < reader.ChannelCount; i++)
+        channelReader.ReadAnalogF64(numSamplesPerChannel, buffer, AIFillMode.GroupByChannel, timeout);
+        for (var i = 0; i < channelReader.ChannelCount; i++)
             buffer[(i * numSamplesPerChannel)..((i + 1) * numSamplesPerChannel)].CopyTo(dataBuffer.GetRowSpan(i));
     }
 
-    public static double[,] ReadByChannel(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static double[,] ReadByChannel(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         int numSamplesPerChannel,
         double timeout = 10)
     {
-        var dataBuffer = new double[reader.ChannelCount, numSamplesPerChannel];
-        reader.ReadByChannel(numSamplesPerChannel, dataBuffer, timeout);
+        var dataBuffer = new double[channelReader.ChannelCount, numSamplesPerChannel];
+        channelReader.ReadByChannel(numSamplesPerChannel, dataBuffer, timeout);
         return dataBuffer;
     }
 
-    public static void ReadBinaryU16(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadBinaryU16(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         int numSamplesPerChannel,
         in Span<ushort> dataBuffer,
         AIFillMode fillMode,
         double timeout = 10) =>
-        reader.Read(Interop.DAQmxReadBinaryU16, numSamplesPerChannel, dataBuffer, fillMode, timeout);
+        channelReader.Read(Interop.DAQmxReadBinaryU16, numSamplesPerChannel, dataBuffer, fillMode, timeout);
 
-    public static void ReadBinaryI16(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadBinaryI16(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         int numSamplesPerChannel,
         in Span<short> dataBuffer,
         AIFillMode fillMode,
         double timeout = 10) =>
-        reader.Read(Interop.DAQmxReadBinaryI16, numSamplesPerChannel, dataBuffer, fillMode, timeout);
+        channelReader.Read(Interop.DAQmxReadBinaryI16, numSamplesPerChannel, dataBuffer, fillMode, timeout);
 
-    public static void ReadBinaryU32(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadBinaryU32(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         int numSamplesPerChannel,
         in Span<uint> dataBuffer,
         AIFillMode fillMode,
         double timeout = 10) =>
-        reader.Read(Interop.DAQmxReadBinaryU32, numSamplesPerChannel, dataBuffer, fillMode, timeout);
+        channelReader.Read(Interop.DAQmxReadBinaryU32, numSamplesPerChannel, dataBuffer, fillMode, timeout);
 
-    public static void ReadBinaryI32(this MultiChannelReader<AnalogInputTask, IAnalogInputChannel> reader,
+    public static void ReadBinaryI32(this IChannelReader<AnalogInputTask, IAnalogInputChannel> channelReader,
         int numSamplesPerChannel,
         in Span<int> dataBuffer,
         AIFillMode fillMode,
         double timeout = 10) =>
-        reader.Read(Interop.DAQmxReadBinaryI32, numSamplesPerChannel, dataBuffer, fillMode, timeout);
+        channelReader.Read(Interop.DAQmxReadBinaryI32, numSamplesPerChannel, dataBuffer, fillMode, timeout);
 }

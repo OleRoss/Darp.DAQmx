@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;
 
@@ -17,8 +18,11 @@ public class ChannelCollection<TTask, TChannel> : IList<TChannel>
     }
 
     public TTask Task { get; }
-    public MultiChannelReader<TTask, TChannel> GetReader() => new(Task);
-    public SingleChannelReader<TTask, TChannel> GetSingleReader() => new(Task);
+    public IChannelReader<TTask, TChannel> GetReader() => ChannelCount > 1
+        ? new ChannelReader<TTask, TChannel>(Task)
+        : new SingleChannelReader<TTask, TChannel>(Task);
+
+    public ISingleChannelReader<TTask, TChannel> GetSingleReader() => new SingleChannelReader<TTask, TChannel>(Task);
     public IEnumerator<TChannel> GetEnumerator() => _channels.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     public void Add(TChannel item) => _channels.Add(item);
@@ -32,4 +36,5 @@ public class ChannelCollection<TTask, TChannel> : IList<TChannel>
     public void Insert(int index, TChannel item) => _channels.Insert(index, item);
     public void RemoveAt(int index) => _channels.RemoveAt(index);
     public TChannel this[int index] { get => _channels[index]; set => _channels[index] = value; }
+    public int ChannelCount => _channels.Sum(x => x.NumberOfVirtualChannels);
 }

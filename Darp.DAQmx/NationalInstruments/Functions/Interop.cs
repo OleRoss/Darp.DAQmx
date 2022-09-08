@@ -45,58 +45,7 @@ internal static partial class Interop
     /// int32 __CFUNC DAQmxGetPhysicalChanAITermCfgs(const char physicalChannel[], int32 *data);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxGetPhysicalChanAITermCfgs(string physicalChannel, out int data);
-//********** Channel **********
 
-//*** Set/Get functions for DAQmx_AI_Max ***
-    /// int32 __CFUNC DAQmxGetAIMax(TaskHandle taskHandle, const char channel[], float64 *data);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxGetAIMax(IntPtr taskHandle, string channel, out double data);
-    /// int32 __CFUNC DAQmxSetAIMax(TaskHandle taskHandle, const char channel[], float64 data);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxSetAIMax(IntPtr taskHandle, string channel, double data);
-    /// int32 __CFUNC DAQmxResetAIMax(TaskHandle taskHandle, const char channel[]);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxResetAIMax(IntPtr taskHandle, string channel);
-
-//*** Set/Get functions for DAQmx_AI_Min ***
-    /// int32 __CFUNC DAQmxGetAIMin(TaskHandle taskHandle, const char channel[], float64 *data);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxGetAIMin(IntPtr taskHandle, string channel, out double data);
-    /// int32 __CFUNC DAQmxSetAIMin(TaskHandle taskHandle, const char channel[], float64 data);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxSetAIMin(IntPtr taskHandle, string channel, double data);
-    /// int32 __CFUNC DAQmxResetAIMin(TaskHandle taskHandle, const char channel[]);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxResetAIMin(IntPtr taskHandle, string channel);
-
-//*** Set/Get functions for DAQmx_AI_CustomScaleName ***
-    /// int32 __CFUNC DAQmxGetAICustomScaleName(TaskHandle taskHandle, const char channel[], char *data, uInt32 bufferSize);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxGetAICustomScaleName(IntPtr taskHandle, string channel, in byte data, uint bufferSize);
-    /// int32 __CFUNC DAQmxSetAICustomScaleName(TaskHandle taskHandle, const char channel[], const char *data);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxSetAICustomScaleName(IntPtr taskHandle, string channel, char[] data);
-    /// int32 __CFUNC DAQmxResetAICustomScaleName(TaskHandle taskHandle, const char channel[]);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxResetAICustomScaleName(IntPtr taskHandle, string channel);
-
-//*** Set/Get functions for DAQmx_AI_MeasType ***
-// Uses value set AIMeasurementType
-    /// int32 __CFUNC DAQmxGetAIMeasType(TaskHandle taskHandle, const char channel[], int32 *data);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxGetAIMeasType(IntPtr taskHandle, string channel, out int data);
-
-//*** Set/Get functions for DAQmx_AI_Voltage_Units ***
-// Uses value set VoltageUnits1
-    /// int32 __CFUNC DAQmxGetAIVoltageUnits(TaskHandle taskHandle, const char channel[], int32 *data)
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxGetAIVoltageUnits(IntPtr taskHandle, string channel, out int data);
-    /// int32 __CFUNC DAQmxSetAIVoltageUnits(TaskHandle taskHandle, const char channel[], int32 data);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxSetAIVoltageUnits(IntPtr taskHandle, string channel, int data);
-    /// int32 __CFUNC DAQmxResetAIVoltageUnits(TaskHandle taskHandle, const char channel[]);
-    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
-    internal static extern int DAQmxResetAIVoltageUnits(IntPtr taskHandle, string channel);
 
 /******************************************************/
 /***                 Read Data                      ***/
@@ -693,7 +642,1925 @@ internal static partial class Interop
     /// int32 __CFUNC     DAQmxRegisterSignalEvent       (TaskHandle task, int32 signalID, uInt32 options, DAQmxSignalEventCallbackPtr callbackFunction, void *callbackData);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
     internal static extern int DAQmxRegisterSignalEvent(IntPtr task, int signalID, uint options, DAQmxSignalEventCallbackPtr callbackFunction, IntPtr callbackData);
+//********** Channel **********
 
+//*** Set/Get functions for DAQmx_AI_Max ***
+    /// int32 __CFUNC DAQmxGetAIMax(TaskHandle taskHandle, const char channel[], float64 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetAIMax(IntPtr taskHandle, string channel, out double data);
+    /// int32 __CFUNC DAQmxSetAIMax(TaskHandle taskHandle, const char channel[], float64 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetAIMax(IntPtr taskHandle, string channel, double data);
+    /// int32 __CFUNC DAQmxResetAIMax(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetAIMax(IntPtr taskHandle, string channel);
+
+//*** Set/Get functions for DAQmx_AI_Min ***
+    /// int32 __CFUNC DAQmxGetAIMin(TaskHandle taskHandle, const char channel[], float64 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetAIMin(IntPtr taskHandle, string channel, out double data);
+    /// int32 __CFUNC DAQmxSetAIMin(TaskHandle taskHandle, const char channel[], float64 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetAIMin(IntPtr taskHandle, string channel, double data);
+    /// int32 __CFUNC DAQmxResetAIMin(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetAIMin(IntPtr taskHandle, string channel);
+
+//*** Set/Get functions for DAQmx_AI_CustomScaleName ***
+    /// int32 __CFUNC DAQmxGetAICustomScaleName(TaskHandle taskHandle, const char channel[], char *data, uInt32 bufferSize);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetAICustomScaleName(IntPtr taskHandle, string channel, in byte data, uint bufferSize);
+    /// int32 __CFUNC DAQmxSetAICustomScaleName(TaskHandle taskHandle, const char channel[], const char *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetAICustomScaleName(IntPtr taskHandle, string channel, char[] data);
+    /// int32 __CFUNC DAQmxResetAICustomScaleName(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetAICustomScaleName(IntPtr taskHandle, string channel);
+
+//*** Set/Get functions for DAQmx_AI_MeasType ***
+// Uses value set AIMeasurementType
+    /// int32 __CFUNC DAQmxGetAIMeasType(TaskHandle taskHandle, const char channel[], int32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetAIMeasType(IntPtr taskHandle, string channel, out int data);
+
+//*** Set/Get functions for DAQmx_AI_Voltage_Units ***
+// Uses value set VoltageUnits1
+    /// int32 __CFUNC DAQmxGetAIVoltageUnits(TaskHandle taskHandle, const char channel[], int32 *data)
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetAIVoltageUnits(IntPtr taskHandle, string channel, out AIVoltageUnits data);
+    /// int32 __CFUNC DAQmxSetAIVoltageUnits(TaskHandle taskHandle, const char channel[], int32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetAIVoltageUnits(IntPtr taskHandle, string channel, AIVoltageUnits data);
+    /// int32 __CFUNC DAQmxResetAIVoltageUnits(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetAIVoltageUnits(IntPtr taskHandle, string channel);
+// ///*** Set/Get functions for DAQmx_AI_Voltage_dBRef ***
+//    /// int32 __CFUNC DAQmxGetAIVoltagedBRef(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIVoltagedBRef(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIVoltagedBRef(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Voltage_ACRMS_Units ***
+//// Uses value set VoltageUnits1
+//    /// int32 __CFUNC DAQmxGetAIVoltageACRMSUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIVoltageACRMSUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIVoltageACRMSUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Temp_Units ***
+//// Uses value set TemperatureUnits1
+//    /// int32 __CFUNC DAQmxGetAITempUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAITempUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAITempUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmcpl_Type ***
+//// Uses value set ThermocoupleType1
+//    /// int32 __CFUNC DAQmxGetAIThrmcplType(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIThrmcplType(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIThrmcplType(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmcpl_ScaleType ***
+//// Uses value set ScaleType2
+//    /// int32 __CFUNC DAQmxGetAIThrmcplScaleType(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIThrmcplScaleType(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIThrmcplScaleType(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmcpl_CJCSrc ***
+//// Uses value set CJCSource1
+//    /// int32 __CFUNC DAQmxGetAIThrmcplCJCSrc(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmcpl_CJCVal ***
+//    /// int32 __CFUNC DAQmxGetAIThrmcplCJCVal(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIThrmcplCJCVal(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIThrmcplCJCVal(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmcpl_CJCChan ***
+//    /// int32 __CFUNC DAQmxGetAIThrmcplCJCChan(TaskHandle taskHandle, const char channel[], char *data, uint32 bufferSize);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RTD_Type ***
+//// Uses value set RTDType1
+//    /// int32 __CFUNC DAQmxGetAIRTDType(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIRTDType(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRTDType(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RTD_R0 ***
+//    /// int32 __CFUNC DAQmxGetAIRTDR0(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIRTDR0(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRTDR0(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RTD_A ***
+//    /// int32 __CFUNC DAQmxGetAIRTDA(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIRTDA(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRTDA(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RTD_B ***
+//    /// int32 __CFUNC DAQmxGetAIRTDB(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIRTDB(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRTDB(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RTD_C ***
+//    /// int32 __CFUNC DAQmxGetAIRTDC(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIRTDC(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRTDC(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmstr_A ***
+//    /// int32 __CFUNC DAQmxGetAIThrmstrA(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIThrmstrA(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIThrmstrA(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmstr_B ***
+//    /// int32 __CFUNC DAQmxGetAIThrmstrB(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIThrmstrB(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIThrmstrB(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmstr_C ***
+//    /// int32 __CFUNC DAQmxGetAIThrmstrC(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIThrmstrC(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIThrmstrC(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Thrmstr_R1 ***
+//    /// int32 __CFUNC DAQmxGetAIThrmstrR1(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIThrmstrR1(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIThrmstrR1(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_ForceReadFromChan ***
+//    /// int32 __CFUNC DAQmxGetAIForceReadFromChan(TaskHandle taskHandle, const char channel[], bool32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIForceReadFromChan(TaskHandle taskHandle, const char channel[], bool32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIForceReadFromChan(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Current_Units ***
+//// Uses value set CurrentUnits1
+//    /// int32 __CFUNC DAQmxGetAICurrentUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAICurrentUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAICurrentUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Current_ACRMS_Units ***
+//// Uses value set CurrentUnits1
+//    /// int32 __CFUNC DAQmxGetAICurrentACRMSUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAICurrentACRMSUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAICurrentACRMSUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Strain_Units ***
+//// Uses value set StrainUnits1
+//    /// int32 __CFUNC DAQmxGetAIStrainUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIStrainUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIStrainUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_StrainGage_ForceReadFromChan ***
+//    /// int32 __CFUNC DAQmxGetAIStrainGageForceReadFromChan(TaskHandle taskHandle, const char channel[], bool32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIStrainGageForceReadFromChan(TaskHandle taskHandle, const char channel[], bool32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIStrainGageForceReadFromChan(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_StrainGage_GageFactor ***
+//    /// int32 __CFUNC DAQmxGetAIStrainGageGageFactor(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIStrainGageGageFactor(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIStrainGageGageFactor(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_StrainGage_PoissonRatio ***
+//    /// int32 __CFUNC DAQmxGetAIStrainGagePoissonRatio(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIStrainGagePoissonRatio(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIStrainGagePoissonRatio(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_StrainGage_Cfg ***
+//// Uses value set StrainGageBridgeType1
+//    /// int32 __CFUNC DAQmxGetAIStrainGageCfg(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIStrainGageCfg(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIStrainGageCfg(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RosetteStrainGage_RosetteType ***
+//// Uses value set StrainGageRosetteType
+//    /// int32 __CFUNC DAQmxGetAIRosetteStrainGageRosetteType(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RosetteStrainGage_Orientation ***
+//    /// int32 __CFUNC DAQmxGetAIRosetteStrainGageOrientation(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIRosetteStrainGageOrientation(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRosetteStrainGageOrientation(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RosetteStrainGage_StrainChans ***
+//    /// int32 __CFUNC DAQmxGetAIRosetteStrainGageStrainChans(TaskHandle taskHandle, const char channel[], char *data, uint32 bufferSize);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RosetteStrainGage_RosetteMeasType ***
+//// Uses value set StrainGageRosetteMeasurementType
+//    /// int32 __CFUNC DAQmxGetAIRosetteStrainGageRosetteMeasType(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIRosetteStrainGageRosetteMeasType(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRosetteStrainGageRosetteMeasType(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Resistance_Units ***
+//// Uses value set ResistanceUnits1
+//    /// int32 __CFUNC DAQmxGetAIResistanceUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIResistanceUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIResistanceUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Freq_Units ***
+//// Uses value set FrequencyUnits
+//    /// int32 __CFUNC DAQmxGetAIFreqUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIFreqUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIFreqUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Freq_ThreshVoltage ***
+//    /// int32 __CFUNC DAQmxGetAIFreqThreshVoltage(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIFreqThreshVoltage(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIFreqThreshVoltage(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Freq_Hyst ***
+//    /// int32 __CFUNC DAQmxGetAIFreqHyst(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIFreqHyst(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIFreqHyst(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_LVDT_Units ***
+//// Uses value set LengthUnits2
+//    /// int32 __CFUNC DAQmxGetAILVDTUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAILVDTUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAILVDTUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_LVDT_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAILVDTSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAILVDTSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAILVDTSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_LVDT_SensitivityUnits ***
+//// Uses value set LVDTSensitivityUnits1
+//    /// int32 __CFUNC DAQmxGetAILVDTSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAILVDTSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAILVDTSensitivityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RVDT_Units ***
+//// Uses value set AngleUnits1
+//    /// int32 __CFUNC DAQmxGetAIRVDTUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIRVDTUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRVDTUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RVDT_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAIRVDTSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIRVDTSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRVDTSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_RVDT_SensitivityUnits ***
+//// Uses value set RVDTSensitivityUnits1
+//    /// int32 __CFUNC DAQmxGetAIRVDTSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIRVDTSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIRVDTSensitivityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_EddyCurrentProxProbe_Units ***
+//// Uses value set LengthUnits2
+//    /// int32 __CFUNC DAQmxGetAIEddyCurrentProxProbeUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIEddyCurrentProxProbeUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIEddyCurrentProxProbeUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_EddyCurrentProxProbe_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAIEddyCurrentProxProbeSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIEddyCurrentProxProbeSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIEddyCurrentProxProbeSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_EddyCurrentProxProbe_SensitivityUnits ***
+//// Uses value set EddyCurrentProxProbeSensitivityUnits
+//    /// int32 __CFUNC DAQmxGetAIEddyCurrentProxProbeSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIEddyCurrentProxProbeSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIEddyCurrentProxProbeSensitivityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_SoundPressure_MaxSoundPressureLvl ***
+//    /// int32 __CFUNC DAQmxGetAISoundPressureMaxSoundPressureLvl(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAISoundPressureMaxSoundPressureLvl(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAISoundPressureMaxSoundPressureLvl(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_SoundPressure_Units ***
+//// Uses value set SoundPressureUnits1
+//    /// int32 __CFUNC DAQmxGetAISoundPressureUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAISoundPressureUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAISoundPressureUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_SoundPressure_dBRef ***
+//    /// int32 __CFUNC DAQmxGetAISoundPressuredBRef(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAISoundPressuredBRef(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAISoundPressuredBRef(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Microphone_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAIMicrophoneSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIMicrophoneSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIMicrophoneSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Accel_Units ***
+//// Uses value set AccelUnits2
+//    /// int32 __CFUNC DAQmxGetAIAccelUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIAccelUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIAccelUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Accel_dBRef ***
+//    /// int32 __CFUNC DAQmxGetAIAcceldBRef(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIAcceldBRef(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIAcceldBRef(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Accel_4WireDCVoltage_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAIAccel4WireDCVoltageSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIAccel4WireDCVoltageSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIAccel4WireDCVoltageSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Accel_4WireDCVoltage_SensitivityUnits ***
+//// Uses value set AccelSensitivityUnits1
+//    /// int32 __CFUNC DAQmxGetAIAccel4WireDCVoltageSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIAccel4WireDCVoltageSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIAccel4WireDCVoltageSensitivityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Accel_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAIAccelSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIAccelSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIAccelSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Accel_SensitivityUnits ***
+//// Uses value set AccelSensitivityUnits1
+//    /// int32 __CFUNC DAQmxGetAIAccelSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIAccelSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIAccelSensitivityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Accel_Charge_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAIAccelChargeSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIAccelChargeSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIAccelChargeSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Accel_Charge_SensitivityUnits ***
+//// Uses value set AccelChargeSensitivityUnits
+//    /// int32 __CFUNC DAQmxGetAIAccelChargeSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIAccelChargeSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIAccelChargeSensitivityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Velocity_Units ***
+//// Uses value set VelocityUnits
+//    /// int32 __CFUNC DAQmxGetAIVelocityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIVelocityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIVelocityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Velocity_IEPESensor_dBRef ***
+//    /// int32 __CFUNC DAQmxGetAIVelocityIEPESensordBRef(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIVelocityIEPESensordBRef(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIVelocityIEPESensordBRef(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Velocity_IEPESensor_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAIVelocityIEPESensorSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIVelocityIEPESensorSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIVelocityIEPESensorSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Velocity_IEPESensor_SensitivityUnits ***
+//// Uses value set VelocityIEPESensorSensitivityUnits
+//    /// int32 __CFUNC DAQmxGetAIVelocityIEPESensorSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIVelocityIEPESensorSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIVelocityIEPESensorSensitivityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Force_Units ***
+//// Uses value set ForceUnits
+//    /// int32 __CFUNC DAQmxGetAIForceUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIForceUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIForceUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Force_IEPESensor_Sensitivity ***
+//    /// int32 __CFUNC DAQmxGetAIForceIEPESensorSensitivity(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//    /// int32 __CFUNC DAQmxSetAIForceIEPESensorSensitivity(TaskHandle taskHandle, const char channel[], float64 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIForceIEPESensorSensitivity(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Force_IEPESensor_SensitivityUnits ***
+//// Uses value set ForceIEPESensorSensitivityUnits
+//    /// int32 __CFUNC DAQmxGetAIForceIEPESensorSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIForceIEPESensorSensitivityUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIForceIEPESensorSensitivityUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Pressure_Units ***
+//// Uses value set PressureUnits
+//    /// int32 __CFUNC DAQmxGetAIPressureUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIPressureUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIPressureUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Torque_Units ***
+//// Uses value set TorqueUnits
+//    /// int32 __CFUNC DAQmxGetAITorqueUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAITorqueUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAITorqueUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Bridge_Units ***
+//// Uses value set BridgeUnits
+//    /// int32 __CFUNC DAQmxGetAIBridgeUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIBridgeUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIBridgeUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Bridge_ElectricalUnits ***
+//// Uses value set BridgeElectricalUnits
+//    /// int32 __CFUNC DAQmxGetAIBridgeElectricalUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIBridgeElectricalUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIBridgeElectricalUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Bridge_PhysicalUnits ***
+//// Uses value set BridgePhysicalUnits
+//    /// int32 __CFUNC DAQmxGetAIBridgePhysicalUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIBridgePhysicalUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIBridgePhysicalUnits(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Bridge_ScaleType ***
+//// Uses value set ScaleType4
+//    /// int32 __CFUNC DAQmxGetAIBridgeScaleType(TaskHandle taskHandle, const char channel[], int32 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxSetAIBridgeScaleType(TaskHandle taskHandle, const char channel[], int32 data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+//    /// int32 __CFUNC DAQmxResetAIBridgeScaleType(TaskHandle taskHandle, const char channel[]);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//    internal static extern int Asd(IntPtr taskHandle, string channel);
+////*** Set/Get functions for DAQmx_AI_Bridge_TwoPointLin_First_ElectricalVal ***
+//    /// int32 __CFUNC DAQmxGetAIBridgeTwoPointLinFirstElectricalVal(TaskHandle taskHandle, const char channel[], float64 *data);
+//    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeTwoPointLinFirstElectricalVal(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeTwoPointLinFirstElectricalVal(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_TwoPointLin_First_PhysicalVal ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeTwoPointLinFirstPhysicalVal(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeTwoPointLinFirstPhysicalVal(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxResetAIBridgeTwoPointLinFirstPhysicalVal(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_TwoPointLin_Second_ElectricalVal ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeTwoPointLinSecondElectricalVal(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeTwoPointLinSecondElectricalVal(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeTwoPointLinSecondElectricalVal(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_TwoPointLin_Second_PhysicalVal ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeTwoPointLinSecondPhysicalVal(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeTwoPointLinSecondPhysicalVal(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeTwoPointLinSecondPhysicalVal(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_Table_ElectricalVals ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeTableElectricalVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeTableElectricalVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeTableElectricalVals(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_Table_PhysicalVals ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeTablePhysicalVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeTablePhysicalVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeTablePhysicalVals(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_Poly_ForwardCoeff ***
+//     /// int32 __CFUNC DAQmxGetAIBridgePolyForwardCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgePolyForwardCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgePolyForwardCoeff(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_Poly_ReverseCoeff ***
+//     /// int32 __CFUNC DAQmxGetAIBridgePolyReverseCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgePolyReverseCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgePolyReverseCoeff(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Charge_Units ***
+// // Uses value set ChargeUnits
+//     /// int32 __CFUNC DAQmxGetAIChargeUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChargeUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChargeUnits(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Is_TEDS ***
+//     /// int32 __CFUNC DAQmxGetAIIsTEDS(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_TEDS_Units ***
+//     /// int32 __CFUNC DAQmxGetAITEDSUnits(TaskHandle taskHandle, const char channel[], char *data, uint32 bufferSize);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Coupling ***
+// // Uses value set Coupling1
+//     /// int32 __CFUNC DAQmxGetAICoupling(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAICoupling(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAICoupling(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Impedance ***
+// // Uses value set Impedance1
+//     /// int32 __CFUNC DAQmxGetAIImpedance(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIImpedance(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIImpedance(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_TermCfg ***
+// // Uses value set InputTermCfg
+//     /// int32 __CFUNC DAQmxGetAITermCfg(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAITermCfg(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAITermCfg(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_InputSrc ***
+//     /// int32 __CFUNC DAQmxGetAIInputSrc(TaskHandle taskHandle, const char channel[], char *data, uint32 bufferSize);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIInputSrc(TaskHandle taskHandle, const char channel[], const char *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIInputSrc(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ResistanceCfg ***
+// // Uses value set ResistanceConfiguration
+//     /// int32 __CFUNC DAQmxGetAIResistanceCfg(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIResistanceCfg(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIResistanceCfg(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_LeadWireResistance ***
+//     /// int32 __CFUNC DAQmxGetAILeadWireResistance(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAILeadWireResistance(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAILeadWireResistance(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_Cfg ***
+// // Uses value set BridgeConfiguration1
+//     /// int32 __CFUNC DAQmxGetAIBridgeCfg(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeCfg(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeCfg(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_NomResistance ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeNomResistance(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeNomResistance(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeNomResistance(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_InitialVoltage ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeInitialVoltage(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeInitialVoltage(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeInitialVoltage(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_InitialRatio ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeInitialRatio(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeInitialRatio(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeInitialRatio(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_ShuntCal_Enable ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeShuntCalEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeShuntCalEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeShuntCalEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_ShuntCal_Select ***
+// // Uses value set ShuntCalSelect
+//     /// int32 __CFUNC DAQmxGetAIBridgeShuntCalSelect(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeShuntCalSelect(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeShuntCalSelect(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_ShuntCal_ShuntCalASrc ***
+// // Uses value set BridgeShuntCalSource
+//     /// int32 __CFUNC DAQmxGetAIBridgeShuntCalShuntCalASrc(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeShuntCalShuntCalASrc(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeShuntCalShuntCalASrc(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_ShuntCal_GainAdjust ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeShuntCalGainAdjust(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeShuntCalGainAdjust(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeShuntCalGainAdjust(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_ShuntCal_ShuntCalAResistance ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeShuntCalShuntCalAResistance(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeShuntCalShuntCalAResistance(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeShuntCalShuntCalAResistance(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_ShuntCal_ShuntCalAActualResistance ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeShuntCalShuntCalAActualResistance(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeShuntCalShuntCalAActualResistance(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeShuntCalShuntCalAActualResistance(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_ShuntCal_ShuntCalBResistance ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeShuntCalShuntCalBResistance(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeShuntCalShuntCalBResistance(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeShuntCalShuntCalBResistance(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_ShuntCal_ShuntCalBActualResistance ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeShuntCalShuntCalBActualResistance(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIBridgeShuntCalShuntCalBActualResistance(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeShuntCalShuntCalBActualResistance(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_Balance_CoarsePot ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeBalanceCoarsePot(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeBalanceCoarsePot(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeBalanceCoarsePot(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Bridge_Balance_FinePot ***
+//     /// int32 __CFUNC DAQmxGetAIBridgeBalanceFinePot(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIBridgeBalanceFinePot(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIBridgeBalanceFinePot(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_CurrentShunt_Loc ***
+// // Uses value set CurrentShuntResistorLocation1
+//     /// int32 __CFUNC DAQmxGetAICurrentShuntLoc(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAICurrentShuntLoc(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAICurrentShuntLoc(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_CurrentShunt_Resistance ***
+//     /// int32 __CFUNC DAQmxGetAICurrentShuntResistance(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAICurrentShuntResistance(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAICurrentShuntResistance(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_Sense ***
+// // Uses value set Sense
+//     /// int32 __CFUNC DAQmxGetAIExcitSense(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIExcitSense(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitSense(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_Src ***
+// // Uses value set ExcitationSource
+//     /// int32 __CFUNC DAQmxGetAIExcitSrc(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIExcitSrc(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitSrc(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_Val ***
+//     /// int32 __CFUNC DAQmxGetAIExcitVal(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIExcitVal(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitVal(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_UseForScaling ***
+//     /// int32 __CFUNC DAQmxGetAIExcitUseForScaling(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIExcitUseForScaling(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitUseForScaling(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_UseMultiplexed ***
+//     /// int32 __CFUNC DAQmxGetAIExcitUseMultiplexed(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIExcitUseMultiplexed(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitUseMultiplexed(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_ActualVal ***
+//     /// int32 __CFUNC DAQmxGetAIExcitActualVal(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIExcitActualVal(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitActualVal(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_DCorAC ***
+// // Uses value set ExcitationDCorAC
+//     /// int32 __CFUNC DAQmxGetAIExcitDCorAC(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIExcitDCorAC(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitDCorAC(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_VoltageOrCurrent ***
+// // Uses value set ExcitationVoltageOrCurrent
+//     /// int32 __CFUNC DAQmxGetAIExcitVoltageOrCurrent(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIExcitVoltageOrCurrent(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitVoltageOrCurrent(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Excit_IdleOutputBehavior ***
+// // Uses value set ExcitationIdleOutputBehavior
+//     /// int32 __CFUNC DAQmxGetAIExcitIdleOutputBehavior(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIExcitIdleOutputBehavior(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIExcitIdleOutputBehavior(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ACExcit_Freq ***
+//     /// int32 __CFUNC DAQmxGetAIACExcitFreq(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIACExcitFreq(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIACExcitFreq(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ACExcit_SyncEnable ***
+//     /// int32 __CFUNC DAQmxGetAIACExcitSyncEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIACExcitSyncEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIACExcitSyncEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ACExcit_WireMode ***
+// // Uses value set ACExcitWireMode
+//     /// int32 __CFUNC DAQmxGetAIACExcitWireMode(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIACExcitWireMode(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIACExcitWireMode(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_SensorPower_Voltage ***
+//     /// int32 __CFUNC DAQmxGetAISensorPowerVoltage(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAISensorPowerVoltage(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAISensorPowerVoltage(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_SensorPower_Cfg ***
+// // Uses value set SensorPowerCfg
+//     /// int32 __CFUNC DAQmxGetAISensorPowerCfg(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAISensorPowerCfg(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAISensorPowerCfg(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_SensorPower_Type ***
+// // Uses value set SensorPowerType
+//     /// int32 __CFUNC DAQmxGetAISensorPowerType(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAISensorPowerType(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAISensorPowerType(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_OpenThrmcplDetectEnable ***
+//     /// int32 __CFUNC DAQmxGetAIOpenThrmcplDetectEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIOpenThrmcplDetectEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIOpenThrmcplDetectEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Thrmcpl_LeadOffsetVoltage ***
+//     /// int32 __CFUNC DAQmxGetAIThrmcplLeadOffsetVoltage(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIThrmcplLeadOffsetVoltage(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIThrmcplLeadOffsetVoltage(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Atten ***
+//     /// int32 __CFUNC DAQmxGetAIAtten(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIAtten(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIAtten(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ProbeAtten ***
+//     /// int32 __CFUNC DAQmxGetAIProbeAtten(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIProbeAtten(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIProbeAtten(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Lowpass_Enable ***
+//     /// int32 __CFUNC DAQmxGetAILowpassEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAILowpassEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAILowpassEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Lowpass_CutoffFreq ***
+//     /// int32 __CFUNC DAQmxGetAILowpassCutoffFreq(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAILowpassCutoffFreq(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAILowpassCutoffFreq(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Lowpass_SwitchCap_ClkSrc ***
+// // Uses value set SourceSelection
+//     /// int32 __CFUNC DAQmxGetAILowpassSwitchCapClkSrc(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAILowpassSwitchCapClkSrc(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAILowpassSwitchCapClkSrc(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Lowpass_SwitchCap_ExtClkFreq ***
+//     /// int32 __CFUNC DAQmxGetAILowpassSwitchCapExtClkFreq(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAILowpassSwitchCapExtClkFreq(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAILowpassSwitchCapExtClkFreq(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Lowpass_SwitchCap_ExtClkDiv ***
+//     /// int32 __CFUNC DAQmxGetAILowpassSwitchCapExtClkDiv(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAILowpassSwitchCapExtClkDiv(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAILowpassSwitchCapExtClkDiv(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Lowpass_SwitchCap_OutClkDiv ***
+//     /// int32 __CFUNC DAQmxGetAILowpassSwitchCapOutClkDiv(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAILowpassSwitchCapOutClkDiv(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAILowpassSwitchCapOutClkDiv(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Enable ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Type ***
+// // Uses value set FilterType2
+//     /// int32 __CFUNC DAQmxGetAIDigFltrType(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrType(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrType(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Response ***
+// // Uses value set FilterResponse
+//     /// int32 __CFUNC DAQmxGetAIDigFltrResponse(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrResponse(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrResponse(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Order ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrOrder(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrOrder(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrOrder(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Lowpass_CutoffFreq ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrLowpassCutoffFreq(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrLowpassCutoffFreq(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrLowpassCutoffFreq(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Highpass_CutoffFreq ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrHighpassCutoffFreq(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrHighpassCutoffFreq(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrHighpassCutoffFreq(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Bandpass_CenterFreq ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrBandpassCenterFreq(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrBandpassCenterFreq(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrBandpassCenterFreq(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Bandpass_Width ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrBandpassWidth(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrBandpassWidth(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrBandpassWidth(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Notch_CenterFreq ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrNotchCenterFreq(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrNotchCenterFreq(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrNotchCenterFreq(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Notch_Width ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrNotchWidth(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrNotchWidth(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrNotchWidth(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DigFltr_Coeff ***
+//     /// int32 __CFUNC DAQmxGetAIDigFltrCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDigFltrCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDigFltrCoeff(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Filter_Enable ***
+//     /// int32 __CFUNC DAQmxGetAIFilterEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIFilterEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIFilterEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Filter_Freq ***
+//     /// int32 __CFUNC DAQmxGetAIFilterFreq(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIFilterFreq(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIFilterFreq(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Filter_Response ***
+// // Uses value set FilterResponse1
+//     /// int32 __CFUNC DAQmxGetAIFilterResponse(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIFilterResponse(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIFilterResponse(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Filter_Order ***
+//     /// int32 __CFUNC DAQmxGetAIFilterOrder(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIFilterOrder(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIFilterOrder(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_FilterDelay ***
+//     /// int32 __CFUNC DAQmxGetAIFilterDelay(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+// //*** Set/Get functions for DAQmx_AI_FilterDelayUnits ***
+// // Uses value set DigitalWidthUnits4
+//     /// int32 __CFUNC DAQmxGetAIFilterDelayUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIFilterDelayUnits(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIFilterDelayUnits(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_RemoveFilterDelay ***
+//     /// int32 __CFUNC DAQmxGetAIRemoveFilterDelay(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIRemoveFilterDelay(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIRemoveFilterDelay(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_FilterDelayAdjustment ***
+//     /// int32 __CFUNC DAQmxGetAIFilterDelayAdjustment(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIFilterDelayAdjustment(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIFilterDelayAdjustment(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_AveragingWinSize ***
+//     /// int32 __CFUNC DAQmxGetAIAveragingWinSize(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIAveragingWinSize(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIAveragingWinSize(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ResolutionUnits ***
+// // Uses value set ResolutionType1
+//     /// int32 __CFUNC DAQmxGetAIResolutionUnits(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Resolution ***
+//     /// int32 __CFUNC DAQmxGetAIResolution(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+// //*** Set/Get functions for DAQmx_AI_RawSampSize ***
+//     /// int32 __CFUNC DAQmxGetAIRawSampSize(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_RawSampJustification ***
+// // Uses value set DataJustification1
+//     /// int32 __CFUNC DAQmxGetAIRawSampJustification(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//*** Set/Get functions for DAQmx_AI_ADCTimingMode ***
+// Uses value set ADCTimingMode
+    /// int32 __CFUNC DAQmxGetAIADCTimingMode(TaskHandle taskHandle, const char channel[], int32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetAIADCTimingMode(IntPtr taskHandle, string channel, out ADCTimingMode data);
+    /// int32 __CFUNC DAQmxSetAIADCTimingMode(TaskHandle taskHandle, const char channel[], int32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetAIADCTimingMode(IntPtr taskHandle, string channel, ADCTimingMode data);
+    /// int32 __CFUNC DAQmxResetAIADCTimingMode(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetAIADCTimingMode(IntPtr taskHandle, string channel);
+//*** Set/Get functions for DAQmx_AI_ADCCustomTimingMode ***
+    /// int32 __CFUNC DAQmxGetAIADCCustomTimingMode(TaskHandle taskHandle, const char channel[], uint32 *data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxGetAIADCCustomTimingMode(IntPtr taskHandle, string channel, out uint data);
+    /// int32 __CFUNC DAQmxSetAIADCCustomTimingMode(TaskHandle taskHandle, const char channel[], uint32 data);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxSetAIADCCustomTimingMode(IntPtr taskHandle, string channel, uint data);
+    /// int32 __CFUNC DAQmxResetAIADCCustomTimingMode(TaskHandle taskHandle, const char channel[]);
+    [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+    internal static extern int DAQmxResetAIADCCustomTimingMode(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Dither_Enable ***
+//     /// int32 __CFUNC DAQmxGetAIDitherEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDitherEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDitherEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_HasValidCalInfo ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalHasValidCalInfo(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_EnableCal ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalEnableCal(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalEnableCal(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalEnableCal(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_ApplyCalIfExp ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalApplyCalIfExp(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalApplyCalIfExp(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalApplyCalIfExp(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_ScaleType ***
+// // Uses value set ScaleType3
+//     /// int32 __CFUNC DAQmxGetAIChanCalScaleType(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalScaleType(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalScaleType(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_Table_PreScaledVals ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalTablePreScaledVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalTablePreScaledVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalTablePreScaledVals(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_Table_ScaledVals ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalTableScaledVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalTableScaledVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalTableScaledVals(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_Poly_ForwardCoeff ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalPolyForwardCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalPolyForwardCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalPolyForwardCoeff(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_Poly_ReverseCoeff ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalPolyReverseCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalPolyReverseCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalPolyReverseCoeff(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_OperatorName ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalOperatorName(TaskHandle taskHandle, const char channel[], char *data, uint32 bufferSize);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalOperatorName(TaskHandle taskHandle, const char channel[], const char *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalOperatorName(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_Desc ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalDesc(TaskHandle taskHandle, const char channel[], char *data, uint32 bufferSize);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalDesc(TaskHandle taskHandle, const char channel[], const char *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalDesc(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_Verif_RefVals ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalVerifRefVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalVerifRefVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalVerifRefVals(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChanCal_Verif_AcqVals ***
+//     /// int32 __CFUNC DAQmxGetAIChanCalVerifAcqVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChanCalVerifAcqVals(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChanCalVerifAcqVals(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Rng_High ***
+//     /// int32 __CFUNC DAQmxGetAIRngHigh(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIRngHigh(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIRngHigh(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Rng_Low ***
+//     /// int32 __CFUNC DAQmxGetAIRngLow(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIRngLow(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIRngLow(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DCOffset ***
+//     /// int32 __CFUNC DAQmxGetAIDCOffset(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIDCOffset(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDCOffset(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_Gain ***
+//     /// int32 __CFUNC DAQmxGetAIGain(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIGain(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIGain(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_SampAndHold_Enable ***
+//     /// int32 __CFUNC DAQmxGetAISampAndHoldEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAISampAndHoldEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAISampAndHoldEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_AutoZeroMode ***
+// // Uses value set AutoZeroType1
+//     /// int32 __CFUNC DAQmxGetAIAutoZeroMode(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIAutoZeroMode(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIAutoZeroMode(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_ChopEnable ***
+//     /// int32 __CFUNC DAQmxGetAIChopEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIChopEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIChopEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DataXferMaxRate ***
+//     /// int32 __CFUNC DAQmxGetAIDataXferMaxRate(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIDataXferMaxRate(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDataXferMaxRate(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DataXferMech ***
+// // Uses value set DataTransferMechanism
+//     /// int32 __CFUNC DAQmxGetAIDataXferMech(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDataXferMech(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDataXferMech(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DataXferReqCond ***
+// // Uses value set InputDataTransferCondition
+//     /// int32 __CFUNC DAQmxGetAIDataXferReqCond(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDataXferReqCond(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDataXferReqCond(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DataXferCustomThreshold ***
+//     /// int32 __CFUNC DAQmxGetAIDataXferCustomThreshold(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIDataXferCustomThreshold(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIDataXferCustomThreshold(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_UsbXferReqSize ***
+//     /// int32 __CFUNC DAQmxGetAIUsbXferReqSize(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIUsbXferReqSize(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIUsbXferReqSize(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_UsbXferReqCount ***
+//     /// int32 __CFUNC DAQmxGetAIUsbXferReqCount(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIUsbXferReqCount(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIUsbXferReqCount(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_MemMapEnable ***
+//     /// int32 __CFUNC DAQmxGetAIMemMapEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIMemMapEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIMemMapEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_RawDataCompressionType ***
+// // Uses value set RawDataCompressionType
+//     /// int32 __CFUNC DAQmxGetAIRawDataCompressionType(TaskHandle taskHandle, const char channel[], int32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIRawDataCompressionType(TaskHandle taskHandle, const char channel[], int32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIRawDataCompressionType(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_LossyLSBRemoval_CompressedSampSize ***
+//     /// int32 __CFUNC DAQmxGetAILossyLSBRemovalCompressedSampSize(TaskHandle taskHandle, const char channel[], uint32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAILossyLSBRemovalCompressedSampSize(TaskHandle taskHandle, const char channel[], uint32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAILossyLSBRemovalCompressedSampSize(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_DevScalingCoeff ***
+//     /// int32 __CFUNC DAQmxGetAIDevScalingCoeff(TaskHandle taskHandle, const char channel[], float64 *data, uint32 arraySizeInElements);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_EnhancedAliasRejectionEnable ***
+//     /// int32 __CFUNC DAQmxGetAIEnhancedAliasRejectionEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIEnhancedAliasRejectionEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIEnhancedAliasRejectionEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_OpenChanDetectEnable ***
+//     /// int32 __CFUNC DAQmxGetAIOpenChanDetectEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIOpenChanDetectEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIOpenChanDetectEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_InputLimitsFaultDetect_UpperLimit ***
+//     /// int32 __CFUNC DAQmxGetAIInputLimitsFaultDetectUpperLimit(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIInputLimitsFaultDetectUpperLimit(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIInputLimitsFaultDetectUpperLimit(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_InputLimitsFaultDetect_LowerLimit ***
+//     /// int32 __CFUNC DAQmxGetAIInputLimitsFaultDetectLowerLimit(TaskHandle taskHandle, const char channel[], float64 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel, out double data);
+//     /// int32 __CFUNC DAQmxSetAIInputLimitsFaultDetectLowerLimit(TaskHandle taskHandle, const char channel[], float64 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIInputLimitsFaultDetectLowerLimit(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_InputLimitsFaultDetectEnable ***
+//     /// int32 __CFUNC DAQmxGetAIInputLimitsFaultDetectEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIInputLimitsFaultDetectEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIInputLimitsFaultDetectEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_PowerSupplyFaultDetectEnable ***
+//     /// int32 __CFUNC DAQmxGetAIPowerSupplyFaultDetectEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIPowerSupplyFaultDetectEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIPowerSupplyFaultDetectEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+// //*** Set/Get functions for DAQmx_AI_OvercurrentDetectEnable ***
+//     /// int32 __CFUNC DAQmxGetAIOvercurrentDetectEnable(TaskHandle taskHandle, const char channel[], bool32 *data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxSetAIOvercurrentDetectEnable(TaskHandle taskHandle, const char channel[], bool32 data);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
+//     /// int32 __CFUNC DAQmxResetAIOvercurrentDetectEnable(TaskHandle taskHandle, const char channel[]);
+//     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]
+//     internal static extern int Asd(IntPtr taskHandle, string channel);
         //*** Set/Get functions for DAQmx_DI_InvertLines ***
     /// int32 __CFUNC DAQmxGetDIInvertLines(TaskHandle taskHandle, const char channel[], bool32 *data);
     [DllImport(Lib, CallingConvention = CallingConvention.StdCall)]

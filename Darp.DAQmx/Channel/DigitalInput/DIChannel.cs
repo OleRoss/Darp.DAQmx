@@ -75,7 +75,7 @@ public static class DIChannelExtensions
             portId,
             firstLine,
             lastLine,
-            Guid.NewGuid().ToString(),
+            "",
             ChannelLineGrouping.OneChannelForEachLine);
         configuration?.Invoke(channel);
         channelCollection.Add(channel);

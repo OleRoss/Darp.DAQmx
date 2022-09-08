@@ -55,8 +55,8 @@ public class AIVoltageChannel : IAnalogInputChannel
 
     public AIVoltageUnits Units
     {
-        get => ThrowIfFailedOrReturn(DAQmxGetAIVoltageUnits(_taskHandle, PhysicalChannel, out int units), (AIVoltageUnits)units);
-        set => ThrowIfFailed(DAQmxSetAIVoltageUnits(_taskHandle, PhysicalChannel, (int)value));
+        get => ThrowIfFailedOrReturn(DAQmxGetAIVoltageUnits(_taskHandle, PhysicalChannel, out AIVoltageUnits units), units);
+        set => ThrowIfFailed(DAQmxSetAIVoltageUnits(_taskHandle, PhysicalChannel, value));
     }
     public void ResetUnits() => ThrowIfFailed(DAQmxResetAIVoltageUnits(_taskHandle, PhysicalChannel));
 
@@ -65,7 +65,7 @@ public class AIVoltageChannel : IAnalogInputChannel
 
     public void SetCustomScale(string customScaleName)
     {
-        ThrowIfFailed(DAQmxSetAIVoltageUnits(_taskHandle, PhysicalChannel, (int)AIVoltageUnits.FromCustomScale));
+        ThrowIfFailed(DAQmxSetAIVoltageUnits(_taskHandle, PhysicalChannel, AIVoltageUnits.FromCustomScale));
         ThrowIfFailed(DAQmxSetAICustomScaleName(_taskHandle, PhysicalChannel, customScaleName.ToCharArray()));
     }
     public void ResetCustomScale()
@@ -73,6 +73,13 @@ public class AIVoltageChannel : IAnalogInputChannel
         ThrowIfFailed(DAQmxResetAIVoltageUnits(_taskHandle, PhysicalChannel));
         ThrowIfFailed(DAQmxResetAICustomScaleName(_taskHandle, PhysicalChannel));
     }
+
+    public ADCTimingMode ADCTimingMode
+    {
+        get => ThrowIfFailedOrReturn(DAQmxGetAIADCTimingMode(_taskHandle, PhysicalChannel, out ADCTimingMode timingMode), timingMode);
+        set => ThrowIfFailed(DAQmxSetAIADCTimingMode(_taskHandle, PhysicalChannel, value));
+    }
+    public void ResetADCTimingMode() => ThrowIfFailed(DAQmxResetAIADCTimingMode(_taskHandle, PhysicalChannel));
 
 }
 
@@ -93,15 +100,16 @@ public static class AIVoltageChannelExtensions
     public static AnalogInputTask AddVoltageChannel(this ChannelCollection<AnalogInputTask, IAnalogInputChannel> channelCollection,
         string deviceIdentifier,
         int analogInputId,
-        Action<AIVoltageChannel>? configuration = null)
+        Action<AIVoltageChannel>? configuration = null,
+        AITerminalConfiguration terminalConfiguration = AITerminalConfiguration.Differential)
     {
         var channel = new AIVoltageChannel(channelCollection.Task.Handle,
             deviceIdentifier,
             analogInputId,
             Guid.NewGuid().ToString(),
-            AITerminalConfiguration.Differential,
-            -10,
-            10,
+            terminalConfiguration,
+            0,
+            5,
             AIVoltageUnits.Volts,
             "");
         configuration?.Invoke(channel);

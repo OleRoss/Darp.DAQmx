@@ -7,7 +7,7 @@ using Darp.DAQmx.Task;
 
 namespace Darp.DAQmx.Reader;
 
-public class SingleChannelReader<TTask, TChannel> : IReader<TTask, TChannel>
+public class SingleChannelReader<TTask, TChannel> : ISingleChannelReader<TTask, TChannel>
     where TTask : ITask<TTask, TChannel>
     where TChannel : IChannel
 {
@@ -15,7 +15,7 @@ public class SingleChannelReader<TTask, TChannel> : IReader<TTask, TChannel>
     {
         Task = task;
         Channels = new ReadOnlyCollection<TChannel>(task.Channels);
-        ChannelCount = Channels.Sum(x => x.NumberOfVirtualChannels);
+        ChannelCount = task.Channels.ChannelCount;
 
         if (ChannelCount != 1)
             throw new ArgumentOutOfRangeException(nameof(task),

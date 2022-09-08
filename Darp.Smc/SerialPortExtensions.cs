@@ -36,7 +36,7 @@ public static class SerialPortExtensions
     public static Task<State> StartSamplingAsync(this SerialPort serialPort) => serialPort
         .GetResponse<State>(Smc.ConstructStartSampling);
 
-    public static void SubscribeToSamples(this SerialPort serialPort,
+    public static void OnSampleReceived(this SerialPort serialPort,
         Action<StateAndTemp> callback,
         CancellationToken token = default)
     {
