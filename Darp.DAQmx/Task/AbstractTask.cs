@@ -46,7 +46,7 @@ public abstract class AbstractTask<TTask, TChannel> : ITask<TTask, TChannel>
         ThrowIfFailed(DAQmxClearTask(Handle));
     }
 
-    public delegate void SampleCallback(IChannelReader<TTask, TChannel> channelReader, int numberOfSamples);
+    public delegate void SampleCallback(IChannelReader<TTask, TChannel> channelReader, int nSamples);
     public TTask OnEveryNSamplesRead(int nSamples, SampleCallback callback)
     {
         IChannelReader<TTask, TChannel> channelReader = Channels.GetReader();

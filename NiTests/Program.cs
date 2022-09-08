@@ -1,4 +1,5 @@
-﻿using Darp.DAQmx;
+﻿using System.Security.AccessControl;
+using Darp.DAQmx;
 using Darp.DAQmx.Channel;
 using Darp.DAQmx.Channel.AnalogInput;
 using Darp.DAQmx.Channel.CounterInput;
@@ -8,6 +9,7 @@ using Darp.DAQmx.Task;
 using Darp.DAQmx.Timing;
 using FftSharp;
 using Microsoft.Toolkit.HighPerformance;
+using NiTests;
 
 Console.WriteLine("Hello, World!");
 
@@ -15,42 +17,39 @@ IReadOnlyList<Device> devices = DaqMx.GetDevices();
 Device device = devices
     .First(x => x.ProductType is "USB-6210");
 Console.WriteLine($"Using device {device}");
-using AnalogInputTask torqueTask = new AnalogInputTask()
-    .Channels.AddVoltageChannel(device, 6, terminalConfiguration:AITerminalConfiguration.Rse, configuration:channel =>
-    {
-        channel.ADCTimingMode = ADCTimingMode.HighSpeed;
-    })
-    .Channels.AddVoltageChannel(device, 7, terminalConfiguration: AITerminalConfiguration.Rse, configuration:channel =>
-    {
-        channel.ADCTimingMode = ADCTimingMode.HighSpeed;
-    })
-    .Timing.ConfigureSampleClock(1000, 100, SampleQuantityMode.ContinuousSamples)
-    .OnEveryNSamplesRead(100, (reader, samples) =>
-    {
-        Span2D<double> values = new double[2,512];
-        reader.ReadByChannel(samples, values);
-        double[] buffer = values.GetRowSpan(0).ToArray().Select<double, double>(x => x > 2 ? 1 : 0).ToArray();
+/*var values = new double[2,2048];
+var boolValuesA = new double[2048];
+var boolValuesB = new double[2048];
 
-        // Console.WriteLine(string.Join(",", values.GetRowSpan(0).ToArray()));
-        double[] x = Transform.FFTmagnitude(buffer);
-        double diff = Transform.FFTfreqPeriod(100000, 512);
-        double max = 0;
-        int maxI = -1;
-        for (var n = 0; n < x.Length; n++)
-        {
-            if (x[n] > max)
-            {
-                max = x[n];
-                maxI = n;
-            }
-        }
-        Console.WriteLine($"{maxI} - {diff * maxI / 60}");
+using AnalogInputTask torqueTask = new AnalogInputTask()
+    .Channels.AddVoltageChannel(device, 6, terminalConfiguration:AITerminalConfiguration.Rse)
+    .Channels.AddVoltageChannel(device, 7, terminalConfiguration: AITerminalConfiguration.Rse)
+    .Timing.ConfigureSampleClock(100000, 2000, SampleQuantityMode.ContinuousSamples)
+    .OnEveryNSamplesRead(2000, (reader, nSamples) =>
+    {
+        reader.ReadByChannel(nSamples, values);
+        values.ToBool(boolValuesA, 0);
+        values.ToBool(boolValuesB, 1);
+
+        double[] x = Transform.FFTmagnitude(boolValuesA);
+        int rpm = x.ArgMax().FftToRpm(100000, 2048);
+        int dir = values.SamplesToDirection(nSamples);
+        Console.WriteLine($"{dir*rpm}");
         // Console.WriteLine(string.Join(",", values.GetRow(0).ToArray().Select(x => x > 2)));
         // Console.WriteLine(string.Join(",", values.GetRow(1).ToArray().Select(x => x > 2)));
+    });*/
+
+using AnalogInputTask torqueTask = new AnalogInputTask()
+    .Channels.AddVoltageChannel(device, 5)
+    .Timing.ConfigureSampleClock(1000, 1000, SampleQuantityMode.ContinuousSamples)
+    .OnEveryNSamplesRead(1000, (reader, nSamples) =>
+    {
+        var res = reader.ReadByChannel(nSamples);
+        Console.WriteLine(res.GetRowSpan(0).ToArray().Sum()*63*200/1000);
     });
 torqueTask.Start();
 
-await Task.Delay(100000);
+await Task.Delay(1000000);
 /*var bytes = new double[4, 1000];
 using AnalogInputTask analogTask = new AnalogInputTask()
     .Channels.AddVoltageChannel(deviceOne, 0)

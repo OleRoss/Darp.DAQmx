@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Wbst\src\Darp.NiService\Darp.NiService.csproj" />
       <ProjectReference Include="..\Darp.DAQmx\Darp.DAQmx.csproj" />
       <ProjectReference Include="..\Darp.Smc\Darp.Smc.csproj" />
     </ItemGroup>
