@@ -95,8 +95,8 @@ public static class CIReaderExtensions
 
     public static void ReadByChannel(this IChannelReader<CounterInputTask, ICounterInputChannel> channelReader,
         int numSamplesPerChannel,
-        in Span2D<double> dataBuffer,
-        int timeout = 10
+        Span2D<double> dataBuffer,
+        double timeout = 10
         )
     {
         if (dataBuffer.Width < numSamplesPerChannel)
@@ -109,5 +109,14 @@ public static class CIReaderExtensions
         channelReader.ReadCounterF64(numSamplesPerChannel, buffer, CIFillMode.GroupByChannel, timeout);
         for (var i = 0; i < channelReader.ChannelCount; i++)
             buffer[(i * numSamplesPerChannel)..((i + 1) * numSamplesPerChannel)].CopyTo(dataBuffer.GetRowSpan(i));
+    }
+
+    public static double[,] ReadByChannel(this IChannelReader<CounterInputTask, ICounterInputChannel> channelReader,
+        int numSamplesPerChannel,
+        double timeout = 10)
+    {
+        var dataBuffer = new double[channelReader.ChannelCount, numSamplesPerChannel];
+        channelReader.ReadByChannel(numSamplesPerChannel, dataBuffer, timeout);
+        return dataBuffer;
     }
 }
