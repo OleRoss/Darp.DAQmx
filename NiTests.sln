@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Darp.Smc", "Darp.Smc\Darp.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Darp.NrfBleDriver", "Darp.NrfBleDriver\Darp.NrfBleDriver.csproj", "{BB722846-3A38-42F9-B063-76FB455F2942}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bluetooth", "..\Wbst\src\Bluetooth\Bluetooth.csproj", "{88BCE8B8-DC66-493F-90E6-558427980CEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{BB722846-3A38-42F9-B063-76FB455F2942}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB722846-3A38-42F9-B063-76FB455F2942}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB722846-3A38-42F9-B063-76FB455F2942}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88BCE8B8-DC66-493F-90E6-558427980CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88BCE8B8-DC66-493F-90E6-558427980CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88BCE8B8-DC66-493F-90E6-558427980CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88BCE8B8-DC66-493F-90E6-558427980CEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
