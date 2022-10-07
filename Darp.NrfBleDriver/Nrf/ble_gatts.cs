@@ -16,33 +16,33 @@ namespace NrfBleDriver
     public enum BLE_GATTS_SVCS
     {
         /// <summary>Add a service.</summary>
-        SD_BLE_GATTS_SERVICE_ADD = 160,
+        SD_BLE_GATTS_SERVICE_ADD = 168,
         /// <summary>Add an included service.</summary>
-        SD_BLE_GATTS_INCLUDE_ADD = 161,
+        SD_BLE_GATTS_INCLUDE_ADD = 169,
         /// <summary>Add a characteristic.</summary>
-        SD_BLE_GATTS_CHARACTERISTIC_ADD = 162,
+        SD_BLE_GATTS_CHARACTERISTIC_ADD = 170,
         /// <summary>Add a generic attribute.</summary>
-        SD_BLE_GATTS_DESCRIPTOR_ADD = 163,
+        SD_BLE_GATTS_DESCRIPTOR_ADD = 171,
         /// <summary>Set an attribute value.</summary>
-        SD_BLE_GATTS_VALUE_SET = 164,
+        SD_BLE_GATTS_VALUE_SET = 172,
         /// <summary>Get an attribute value.</summary>
-        SD_BLE_GATTS_VALUE_GET = 165,
+        SD_BLE_GATTS_VALUE_GET = 173,
         /// <summary>Handle Value Notification or Indication.</summary>
-        SD_BLE_GATTS_HVX = 166,
+        SD_BLE_GATTS_HVX = 174,
         /// <summary>Perform a Service Changed Indication to one or more peers.</summary>
-        SD_BLE_GATTS_SERVICE_CHANGED = 167,
+        SD_BLE_GATTS_SERVICE_CHANGED = 175,
         /// <summary>Reply to an authorization request for a read or write operation on one or more attributes.</summary>
-        SD_BLE_GATTS_RW_AUTHORIZE_REPLY = 168,
+        SD_BLE_GATTS_RW_AUTHORIZE_REPLY = 176,
         /// <summary>Set the persistent system attributes for a connection.</summary>
-        SD_BLE_GATTS_SYS_ATTR_SET = 169,
+        SD_BLE_GATTS_SYS_ATTR_SET = 177,
         /// <summary>Retrieve the persistent system attributes.</summary>
-        SD_BLE_GATTS_SYS_ATTR_GET = 170,
+        SD_BLE_GATTS_SYS_ATTR_GET = 178,
         /// <summary>Retrieve the first valid user handle.</summary>
-        SD_BLE_GATTS_INITIAL_USER_HANDLE_GET = 171,
+        SD_BLE_GATTS_INITIAL_USER_HANDLE_GET = 179,
         /// <summary>Retrieve the UUID and/or metadata of an attribute.</summary>
-        SD_BLE_GATTS_ATTR_GET = 172,
+        SD_BLE_GATTS_ATTR_GET = 180,
         /// <summary>Reply to Exchange MTU Request.</summary>
-        SD_BLE_GATTS_EXCHANGE_MTU_REPLY = 173
+        SD_BLE_GATTS_EXCHANGE_MTU_REPLY = 181
     }
 
     /// <summary>GATT Server Event IDs.</summary>
@@ -1508,7 +1508,7 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>Length in bytes to be written, length in bytes written after successful return.</summary>
+        /// <summary>Length in bytes to be written, length in bytes written after return.</summary>
         public ushort* PLen
         {
             get
@@ -3809,7 +3809,7 @@ namespace NrfBleDriver
             internal static extern uint SdBleGattsSysAttrSet(__IntPtr adapter, ushort conn_handle, byte* p_sys_attr_data, ushort len, uint flags);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gatts_sys_attr_get", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGattsSysAttrGet(__IntPtr adapter, ushort conn_handle, byte* p_sys_attr_data, ushort* p_sys_attr_data_len, uint flags);
+            internal static extern uint SdBleGattsSysAttrGet(__IntPtr adapter, ushort conn_handle, byte* p_sys_attr_data, ushort* p_len, uint flags);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gatts_initial_user_handle_get", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGattsInitialUserHandleGet(__IntPtr adapter, ushort* p_handle);
@@ -3912,12 +3912,12 @@ namespace NrfBleDriver
             return __ret;
         }
 
-        public static uint SdBleGattsSysAttrGet(global::NrfBleDriver.AdapterT adapter, ushort conn_handle, byte* p_sys_attr_data, ref ushort p_sys_attr_data_len, uint flags)
+        public static uint SdBleGattsSysAttrGet(global::NrfBleDriver.AdapterT adapter, ushort conn_handle, byte* p_sys_attr_data, ref ushort p_len, uint flags)
         {
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            fixed (ushort* __p_sys_attr_data_len3 = &p_sys_attr_data_len)
+            fixed (ushort* __p_len3 = &p_len)
             {
-                var __arg3 = __p_sys_attr_data_len3;
+                var __arg3 = __p_len3;
                 var __ret = __Internal.SdBleGattsSysAttrGet(__arg0, conn_handle, p_sys_attr_data, __arg3, flags);
                 return __ret;
             }

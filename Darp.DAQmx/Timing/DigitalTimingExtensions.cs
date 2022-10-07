@@ -1,5 +1,4 @@
-﻿using System;
-using Darp.DAQmx.Task;
+﻿using Darp.DAQmx.Task;
 using static Darp.DAQmx.DaqMxException;
 using static Darp.DAQmx.NationalInstruments.Functions.Interop;
 

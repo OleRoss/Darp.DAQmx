@@ -1,5 +1,4 @@
 ﻿using System;
-using Darp.DAQmx.Reader;
 using Darp.DAQmx.Task;
 
 using static Darp.DAQmx.DaqMxException;

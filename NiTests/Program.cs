@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Bluetooth.Advertisement;
+using Darp.NrfBleDriver.Bluetooth;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 
@@ -16,6 +17,18 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 Log.Logger.Information("Hi");
+
+NrfBluetoothService.Setup();
+
+using var bleController = new NrfBluetoothService("COM3", logger:Log.Logger);
+var source = new CancellationTokenSource();
+source.CancelAfter(5000);
+BleAdvertisement[] advertisements = await bleController
+    .AdvertisementScanner(CancellationToken.None)
+    .ScanAsync(source.Token)
+    .ToArrayAsync();
+
+return;
 
 await Task.Delay(100);
 /*IReadOnlyList<Device> devices = DaqMx.GetDevices();

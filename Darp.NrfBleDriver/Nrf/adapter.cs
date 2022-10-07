@@ -12,6 +12,125 @@ using __IntPtr = global::System.IntPtr;
 
 namespace NrfBleDriver
 {
+    public unsafe partial class AdapterT : IDisposable
+    {
+        [StructLayout(LayoutKind.Sequential, Size = 8)]
+        public partial struct __Internal
+        {
+            internal __IntPtr @internal;
+
+            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0adapter_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
+            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
+        }
+
+        public __IntPtr __Instance { get; protected set; }
+
+        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.AdapterT> NativeToManagedMap =
+            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.AdapterT>();
+
+        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.AdapterT managed)
+        {
+            NativeToManagedMap[native] = managed;
+        }
+
+        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.AdapterT managed)
+        {
+    
+            return NativeToManagedMap.TryGetValue(native, out managed);
+        }
+
+        protected bool __ownsNativeInstance;
+
+        internal static AdapterT __CreateInstance(__IntPtr native, bool skipVTables = false)
+        {
+            return new AdapterT(native.ToPointer(), skipVTables);
+        }
+
+        internal static AdapterT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
+        {
+            if (native == __IntPtr.Zero)
+                return null;
+            if (__TryGetNativeToManagedMapping(native, out var managed))
+                return (AdapterT)managed;
+            var result = __CreateInstance(native, skipVTables);
+            if (saveInstance)
+                __RecordNativeToManagedMapping(native, result);
+            return result;
+        }
+
+        internal static AdapterT __CreateInstance(__Internal native, bool skipVTables = false)
+        {
+            return new AdapterT(native, skipVTables);
+        }
+
+        private static void* __CopyValue(__Internal native)
+        {
+            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
+            *(__Internal*) ret = native;
+            return ret.ToPointer();
+        }
+
+        private AdapterT(__Internal native, bool skipVTables = false)
+            : this(__CopyValue(native), skipVTables)
+        {
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+        }
+
+        protected AdapterT(void* native, bool skipVTables = false)
+        {
+            if (native == null)
+                return;
+            __Instance = new __IntPtr(native);
+        }
+
+        public AdapterT()
+        {
+            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.AdapterT.__Internal));
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+        }
+
+        public AdapterT(global::NrfBleDriver.AdapterT __0)
+        {
+            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.AdapterT.__Internal));
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+            *((global::NrfBleDriver.AdapterT.__Internal*) __Instance) = *((global::NrfBleDriver.AdapterT.__Internal*) __0.__Instance);
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
+        }
+
+        partial void DisposePartial(bool disposing);
+
+        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
+        {
+            if (__Instance == IntPtr.Zero)
+                return;
+            NativeToManagedMap.TryRemove(__Instance, out _);
+            DisposePartial(disposing);
+            if (__ownsNativeInstance)
+                Marshal.FreeHGlobal(__Instance);
+            __Instance = IntPtr.Zero;
+        }
+
+        public __IntPtr Internal
+        {
+            get
+            {
+                return ((__Internal*)__Instance)->@internal;
+            }
+
+            set
+            {
+                ((__Internal*)__Instance)->@internal = (__IntPtr) value;
+            }
+        }
+    }
+
     public unsafe partial class TransportLayerT : IDisposable
     {
         [StructLayout(LayoutKind.Sequential, Size = 8)]
@@ -216,125 +335,6 @@ namespace NrfBleDriver
             __ownsNativeInstance = true;
             __RecordNativeToManagedMapping(__Instance, this);
             *((global::NrfBleDriver.DataLinkLayerT.__Internal*) __Instance) = *((global::NrfBleDriver.DataLinkLayerT.__Internal*) __0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
-        }
-
-        partial void DisposePartial(bool disposing);
-
-        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            NativeToManagedMap.TryRemove(__Instance, out _);
-            DisposePartial(disposing);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
-        }
-
-        public __IntPtr Internal
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->@internal;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->@internal = (__IntPtr) value;
-            }
-        }
-    }
-
-    public unsafe partial class AdapterT : IDisposable
-    {
-        [StructLayout(LayoutKind.Sequential, Size = 8)]
-        public partial struct __Internal
-        {
-            internal __IntPtr @internal;
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0adapter_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-        }
-
-        public __IntPtr __Instance { get; protected set; }
-
-        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.AdapterT> NativeToManagedMap =
-            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.AdapterT>();
-
-        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.AdapterT managed)
-        {
-            NativeToManagedMap[native] = managed;
-        }
-
-        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.AdapterT managed)
-        {
-    
-            return NativeToManagedMap.TryGetValue(native, out managed);
-        }
-
-        protected bool __ownsNativeInstance;
-
-        internal static AdapterT __CreateInstance(__IntPtr native, bool skipVTables = false)
-        {
-            return new AdapterT(native.ToPointer(), skipVTables);
-        }
-
-        internal static AdapterT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
-        {
-            if (native == __IntPtr.Zero)
-                return null;
-            if (__TryGetNativeToManagedMapping(native, out var managed))
-                return (AdapterT)managed;
-            var result = __CreateInstance(native, skipVTables);
-            if (saveInstance)
-                __RecordNativeToManagedMapping(native, result);
-            return result;
-        }
-
-        internal static AdapterT __CreateInstance(__Internal native, bool skipVTables = false)
-        {
-            return new AdapterT(native, skipVTables);
-        }
-
-        private static void* __CopyValue(__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
-            *(__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
-        private AdapterT(__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
-        {
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        protected AdapterT(void* native, bool skipVTables = false)
-        {
-            if (native == null)
-                return;
-            __Instance = new __IntPtr(native);
-        }
-
-        public AdapterT()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.AdapterT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        public AdapterT(global::NrfBleDriver.AdapterT __0)
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.AdapterT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-            *((global::NrfBleDriver.AdapterT.__Internal*) __Instance) = *((global::NrfBleDriver.AdapterT.__Internal*) __0.__Instance);
         }
 
         public void Dispose()

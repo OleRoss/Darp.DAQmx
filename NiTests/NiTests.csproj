@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Darp.DAQmx\Darp.DAQmx.csproj" />
+      <ProjectReference Include="..\Darp.NrfBleDriver\Darp.NrfBleDriver.csproj" />
       <ProjectReference Include="..\Darp.Smc\Darp.Smc.csproj" />
     </ItemGroup>
 

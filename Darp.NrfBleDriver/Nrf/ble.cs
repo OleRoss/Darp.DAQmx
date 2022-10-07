@@ -19,7 +19,7 @@ namespace NrfBleDriver
         SD_BLE_ENABLE = 96,
         /// <summary>Get an event from the pending events queue.</summary>
         SD_BLE_EVT_GET = 97,
-        /// <summary>Add a Vendor Specific UUID.</summary>
+        /// <summary>Add a Vendor Specific base UUID.</summary>
         SD_BLE_UUID_VS_ADD = 98,
         /// <summary>Decode UUID bytes.</summary>
         SD_BLE_UUID_DECODE = 99,
@@ -34,7 +34,9 @@ namespace NrfBleDriver
         /// <summary>Get a BLE option.</summary>
         SD_BLE_OPT_GET = 104,
         /// <summary>Add a configuration to the BLE stack.</summary>
-        SD_BLE_CFG_SET = 105
+        SD_BLE_CFG_SET = 105,
+        /// <summary>Remove a Vendor Specific base UUID.</summary>
+        SD_BLE_UUID_VS_REMOVE = 106
     }
 
     /// <summary>BLE Module Independent Event IDs.</summary>
@@ -66,7 +68,7 @@ namespace NrfBleDriver
     /// <remarks>IDs that uniquely identify a common configuration.</remarks>
     public enum BLE_COMMON_CFGS
     {
-        /// <summary>Vendor specific UUID configuration</summary>
+        /// <summary>Vendor specific base UUID configuration</summary>
         BLE_COMMON_CFG_VS_UUID = 1
     }
 
@@ -79,7 +81,9 @@ namespace NrfBleDriver
         /// <summary>PA and LNA options</summary>
         BLE_COMMON_OPT_PA_LNA = 1,
         /// <summary>Extended connection events option</summary>
-        BLE_COMMON_OPT_CONN_EVT_EXT = 2
+        BLE_COMMON_OPT_CONN_EVT_EXT = 2,
+        /// <summary>Extended RC calibration option</summary>
+        BLE_COMMON_OPT_EXTENDED_RC_CAL = 3
     }
 
     /// <summary>User Memory Block.</summary>
@@ -107,6 +111,18 @@ namespace NrfBleDriver
     /// <para>and if there are no conflicts with other BLE roles requesting radio time.</para>
     /// <para>is not supported for this option.</para>
     /// </remarks>
+    /// <summary>Enable/disable extended RC calibration.</summary>
+    /// <remarks>
+    /// <para>If extended RC calibration is enabled and the internal RC oscillator (is used as the SoftDevice</para>
+    /// <para>LFCLK source, the SoftDevice as a peripheral will by default try to increase the receive window if two consecutive packets</para>
+    /// <para>are not received. If it turns out that the packets were not received due to clock drift, the RC calibration is started.</para>
+    /// <para>This calibration comes in addition to the periodic calibration that is configured byWhen</para>
+    /// <para>using only peripheral connections, the periodic calibration can therefore be configured with a much longer interval as the</para>
+    /// <para>peripheral will be able to detect and adjust automatically to clock drift, and calibrate on demand.</para>
+    /// <para>If extended RC calibration is disabled and the internal RC oscillator is used as the SoftDevice LFCLK source, the</para>
+    /// <para>RC oscillator is calibrated periodically as configured by</para>
+    /// <para>is not supported for this option.</para>
+    /// </remarks>
     /// <summary>Option structure for common options.</summary>
     /// <summary>Common BLE Option type, wrapping the module specific options.</summary>
     /// <summary>BLE connection configuration type, wrapping the module specific configurations, set with</summary>
@@ -115,10 +131,12 @@ namespace NrfBleDriver
     /// <para>In the case that no configurations has been set, or fewer connection configurations has been set than enabled connections,</para>
     /// <para>the default connection configuration will be automatically added for the remaining connections.</para>
     /// <para>When creating connections with the default configuration,should be used in</para>
-    /// <para>place ofSeeand</para>
+    /// <para>place of</para>
+    /// <para>sd_ble_gap_adv_start()</para>
+    /// <para>sd_ble_gap_connect()</para>
     /// <para>s</para>
     /// </remarks>
-    /// <summary>Configuration of Vendor Specific UUIDs, set with</summary>
+    /// <summary>Configuration of Vendor Specific base UUIDs, set with</summary>
     /// <remarks>::NRF_ERROR_INVALID_PARAM Too many UUIDs configured.</remarks>
     /// <summary>Common BLE Configuration type, wrapping the common configurations.</summary>
     /// <summary>BLE Configuration type, wrapping the module specific configurations.</summary>
@@ -875,7 +893,7 @@ namespace NrfBleDriver
     /// <summary>Common BLE Event type, wrapping the module specific event reports.</summary>
     public unsafe partial class BleEvtT : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Size = 64)]
+        [StructLayout(LayoutKind.Sequential, Size = 72)]
         public partial struct __Internal
         {
             internal global::NrfBleDriver.BleEvtHdrT.__Internal header;
@@ -887,7 +905,7 @@ namespace NrfBleDriver
 
         public unsafe partial struct Evt
         {
-            [StructLayout(LayoutKind.Explicit, Size = 56)]
+            [StructLayout(LayoutKind.Explicit, Size = 64)]
             public partial struct __Internal
             {
                 [FieldOffset(0)]
@@ -1778,6 +1796,138 @@ namespace NrfBleDriver
         }
     }
 
+    /// <summary>Enable/disable extended RC calibration.</summary>
+    /// <remarks>
+    /// <para>If extended RC calibration is enabled and the internal RC oscillator (is used as the SoftDevice</para>
+    /// <para>LFCLK source, the SoftDevice as a peripheral will by default try to increase the receive window if two consecutive packets</para>
+    /// <para>are not received. If it turns out that the packets were not received due to clock drift, the RC calibration is started.</para>
+    /// <para>This calibration comes in addition to the periodic calibration that is configured byWhen</para>
+    /// <para>using only peripheral connections, the periodic calibration can therefore be configured with a much longer interval as the</para>
+    /// <para>peripheral will be able to detect and adjust automatically to clock drift, and calibrate on demand.</para>
+    /// <para>If extended RC calibration is disabled and the internal RC oscillator is used as the SoftDevice LFCLK source, the</para>
+    /// <para>RC oscillator is calibrated periodically as configured by</para>
+    /// <para>is not supported for this option.</para>
+    /// </remarks>
+    public unsafe partial class BleCommonOptExtendedRcCalT : IDisposable
+    {
+        [StructLayout(LayoutKind.Sequential, Size = 1)]
+        public partial struct __Internal
+        {
+            internal byte enable;
+
+            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_common_opt_extended_rc_cal_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
+            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
+        }
+
+        public __IntPtr __Instance { get; protected set; }
+
+        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleCommonOptExtendedRcCalT> NativeToManagedMap =
+            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleCommonOptExtendedRcCalT>();
+
+        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleCommonOptExtendedRcCalT managed)
+        {
+            NativeToManagedMap[native] = managed;
+        }
+
+        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleCommonOptExtendedRcCalT managed)
+        {
+    
+            return NativeToManagedMap.TryGetValue(native, out managed);
+        }
+
+        protected bool __ownsNativeInstance;
+
+        internal static BleCommonOptExtendedRcCalT __CreateInstance(__IntPtr native, bool skipVTables = false)
+        {
+            return new BleCommonOptExtendedRcCalT(native.ToPointer(), skipVTables);
+        }
+
+        internal static BleCommonOptExtendedRcCalT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
+        {
+            if (native == __IntPtr.Zero)
+                return null;
+            if (__TryGetNativeToManagedMapping(native, out var managed))
+                return (BleCommonOptExtendedRcCalT)managed;
+            var result = __CreateInstance(native, skipVTables);
+            if (saveInstance)
+                __RecordNativeToManagedMapping(native, result);
+            return result;
+        }
+
+        internal static BleCommonOptExtendedRcCalT __CreateInstance(__Internal native, bool skipVTables = false)
+        {
+            return new BleCommonOptExtendedRcCalT(native, skipVTables);
+        }
+
+        private static void* __CopyValue(__Internal native)
+        {
+            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
+            *(__Internal*) ret = native;
+            return ret.ToPointer();
+        }
+
+        private BleCommonOptExtendedRcCalT(__Internal native, bool skipVTables = false)
+            : this(__CopyValue(native), skipVTables)
+        {
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+        }
+
+        protected BleCommonOptExtendedRcCalT(void* native, bool skipVTables = false)
+        {
+            if (native == null)
+                return;
+            __Instance = new __IntPtr(native);
+        }
+
+        public BleCommonOptExtendedRcCalT()
+        {
+            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleCommonOptExtendedRcCalT.__Internal));
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+        }
+
+        public BleCommonOptExtendedRcCalT(global::NrfBleDriver.BleCommonOptExtendedRcCalT __0)
+        {
+            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleCommonOptExtendedRcCalT.__Internal));
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+            *((global::NrfBleDriver.BleCommonOptExtendedRcCalT.__Internal*) __Instance) = *((global::NrfBleDriver.BleCommonOptExtendedRcCalT.__Internal*) __0.__Instance);
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
+        }
+
+        partial void DisposePartial(bool disposing);
+
+        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
+        {
+            if (__Instance == IntPtr.Zero)
+                return;
+            NativeToManagedMap.TryRemove(__Instance, out _);
+            DisposePartial(disposing);
+            if (__ownsNativeInstance)
+                Marshal.FreeHGlobal(__Instance);
+            __Instance = IntPtr.Zero;
+        }
+
+        /// <summary>Enable extended RC calibration, enabled by default.</summary>
+        public byte Enable
+        {
+            get
+            {
+                return ((__Internal*)__Instance)->enable;
+            }
+
+            set
+            {
+                ((__Internal*)__Instance)->enable = value;
+            }
+        }
+    }
+
     /// <summary>Option structure for common options.</summary>
     public unsafe partial struct BleCommonOptT
     {
@@ -1789,6 +1939,9 @@ namespace NrfBleDriver
 
             [FieldOffset(0)]
             internal global::NrfBleDriver.BleCommonOptConnEvtExtT.__Internal conn_evt_ext;
+
+            [FieldOffset(0)]
+            internal global::NrfBleDriver.BleCommonOptExtendedRcCalT.__Internal extended_rc_cal;
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_common_opt_t@@QEAA@AEBT0@@Z", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
@@ -1860,6 +2013,22 @@ namespace NrfBleDriver
                 __instance.conn_evt_ext = *(global::NrfBleDriver.BleCommonOptConnEvtExtT.__Internal*) value.__Instance;
             }
         }
+
+        /// <summary>Parameters for enabling extended RC calibration.</summary>
+        public global::NrfBleDriver.BleCommonOptExtendedRcCalT ExtendedRcCal
+        {
+            get
+            {
+                return global::NrfBleDriver.BleCommonOptExtendedRcCalT.__CreateInstance(__instance.extended_rc_cal);
+            }
+
+            set
+            {
+                if (ReferenceEquals(value, null))
+                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
+                __instance.extended_rc_cal = *(global::NrfBleDriver.BleCommonOptExtendedRcCalT.__Internal*) value.__Instance;
+            }
+        }
     }
 
     /// <summary>Common BLE Option type, wrapping the module specific options.</summary>
@@ -1926,7 +2095,9 @@ namespace NrfBleDriver
     /// <para>In the case that no configurations has been set, or fewer connection configurations has been set than enabled connections,</para>
     /// <para>the default connection configuration will be automatically added for the remaining connections.</para>
     /// <para>When creating connections with the default configuration,should be used in</para>
-    /// <para>place ofSeeand</para>
+    /// <para>place of</para>
+    /// <para>sd_ble_gap_adv_start()</para>
+    /// <para>sd_ble_gap_connect()</para>
     /// <para>s</para>
     /// </remarks>
     public unsafe partial class BleConnCfgT : IDisposable
@@ -2176,7 +2347,9 @@ namespace NrfBleDriver
         }
 
         /// <summary>
-        /// <para>The application chosen tag it can use with theandcalls to select this configuration when creating a connection.</para>
+        /// <para>The application chosen tag it can use with the</para>
+        /// <para>andcalls</para>
+        /// <para>to select this configuration when creating a connection.</para>
         /// <para>Must be different for all connection configurations added and not</para>
         /// </summary>
         public byte ConnCfgTag
@@ -2207,7 +2380,7 @@ namespace NrfBleDriver
         }
     }
 
-    /// <summary>Configuration of Vendor Specific UUIDs, set with</summary>
+    /// <summary>Configuration of Vendor Specific base UUIDs, set with</summary>
     /// <remarks>::NRF_ERROR_INVALID_PARAM Too many UUIDs configured.</remarks>
     public unsafe partial class BleCommonCfgVsUuidT : IDisposable
     {
@@ -2315,7 +2488,7 @@ namespace NrfBleDriver
         }
 
         /// <summary>
-        /// <para>Number of 128-bit Vendor Specific UUID bases to allocate memory for.</para>
+        /// <para>Number of 128-bit Vendor Specific base UUID bases to allocate memory for.</para>
         /// <para>Default value isMaximum value is</para>
         /// </summary>
         public byte VsUuidCount
@@ -2380,7 +2553,7 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>Vendor specific UUID configuration, cfg_id is</summary>
+        /// <summary>Vendor Specific base UUID configuration, cfg_id is</summary>
         public global::NrfBleDriver.BleCommonCfgVsUuidT VsUuidCfg
         {
             get
@@ -2496,6 +2669,9 @@ namespace NrfBleDriver
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_uuid_vs_add", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleUuidVsAdd(__IntPtr adapter, __IntPtr p_vs_uuid, byte* p_uuid_type);
 
+            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_uuid_vs_remove", CallingConvention = __CallingConvention.Cdecl)]
+            internal static extern uint SdBleUuidVsRemove(__IntPtr adapter, byte* p_uuid_type);
+
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_uuid_decode", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleUuidDecode(__IntPtr adapter, byte uuid_le_len, byte* p_uuid_le, __IntPtr p_uuid);
 
@@ -2551,6 +2727,13 @@ namespace NrfBleDriver
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
             var __arg1 = p_vs_uuid is null ? __IntPtr.Zero : p_vs_uuid.__Instance;
             var __ret = __Internal.SdBleUuidVsAdd(__arg0, __arg1, p_uuid_type);
+            return __ret;
+        }
+
+        public static uint SdBleUuidVsRemove(global::NrfBleDriver.AdapterT adapter, byte* p_uuid_type)
+        {
+            var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
+            var __ret = __Internal.SdBleUuidVsRemove(__arg0, p_uuid_type);
             return __ret;
         }
 

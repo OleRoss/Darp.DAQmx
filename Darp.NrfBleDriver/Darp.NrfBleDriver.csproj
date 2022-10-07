@@ -19,5 +19,12 @@
     <ItemGroup>
       <ClCompile Include="Nrf\NrfBleDriver-symbols.cpp" />
     </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Serilog" Version="2.11.0" />
+        <PackageReference Include="ErrorOr" Version="1.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\Wbst\src\Bluetooth\Bluetooth.csproj" />
+    </ItemGroup>
 
 </Project>
