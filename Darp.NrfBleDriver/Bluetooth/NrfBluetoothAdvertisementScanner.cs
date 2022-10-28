@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using Bluetooth;
 using Bluetooth.Advertisement;
@@ -22,8 +23,6 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
     private readonly BleDataT _mAdvReportBuffer;
     private readonly byte[] _data = new byte[100];
     private readonly ConcurrentQueue<BleAdvertisement> _queue;
-    // ReSharper disable once CollectionNeverQueried.Local
-    private readonly ICollection<Delegate> _delegates;
 
     public NrfBluetoothAdvertisementScanner(NrfBluetoothService service, ILogger? logger, CancellationToken token)
     {
@@ -32,15 +31,9 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
         _token = token;
         _mAdvReportBuffer = new BleDataT();
         _queue = new ConcurrentQueue<BleAdvertisement>();
-        _delegates = new List<Delegate>();
-        uint errorCode = BleConfigSet(1);
-        if (errorCode != NrfError.NRF_SUCCESS)
-            throw new Exception($"Config set failed with error code: {errorCode}");
+        BleConfigSet(1).ThrowIfFailed("Config set failed");
 
-        errorCode = BleStackInit();
-        if (errorCode != NrfError.NRF_SUCCESS)
-            throw new Exception($"Ble Stack Init failed with error code: {errorCode}");
-
+        BleStackInit().ThrowIfFailed("Ble Stack Init failed");
     }
 
     public IBluetoothAdvertisementScanner SetScanningMode(ScanningMode mode)
@@ -53,16 +46,32 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
         return this;
     }
 
-    public IBluetoothAdvertisementScanner AddServiceUuid(Guid serviceUuid) => throw new NotImplementedException();
+    public IBluetoothAdvertisementScanner AddServiceUuid(Guid serviceUuid)
+    {
+        unsafe
+        {
+            GCHandle handle = GCHandle.Alloc(serviceUuid.ToByteArray(), GCHandleType.Pinned);
+            var bleUuidType = (byte)BLE_UUID_TYPES.BLE_UUID_TYPE_BLE;
+            ble.SdBleUuidVsAdd(_service.Adapter, BleUuid128T.__GetOrCreateInstance(handle.AddrOfPinnedObject()), &bleUuidType);
+            handle.Free();
+        }
+        return this;
+    }
 
     public IBluetoothAdvertisementScanner SetMinRssi(short rssi) => throw new NotImplementedException();
 
     public IBluetoothAdvertisementScanner SetMaxRssi(short rssi) => throw new NotImplementedException();
 
-    public IBluetoothAdvertisementScanner SetSampleInterval(int scanIntervalMs, int scanWindowMs)
+    public IBluetoothAdvertisementScanner SetSampleInterval(ushort scanIntervalMs, ushort scanWindowMs)
     {
-        _scanInterval = (ushort)(scanIntervalMs / 0.625f);
-        _scanWindow = (ushort)(scanWindowMs / 0.625f);
+        if (scanWindowMs > scanIntervalMs)
+            throw new ArgumentOutOfRangeException(nameof(scanWindowMs),
+                $"Expected scanWindow to be smaller than scanInterval ({scanIntervalMs}), but is {scanWindowMs}");
+        if (scanIntervalMs < 2.5f)
+            throw new ArgumentOutOfRangeException(nameof(scanIntervalMs),
+                $"Expected scanInterval to be greater than or equal to 2.5ms, but is {scanIntervalMs}");
+        _scanInterval = (ushort)(scanIntervalMs * 1.6f); // 1 / 0.625
+        _scanWindow = (ushort)(scanWindowMs * 1.6f);
         return this;
     }
 
@@ -72,15 +81,12 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
         var tokenSource = CancellationTokenSource.CreateLinkedTokenSource(_token, token);
         CancellationToken linkedToken = tokenSource.Token;
 
-        uint errorCode = StartScan();
-        if (errorCode != NrfError.NRF_SUCCESS)
+        if (StartScan().IsFailed(_logger, "Scan start failed"))
         {
-            _logger?.Error("Scan start failed with error code: {ErrorCode}", errorCode);
             yield break;
         }
         _logger?.Debug("Scan started");
         Action<BleGapEvtT> action = OnAdvertisementReport;
-        _delegates.Add(action);
         _service.OnAdvertisementReceived += action;
         while (!linkedToken.IsCancellationRequested)
         {
@@ -103,6 +109,7 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
                 yield break;
             }
         }
+        GC.KeepAlive(action);
     }
 
     private uint StartScan()
@@ -157,15 +164,9 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             dataSections.GetFlags(),
             dataSections.GetServiceGuids()
         );
-        if (advertisement.Name != "")
-        {
-            int i = 0;
-        }
         _queue.Enqueue(advertisement);
-        _logger?.Information("Received advertisement {@Advertisement}", report.Type);
-        uint scanStart = ble_gap.SdBleGapScanStart(_service.Adapter, null, _mAdvReportBuffer);
-        if (scanStart != NrfError.NRF_SUCCESS)
-            _logger?.Warning("Scan restart failed with error code: {ErrorCode}", scanStart);
+        ble_gap.SdBleGapScanStart(_service.Adapter, null, _mAdvReportBuffer)
+            .IsFailed(_logger, _ => "Scan restart failed");
     }
 
     private uint BleStackInit()
@@ -201,11 +202,9 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             CentralSecCount  = 0
         };
 
-        uint errorCode = ble.SdBleCfgSet(_service.Adapter, (uint)BLE_GAP_CFGS.BLE_GAP_CFG_ROLE_COUNT, bleCfg, ramStart);
-        if (errorCode != NrfError.NRF_SUCCESS)
+        if (ble.SdBleCfgSet(_service.Adapter, (uint)BLE_GAP_CFGS.BLE_GAP_CFG_ROLE_COUNT, bleCfg, ramStart)
+            .IsFailed(out uint errorCode, _logger, "sd_ble_cfg_set() failed when attempting to set BLE_GAP_CFG_ROLE_COUNT"))
         {
-            _logger?.Error("sd_ble_cfg_set() failed when attempting to set BLE_GAP_CFG_ROLE_COUNT." +
-                      " Error code: 0x{ErrorCode:X}", errorCode);
             return errorCode;
         }
 
@@ -221,11 +220,9 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
                 }
             }
         };
-
-        errorCode = ble.SdBleCfgSet(_service.Adapter, (uint)BLE_CONN_CFGS.BLE_CONN_CFG_GATT, bleCfg, ramStart);
-        if (errorCode != NrfError.NRF_SUCCESS)
+        if (ble.SdBleCfgSet(_service.Adapter, (uint)BLE_CONN_CFGS.BLE_CONN_CFG_GATT, bleCfg, ramStart)
+            .IsFailed(out errorCode, _logger, "sd_ble_cfg_set() failed when attempting to set BLE_CONN_CFG_GATT"))
         {
-            _logger?.Error("sd_ble_cfg_set() failed when attempting to set BLE_CONN_CFG_GATT. Error code: 0x{ErrorCode:X}", errorCode);
             return errorCode;
         }
 
@@ -255,15 +252,16 @@ public static class Extensions
         return 0;
     }
 
-    public static ulong ToAddress(this BleGapAddrT address)
+    public static ulong ToAddress(this BleGapAddrT address) => address.Addr.ToAddress();
+
+    public static string ToAddressString(this byte[] addressBytes)
     {
         var builder = new StringBuilder();
-        for (int i = address.Addr.Length - 1; i >= 0; --i)
-        {
-            builder.Append($"{address.Addr[i]:X2}");
-        }
-        return Convert.ToUInt64(builder.ToString(), 16);
+        for (int i = addressBytes.Length - 1; i >= 0; --i) builder.Append($"{addressBytes[i]:X2}");
+        return builder.ToString();
     }
+
+    public static ulong ToAddress(this byte[] addressBytes) => Convert.ToUInt64(addressBytes.ToAddressString(), 16);
 
     public static AddressType ToAddressType(this BleGapAddrT address)
     {
@@ -335,7 +333,7 @@ public static class Extensions
         return manufactures;
     }
 
-    private static Guid GetGuid(byte[] bytes)
+    public static Guid ToGuid(this byte[] bytes)
     {
         if (bytes.Length == 16)
             return new Guid(bytes);
@@ -365,7 +363,7 @@ public static class Extensions
                 or SectionType.IncompleteService32BitUuids
                 or SectionType.IncompleteService128BitUuids)
             {
-                serviceGuids.Add(GetGuid(bytes));
+                serviceGuids.Add(bytes.ToGuid());
             }
         }
         return serviceGuids.ToArray();

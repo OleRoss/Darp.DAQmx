@@ -1,33 +1,46 @@
 ﻿using Bluetooth.Advertisement;
+using Bluetooth.Device;
+using Bluetooth.Gatt;
 using Darp.NrfBleDriver.Bluetooth;
+using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
 
 Console.WriteLine("Hello, World!");
 
 Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
-    {
-        AutoRegisterTemplate = true,
-        IndexFormat = $"test-{DateTime.UtcNow:yyyy-MM}",
-        EmitEventFailure = EmitEventFailureHandling.RaiseCallback
-    })
+    .MinimumLevel.Verbose()
+    .WriteTo.Console(LogEventLevel.Verbose)
     .CreateLogger();
+
+Log.Logger.Verbose("aaaa");
 
 Log.Logger.Information("Hi");
 
 NrfBluetoothService.Setup();
-
+Guid guid = Guid.Parse("0000fd4c-0000-1000-8000-00805f9b34fb");
 using var bleController = new NrfBluetoothService("COM3", logger:Log.Logger);
 var source = new CancellationTokenSource();
-source.CancelAfter(5000);
-BleAdvertisement[] advertisements = await bleController
-    .AdvertisementScanner(CancellationToken.None)
-    .ScanAsync(source.Token)
-    .ToArrayAsync();
+source.CancelAfter(40000);
+var startTime = DateTime.UtcNow;
 
+
+var adv = await bleController
+    .AdvertisementScanner(CancellationToken.None)
+    .SetSampleInterval(1000, 1000)
+    .ScanAsync(source.Token)
+    .Where(x => x.ServiceUuids.Contains(guid))
+    .FirstAsync();
+
+Log.Logger.Information("{Time} - {@Advertisement}", DateTime.UtcNow - startTime, adv);
+await Task.Delay(10000);
+IBleDevice? device = await adv.ConnectAsync();
+//IBleDevice? device = null;
+Log.Logger.Information("Device {@Device}", device);
+if (device == null) return;
+var services = await device.GetServicesAsync(CacheMode.Cached).ToArrayAsync();
+Log.Logger.Information("Services {@Services}", services);
 return;
 
 await Task.Delay(100);

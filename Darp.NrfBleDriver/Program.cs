@@ -313,8 +313,8 @@ unsafe
 
     uint scan_start(AdapterT adapter, BleGapScanParamsT? scan_param)
     {
-        m_adv_report_buffer.PData = mp_data;
-        m_adv_report_buffer.Len = dataLength;
+        m_adv_report_buffer!.PData = mp_data;
+        m_adv_report_buffer!.Len = dataLength;
 
         uint error_code = ble_gap.SdBleGapScanStart(adapter, scan_param, m_adv_report_buffer);
 

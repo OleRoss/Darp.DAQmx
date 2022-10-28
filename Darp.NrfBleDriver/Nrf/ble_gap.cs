@@ -1108,8 +1108,8 @@ namespace NrfBleDriver
 
     /// <summary>GAP connection parameters.</summary>
     /// <remarks>
-    /// <para>When ble_conn_params_t is received in an event, both min_conn_interval and</para>
-    /// <para>max_conn_interval will be equal to the connection interval set by the central.</para>
+    /// <para>When ble_conn_params_t is received in an event, both min_conn_interval and
+    /// max_conn_interval will be equal to the connection interval set by the central.</para>
     /// <para>If both conn_sup_timeout and max_conn_interval are specified, then the following constraint applies:</para>
     /// <para>conn_sup_timeout * 4 &gt; (1 + slave_latency) * max_conn_interval</para>
     /// <para>that corresponds to the following Bluetooth Spec requirement:</para>

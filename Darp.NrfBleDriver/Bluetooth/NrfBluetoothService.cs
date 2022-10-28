@@ -13,17 +13,27 @@ namespace Darp.NrfBleDriver.Bluetooth;
 public class NrfBluetoothService : IBluetoothService
 {
     public event Action<BleGapEvtT>? OnAdvertisementReceived;
+    public event Action<BleGapEvtT>? OnConnected;
+    public event Action<BleGattcEvtT>? OnPrimaryServiceDiscoveryResponse;
+
     private readonly ILogger? _logger;
     public AdapterT Adapter { get; }
     // ReSharper disable once CollectionNeverQueried.Local
     private readonly ICollection<Delegate> _delegates;
+    private readonly IList<NrfDevice> _devices;
+    private bool _connectionInProgress;
+    private static byte _globalConfigIdCounter = 1;
+    private readonly byte _configId;
 
     public NrfBluetoothService(string serialPort, uint baudRate = 1000000, ILogger? logger = null)
     {
+        _configId = _globalConfigIdCounter++;
         _logger = logger;
         _logger?.Information("Using serial port {SerialPort}", serialPort);
         _logger?.Information("Using baud rate {BaudRate}", baudRate);
         _delegates = new List<Delegate>();
+        _devices = new List<NrfDevice>();
+        _connectionInProgress = false;
         ErrorOr<AdapterT> errorOrAdapter = AdapterInit(serialPort, baudRate);
         if (errorOrAdapter.IsError)
             throw new Exception(string.Join(',', errorOrAdapter.Errors.Select(x => x.Description)));
@@ -34,7 +44,62 @@ public class NrfBluetoothService : IBluetoothService
         new NrfBluetoothAdvertisementScanner(this, _logger, token);
 
     public Task<IBleDevice?> ConnectDeviceAsync(string id) => throw new NotImplementedException();
-    public Task<IBleDevice?> ConnectDeviceAsync(ulong bluetoothId) => throw new NotImplementedException();
+    public async Task<IBleDevice?> ConnectDeviceAsync(ulong bluetoothId)
+    {
+        const ushort timeoutMs = 4000;
+        // Wait until running connections are finished
+        while (_connectionInProgress) await Task.Delay(timeoutMs);
+        _connectionInProgress = true;
+        // Determines minimum connection interval in milliseconds
+        const ushort minConnectionInterval = 7500 / 1250;
+        // Determines maximum connection interval in milliseconds
+        const ushort maxConnectionInterval = 7500 / 1250;
+        // Slave Latency in number of connection events
+        const ushort slaveLatency = 0;
+        // Determines supervision time-out in units of 10 milliseconds
+        var connectionSupervisionTimeout = (ushort) (timeoutMs / 10);
+        const ushort scanInterval = 0x00A0;
+        const ushort scanWindow = 0x0050;
+
+        var addr = new BleGapAddrT
+        {
+            Addr = BitConverter.GetBytes(bluetoothId)[..6],
+            AddrType = BLE_GAP_ADDR_TYPES.BLE_GAP_ADDR_TYPE_PUBLIC,
+            AddrIdPeer = 0
+        };
+        var mConnectionParam = new BleGapConnParamsT
+        {
+            MinConnInterval = minConnectionInterval,
+            MaxConnInterval = maxConnectionInterval,
+            SlaveLatency = slaveLatency,
+            ConnSupTimeout = connectionSupervisionTimeout
+        };
+        var scanParam = new BleGapScanParamsT
+        {
+            Extended = 0,
+            ReportIncompleteEvts = 0,
+            Active = 0,
+            FilterPolicy = BLE_GAP_SCAN_FILTER_POLICIES.BLE_GAP_SCAN_FP_ACCEPT_ALL,
+            ScanPhys = BLE_GAP_PHYS.BLE_GAP_PHY_AUTO,
+            Interval = scanInterval,
+            Window = scanWindow,
+            Timeout = 0,
+            ChannelMask = new byte[] {0, 0, 0, 0, 0}
+        };
+        _logger?.Information("aa {@Address}, {@ScanParam}, {@ConnectionParam}, {ConfigId}", addr, scanParam, mConnectionParam, _configId);
+        if (ble_gap.SdBleGapConnect(Adapter, addr, scanParam, mConnectionParam, _configId)
+            .IsFailed(_logger, "Ble gap connection failed"))
+        {
+            return null;
+        }
+
+        OnConnected += NrfUtils.CreateEventSubscription(out Func<BleGapEvtT> action, timeoutMs, out CancellationToken token);
+        BleGapEvtT evt = await NrfUtils.FirstEventAsync(action, token);
+        _connectionInProgress = false;
+        var device = new NrfDevice(this, evt.ConnHandle, addr.Addr, _logger);
+        _devices.Add(device);
+        return device;
+    }
 
     public void Clear()
     {
@@ -66,9 +131,27 @@ public class NrfBluetoothService : IBluetoothService
         switch (bleEvt.Header.EvtId)
         {
             case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_ADV_REPORT:
-                _logger?.Debug("Received Advertisement");
-                //on_adv_report(bleEvt.evt.GapEvt);
                 OnAdvertisementReceived?.Invoke(bleEvt.evt.GapEvt);
+                break;
+            case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_CONNECTED:
+                _logger?.Debug("Device connected");
+                OnConnected?.Invoke(bleEvt.evt.GapEvt);
+                break;
+            case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_DISCONNECTED:
+                _logger?.Debug("Device disconnected");
+                var removedAny = false;
+                for (int i = _devices.Count - 1; i >= 0; i--)
+                {
+                    if (_devices[i].ConnectionHandle != bleEvt.evt.GapEvt.ConnHandle) continue;
+                    _devices.RemoveAt(i);
+                    removedAny = true;
+                }
+                if (!removedAny)
+                    _logger?.Warning("Unknown device with handle 0x{Handle:X} disconnected", bleEvt.evt.GapEvt.ConnHandle);
+                break;
+            case (ushort)BLE_GATTC_EVTS.BLE_GATTC_EVT_PRIM_SRVC_DISC_RSP:
+                _logger?.Debug("Service discovery response");
+                OnPrimaryServiceDiscoveryResponse?.Invoke(bleEvt.evt.GattcEvt);
                 break;
             default:
                 _logger?.Warning("Received an un-handled event with ID: {EventId}", bleEvt.Header.EvtId);
