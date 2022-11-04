@@ -44,11 +44,11 @@ public class NrfBluetoothService : IBluetoothService
         new NrfBluetoothAdvertisementScanner(this, _logger, token);
 
     public Task<IBleDevice?> ConnectDeviceAsync(string id) => throw new NotImplementedException();
-    public async Task<IBleDevice?> ConnectDeviceAsync(ulong bluetoothId)
+    public async Task<IBleDevice?> ConnectDeviceAsync(ulong bluetoothId, CancellationToken cancellationToken)
     {
-        const ushort timeoutMs = 4000;
+        _logger?.Information("Attempting connection with {BluetoothId:X}", bluetoothId);
         // Wait until running connections are finished
-        while (_connectionInProgress) await Task.Delay(timeoutMs);
+        while (_connectionInProgress) await Task.Delay(10);
         _connectionInProgress = true;
         // Determines minimum connection interval in milliseconds
         const ushort minConnectionInterval = 7500 / 1250;
@@ -56,6 +56,7 @@ public class NrfBluetoothService : IBluetoothService
         const ushort maxConnectionInterval = 7500 / 1250;
         // Slave Latency in number of connection events
         const ushort slaveLatency = 0;
+        const ushort timeoutMs = 4000;
         // Determines supervision time-out in units of 10 milliseconds
         var connectionSupervisionTimeout = (ushort) (timeoutMs / 10);
         const ushort scanInterval = 0x00A0;
@@ -83,16 +84,20 @@ public class NrfBluetoothService : IBluetoothService
             AdvDirReport = 0,
             UseWhitelist = 0
         };
-        _logger?.Information("aa {@Address}, {@ScanParam}, {@ConnectionParam}, {ConfigId}", addr, scanParam, mConnectionParam, _configId);
+        OnConnected += EventSubscription<BleGapEvtT>.Create(out IAsyncEnumerator<BleGapEvtT> eventSubscription, cancellationToken);
         if (ble_gap.SdBleGapConnect(Adapter, addr, scanParam, mConnectionParam, _configId)
             .IsFailed(_logger, "Ble gap connection failed"))
         {
             return null;
         }
-        _logger?.Information("hm????");
-        OnConnected += NrfUtils.CreateEventSubscription(out Func<BleGapEvtT> action, timeoutMs, out CancellationToken token);
-        BleGapEvtT evt = await NrfUtils.FirstEventAsync(action, token);
+        _logger?.Information("Connecting ...");
+        BleGapEvtT? evt = await eventSubscription.NextAsync(default);
         _connectionInProgress = false;
+        if (evt == null)
+        {
+            _logger?.Warning("Connection timed out");
+            return null;
+        }
         var device = new NrfDevice(this, evt.ConnHandle, addr.Addr, _logger);
         _devices.Add(device);
         return device;
@@ -106,9 +111,7 @@ public class NrfBluetoothService : IBluetoothService
     public void Dispose()
     {
         _logger?.Debug("Disposing of nrf bluetooth service");
-        uint errorCode = sd_rpc.SdRpcClose(Adapter);
-        if (errorCode != NrfError.NRF_SUCCESS)
-            _logger?.Error("Failed to close nRF BLE Driver. Error code: 0x{ErrorCode:X}", errorCode);
+        sd_rpc.SdRpcClose(Adapter).IsFailed(_logger, "Failed to close nRF BLE Driver");
     }
 
     IBluetoothScanner IBluetoothService.Scanner() => throw new NotImplementedException();
@@ -149,6 +152,10 @@ public class NrfBluetoothService : IBluetoothService
             case (ushort)BLE_GATTC_EVTS.BLE_GATTC_EVT_PRIM_SRVC_DISC_RSP:
                 _logger?.Debug("Service discovery response");
                 OnPrimaryServiceDiscoveryResponse?.Invoke(bleEvt.evt.GattcEvt);
+                break;
+            case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_DATA_LENGTH_UPDATE_REQUEST:
+                _logger?.Debug("length update request {@Request}",
+                    bleEvt.evt.GapEvt.@params.DataLengthUpdateRequest);
                 break;
             default:
                 _logger?.Warning("Received an un-handled event with ID: {EventId}", bleEvt.Header.EvtId);

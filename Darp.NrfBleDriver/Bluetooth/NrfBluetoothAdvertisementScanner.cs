@@ -22,6 +22,7 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
     private BleGapScanParamsT? _scanParamsT;
     private readonly BleDataT _mAdvReportBuffer;
     private readonly byte[] _data = new byte[100];
+    private uint _appRamBase = 0;
     private readonly ConcurrentQueue<BleAdvertisement> _queue;
 
     public NrfBluetoothAdvertisementScanner(NrfBluetoothService service, ILogger? logger, CancellationToken token)
@@ -95,21 +96,13 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
                 bool res = _queue.TryDequeue(out BleAdvertisement? bleAdvertisement);
                 if (res && bleAdvertisement != null)
                 {
+                    _logger?.Information("Dequeued advertisement");
                     yield return bleAdvertisement;
                     continue;
                 }
             }
-
-            try
-            {
-                await Task.Delay(100, linkedToken);
-            }
-            catch (Exception)
-            {
-                yield break;
-            }
+            await Task.Delay(100, linkedToken).WithoutThrowing();
         }
-        GC.KeepAlive(action);
     }
 
     private uint StartScan()
@@ -158,13 +151,13 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             dataSections.GetServiceGuids()
         );
         _queue.Enqueue(advertisement);
+        _logger?.Information("Advertisement enqueued");
         // ble_gap.SdBleGapScanStart(_service.Adapter, null).IsFailed(_logger, _ => "Scan restart failed");
     }
 
     private uint BleStackInit()
     {
-        uint appRamBase = 0;
-        uint errCode = ble.SdBleEnable(_service.Adapter, ref appRamBase);
+        uint errCode = ble.SdBleEnable(_service.Adapter, ref _appRamBase);
 
         switch (errCode) {
             case NrfError.NRF_SUCCESS:
@@ -184,22 +177,7 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
     {
         const uint ramStart = 0; // Value is not used by ble-driver
 
-        // Configure the connection roles.
         var bleCfg = default(BleCfgT);
-        bleCfg.GapCfg.RoleCountCfg = new BleGapCfgRoleCountT
-        {
-            PeriphRoleCount = 10,
-            CentralRoleCount = 10,
-            CentralSecCount  = 10
-        };
-
-        if (ble.SdBleCfgSet(_service.Adapter, (uint)BLE_GAP_CFGS.BLE_GAP_CFG_ROLE_COUNT, bleCfg, ramStart)
-            .IsFailed(out uint errorCode, _logger, "sd_ble_cfg_set() failed when attempting to set BLE_GAP_CFG_ROLE_COUNT"))
-        {
-            return errorCode;
-        }
-
-        bleCfg = default;
         bleCfg.ConnCfg = new BleConnCfgT
         {
             ConnCfgTag = connCfgTag,
@@ -212,10 +190,25 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             }
         };
         if (ble.SdBleCfgSet(_service.Adapter, (uint)BLE_CONN_CFGS.BLE_CONN_CFG_GATT, bleCfg, ramStart)
-            .IsFailed(out errorCode, _logger, "sd_ble_cfg_set() failed when attempting to set BLE_CONN_CFG_GATT"))
+            .IsFailed(out uint errorCode, _logger, "sd_ble_cfg_set() failed when attempting to set BLE_CONN_CFG_GATT"))
         {
             return errorCode;
         }
+        /*
+        bleCfg = default;
+        // Configure the connection roles.
+        bleCfg.GapCfg.RoleCountCfg = new BleGapCfgRoleCountT
+        {
+            PeriphRoleCount = 10,
+            CentralRoleCount = 10,
+            CentralSecCount  = 10
+        };
+
+        if (ble.SdBleCfgSet(_service.Adapter, (uint)BLE_GAP_CFGS.BLE_GAP_CFG_ROLE_COUNT, bleCfg, ramStart)
+            .IsFailed(out uint errorCode, _logger, "sd_ble_cfg_set() failed when attempting to set BLE_GAP_CFG_ROLE_COUNT"))
+        {
+            return errorCode;
+        }*/
 
         return NrfError.NRF_SUCCESS;
     }

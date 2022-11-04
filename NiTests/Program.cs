@@ -34,13 +34,18 @@ var adv = await bleController
     .FirstAsync();
 
 Log.Logger.Information("{Time} - {@Advertisement}", DateTime.UtcNow - startTime, adv);
-await Task.Delay(10000);
 IBleDevice? device = await adv.ConnectAsync();
 //IBleDevice? device = null;
 Log.Logger.Information("Device {@Device}", device);
 if (device == null) return;
-var services = await device.GetServicesAsync(CacheMode.Cached).ToArrayAsync();
-Log.Logger.Information("Services {@Services}", services);
+var s = new CancellationTokenSource();
+s.CancelAfter(10000);
+s.Token.Register(() =>
+{
+    Log.Logger.Debug("hu");
+});
+var services = await device.GetServicesAsync(CacheMode.Cached, s.Token).ToArrayAsync();
+Log.Logger.Information("{Count} Services {@Services}", services.Length, services);
 return;
 
 await Task.Delay(100);

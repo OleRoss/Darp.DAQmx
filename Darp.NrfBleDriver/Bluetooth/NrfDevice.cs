@@ -1,4 +1,5 @@
-﻿using Bluetooth.Device;
+﻿using System.Runtime.CompilerServices;
+using Bluetooth.Device;
 using Bluetooth.Gatt;
 using NrfBleDriver;
 using Serilog;
@@ -26,23 +27,39 @@ public sealed class NrfDevice : IBleDevice
     public ulong Address => _addressBytes.ToAddress();
     public string AddressString => _addressBytes.ToAddressString();
 
-    public async IAsyncEnumerable<IGattService> GetServicesAsync(CacheMode cacheMode)
+    public async IAsyncEnumerable<IGattService> GetServicesAsync(CacheMode cacheMode,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        if (ble_gattc.SdBleGattcPrimaryServicesDiscover(_service.Adapter, ConnectionHandle, 0x01, null)
-            .IsFailed(_logger, "Primary Service Discovery failed"))
+        _logger?.Information("Discovering services ...");
+        _service.OnPrimaryServiceDiscoveryResponse += EventSubscription<BleGattcEvtT>
+            .Create(out IAsyncEnumerator<BleGattcEvtT> subscription, cancellationToken);
+        ushort startHandle = 0x01;
+        while (true)
         {
-            yield break;
-        }
-
-        _service.OnPrimaryServiceDiscoveryResponse += NrfUtils.CreateEventSubscription(out Func<BleGattcEvtT> func,
-            4000, out CancellationToken token);
-        BleGattcEvtT evt = await NrfUtils.FirstEventAsync(func, token);
-        if (((uint)evt.ErrorHandle).IsFailed(_logger, "Discovery failed"))
-            yield break;
-        BleGattcEvtPrimSrvcDiscRspT? response = evt.@params.PrimSrvcDiscRsp;
-        foreach (BleGattcServiceT bleGattcServiceT in response.Services)
-        {
-            yield return new NrfGattService(_service, this, bleGattcServiceT);
+            if (ble_gattc.SdBleGattcPrimaryServicesDiscover(_service.Adapter, ConnectionHandle, startHandle, null)
+                .IsFailed(_logger, $"Primary Service Discovery failed from {startHandle}"))
+            {
+                yield break;
+            }
+            BleGattcEvtT? evt = await subscription.NextAsync(cancellationToken);
+            if (evt is null)
+            {
+                _logger?.Warning("Primary service discovery timed out");
+                yield break;
+            }
+            if (((uint)evt.ErrorHandle).IsFailed(_logger, "Discovery failed"))
+                yield break;
+            BleGattcEvtPrimSrvcDiscRspT? response = evt.@params.PrimSrvcDiscRsp;
+            if (response.Services.Length == 0)
+                break;
+            foreach (BleGattcServiceT bleGattcServiceT in response.Services)
+            {
+                yield return new NrfGattService(_service, this, bleGattcServiceT);
+            }
+            ushort endHandle = response.Services[^1].HandleRange.EndHandle;
+            if (endHandle == 0xFFFF)
+                yield break;
+            startHandle = (ushort)(response.Services[^1].HandleRange.EndHandle + 1);
         }
     }
 

@@ -1,6 +1,4 @@
-﻿using Bluetooth;
-using Bluetooth.Advertisement;
-using Bluetooth.Device;
+﻿using Bluetooth.Device;
 using Bluetooth.Gatt;
 using NrfBleDriver;
 

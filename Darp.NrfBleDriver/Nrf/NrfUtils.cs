@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using Serilog;
 
 namespace NrfBleDriver;
 
@@ -39,28 +41,45 @@ public static class NrfUtils
         throw new Exception(message);
     }
 
-    public static async Task<T> FirstEventAsync<T>(Func<T> action, CancellationToken token)
+    public static Task<bool> WithoutThrowing(this Task task)
+    {
+        Task<bool> continuationTask = task.ContinueWith(t => !t.IsFaulted);
+        return continuationTask;
+    }
+
+    public static async Task<T?> NextAsync<T>(this IAsyncEnumerator<T> enumerator, CancellationToken token)
+    {
+        if (await enumerator.MoveNextAsync(token))
+            return enumerator.Current;
+        return default;
+    }
+}
+
+public class EventSubscription<T>
+{
+    private readonly Queue<T> _receivedQueue;
+    private EventSubscription()
+    {
+        _receivedQueue = new Queue<T>();
+    }
+
+    public static Action<T> Create(out IAsyncEnumerator<T> enumerator, CancellationToken cancellationToken)
+    {
+        var subscription = new EventSubscription<T>();
+        enumerator = subscription.EnumerateAsync(cancellationToken).GetAsyncEnumerator(cancellationToken);
+        return obj =>
+        {
+            subscription._receivedQueue.Enqueue(obj);
+        };
+    }
+
+    public async IAsyncEnumerable<T> EnumerateAsync([EnumeratorCancellation] CancellationToken token)
     {
         while (!token.IsCancellationRequested)
         {
-            await Task.Delay(100, token);
+            if (_receivedQueue.Count > 0 && _receivedQueue.TryDequeue(out T? value))
+                yield return value;
+            await Task.Delay(10, token).WithoutThrowing();
         }
-        return action();
-    }
-
-    public static Action<T> CreateEventSubscription<T>(out Func<T> func,
-        ushort timeoutMs,
-        out CancellationToken cancellationToken)
-    {
-        var source = new CancellationTokenSource();
-        source.CancelAfter(timeoutMs);
-        cancellationToken = source.Token;
-        var value = default(T);
-        func = () => value!;
-        return obj =>
-        {
-            value = obj;
-            source.Cancel();
-        };
     }
 }
