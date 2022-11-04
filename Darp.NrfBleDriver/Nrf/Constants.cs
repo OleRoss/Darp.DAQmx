@@ -275,3 +275,69 @@ public enum BLE_HCI_STATUS_CODES : byte
     /// Connection Failed to be Established
     BLE_HCI_CONN_FAILED_TO_BE_ESTABLISHED = 0x3E
 }
+
+public enum BLE_GATT_STATUS_CODES : ushort
+{
+    ///Success.
+    BLE_GATT_STATUS_SUCCESS = 0x0000,
+    ///Unknown or not applicable status.
+    BLE_GATT_STATUS_UNKNOWN = 0x0001,
+    ///ATT Error: Invalid Error Code.
+    BLE_GATT_STATUS_ATTERR_INVALID = 0x0100,
+    ///ATT Error: Invalid Attribute Handle.
+    BLE_GATT_STATUS_ATTERR_INVALID_HANDLE = 0x0101,
+    ///ATT Error: Read not permitted.
+    BLE_GATT_STATUS_ATTERR_READ_NOT_PERMITTED = 0x0102,
+    ///ATT Error: Write not permitted.
+    BLE_GATT_STATUS_ATTERR_WRITE_NOT_PERMITTED = 0x0103,
+    ///ATT Error: Used in ATT as Invalid PDU.
+    BLE_GATT_STATUS_ATTERR_INVALID_PDU = 0x0104,
+    ///ATT Error: Authenticated link required.
+    BLE_GATT_STATUS_ATTERR_INSUF_AUTHENTICATION = 0x0105,
+    ///ATT Error: Used in ATT as Request Not Supported.
+    BLE_GATT_STATUS_ATTERR_REQUEST_NOT_SUPPORTED = 0x0106,
+    ///ATT Error: Offset specified was past the end of the attribute.
+    BLE_GATT_STATUS_ATTERR_INVALID_OFFSET = 0x0107,
+    ///ATT Error: Used in ATT as Insufficient Authorization.
+    BLE_GATT_STATUS_ATTERR_INSUF_AUTHORIZATION = 0x0108,
+    ///ATT Error: Used in ATT as Prepare Queue Full.
+    BLE_GATT_STATUS_ATTERR_PREPARE_QUEUE_FULL = 0x0109,
+    ///ATT Error: Used in ATT as Attribute not found.
+    BLE_GATT_STATUS_ATTERR_ATTRIBUTE_NOT_FOUND = 0x010A,
+    ///ATT Error: Attribute cannot be read or written using read/write blob requests.
+    BLE_GATT_STATUS_ATTERR_ATTRIBUTE_NOT_LONG = 0x010B,
+    ///ATT Error: Encryption key size used is insufficient.
+    BLE_GATT_STATUS_ATTERR_INSUF_ENC_KEY_SIZE = 0x010C,
+    ///ATT Error: Invalid value size.
+    BLE_GATT_STATUS_ATTERR_INVALID_ATT_VAL_LENGTH = 0x010D,
+    ///ATT Error: Very unlikely error.
+    BLE_GATT_STATUS_ATTERR_UNLIKELY_ERROR = 0x010E,
+    ///ATT Error: Encrypted link required.
+    BLE_GATT_STATUS_ATTERR_INSUF_ENCRYPTION = 0x010F,
+    ///ATT Error: Attribute type is not a supported grouping attribute.
+    BLE_GATT_STATUS_ATTERR_UNSUPPORTED_GROUP_TYPE = 0x0110,
+    ///ATT Error: Encrypted link required.
+    BLE_GATT_STATUS_ATTERR_INSUF_RESOURCES = 0x0111,
+    ///ATT Error: Reserved for Future Use range #1 begin.
+    BLE_GATT_STATUS_ATTERR_RFU_RANGE1_BEGIN = 0x0112,
+    ///ATT Error: Reserved for Future Use range #1 end.
+    BLE_GATT_STATUS_ATTERR_RFU_RANGE1_END = 0x017F,
+    ///ATT Error: Application range begin.
+    BLE_GATT_STATUS_ATTERR_APP_BEGIN = 0x0180,
+    ///ATT Error: Application range end.
+    BLE_GATT_STATUS_ATTERR_APP_END = 0x019F,
+    ///ATT Error: Reserved for Future Use range #2 begin.
+    BLE_GATT_STATUS_ATTERR_RFU_RANGE2_BEGIN = 0x01A0,
+    ///ATT Error: Reserved for Future Use range #2 end.
+    BLE_GATT_STATUS_ATTERR_RFU_RANGE2_END = 0x01DF,
+    ///ATT Error: Reserved for Future Use range #3 begin.
+    BLE_GATT_STATUS_ATTERR_RFU_RANGE3_BEGIN = 0x01E0,
+    ///ATT Error: Reserved for Future Use range #3 end.
+    BLE_GATT_STATUS_ATTERR_RFU_RANGE3_END = 0x01FC,
+    ///ATT Common Profile and Service Error: Client Characteristic Configuration Descriptor improperly configured.
+    BLE_GATT_STATUS_ATTERR_CPS_CCCD_CONFIG_ERROR = 0x01FD,
+    ///ATT Common Profile and Service Error: Procedure Already in Progress.
+    BLE_GATT_STATUS_ATTERR_CPS_PROC_ALR_IN_PROG = 0x01FE,
+    ///ATT Common Profile and Service Error: Out Of Range.
+    BLE_GATT_STATUS_ATTERR_CPS_OUT_OF_RANGE = 0x01FF
+}

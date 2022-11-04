@@ -87,8 +87,11 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             yield break;
         }
         _logger?.Debug("Scan started");
-        await foreach (BleGapEvtT bleGapEvtT in _service.GapAdvertisementResponseQueue.WithCancellation(linkedToken))
+        while (!token.IsCancellationRequested)
         {
+            BleGapEvtT? bleGapEvtT = await _service.GapAdvertisementResponseQueue.NextValueAsync(linkedToken);
+            if (bleGapEvtT is null)
+                yield break;
             yield return OnAdvertisementReport(bleGapEvtT);
         }
     }

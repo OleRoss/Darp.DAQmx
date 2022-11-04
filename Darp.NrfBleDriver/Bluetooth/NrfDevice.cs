@@ -31,8 +31,6 @@ public sealed class NrfDevice : IBleDevice
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         _logger?.Information("Discovering services ...");
-        await using IAsyncEnumerator<BleGattcEvtT> enumerator = _service.PrimaryServiceDiscoveryResponseQueue
-            .GetAsyncEnumerator(cancellationToken);
 
         ushort startHandle = 0x01;
         while (true)
@@ -42,7 +40,7 @@ public sealed class NrfDevice : IBleDevice
             {
                 yield break;
             }
-            BleGattcEvtT? evt = await enumerator.NextAsync(cancellationToken);
+            BleGattcEvtT? evt = await _service.PrimaryServiceDiscoveryResponseQueue.NextValueAsync(cancellationToken);
             if (evt is null)
             {
                 _logger?.Warning("Primary service discovery timed out");
@@ -55,7 +53,7 @@ public sealed class NrfDevice : IBleDevice
                 break;
             foreach (BleGattcServiceT bleGattcServiceT in response.Services)
             {
-                yield return new NrfGattService(_service, this, bleGattcServiceT);
+                yield return new NrfGattService(_logger, _service, this, bleGattcServiceT);
             }
             ushort endHandle = response.Services[^1].HandleRange.EndHandle;
             if (endHandle == 0xFFFF)

@@ -19,14 +19,14 @@ Log.Logger.Verbose("aaaa");
 Log.Logger.Information("Hi");
 
 NrfBluetoothService.Setup();
-Guid guid = Guid.Parse("0000fd4c-0000-1000-8000-00805f9b34fc");
+Guid guid = Guid.Parse("0000fd4c-0000-1000-8000-00805f9b34fb");
 using var bleController = new NrfBluetoothService("COM5", logger:Log.Logger);
 var source = new CancellationTokenSource();
 source.CancelAfter(5000);
 var startTime = DateTime.UtcNow;
 
 
-var adv = await bleController
+BleAdvertisement adv = await bleController
     .AdvertisementScanner(CancellationToken.None)
     .SetSampleInterval(1000, 1000)
     .ScanAsync(source.Token)
@@ -38,16 +38,12 @@ IBleDevice? device = await adv.ConnectAsync();
 //IBleDevice? device = null;
 Log.Logger.Information("Device {@Device}", device);
 if (device == null) return;
-var s = new CancellationTokenSource();
-s.CancelAfter(10000);
-s.Token.Register(() =>
-{
-    Log.Logger.Debug("hu");
-});
-var services = await device.GetServicesAsync(CacheMode.Uncached, s.Token)
-    .Select(x => x.Uuid)
-    .ToArrayAsync();
-Log.Logger.Information("{Count} Services {@Services}", services.Length, services);
+IGattService service = await device.GetServicesAsync(CacheMode.Uncached, default)
+    .FirstAsync(x => x.Uuid == guid);
+Log.Logger.Information("Found wcp service {@Service}", service);
+
+IGattCharacteristic[] characteristics = await service.GetCharacteristicsAsync(default).ToArrayAsync();
+Log.Logger.Information("Found {CharacteristicCount} characteristics {@Characteristics}", characteristics.Length, characteristics);
 return;
 
 await Task.Delay(100);

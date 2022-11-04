@@ -12,30 +12,31 @@ using Serilog.Events;
 
 namespace Darp.NrfBleDriver.Bluetooth;
 
-public sealed class NrfQueue<T> : IAsyncEnumerable<T>
+public sealed class NrfQueue<T>
 {
     private readonly ConcurrentQueue<T> _queue = new();
     private bool _connected;
     public void Enqueue(T value) => _queue.Enqueue(value);
 
-    public async IAsyncEnumerable<T> EnumerateAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    public async Task<T?> NextValueAsync(CancellationToken cancellationToken)
     {
         if (_connected)
             throw new Exception("Invalid connection at queue. Only one member is allowed to listen at the same time");
         _connected = true;
-        _queue.Clear();
-        while (!cancellationToken.IsCancellationRequested)
+        try
         {
-            if (_queue.Count > 0 && _queue.TryDequeue(out T? value))
-                yield return value;
-            await Task.Delay(10, cancellationToken).WithoutThrowing();
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (_queue.Count > 0 && _queue.TryDequeue(out T? value))
+                    return value;
+                await Task.Delay(10, cancellationToken).WithoutThrowing();
+            }
         }
-        _connected = false;
-    }
-
-    public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
-    {
-        return EnumerateAsync(cancellationToken).GetAsyncEnumerator(cancellationToken);
+        finally
+        {
+            _connected = false;
+        }
+        return default;
     }
 }
 
@@ -44,6 +45,7 @@ public sealed class NrfBluetoothService : IBluetoothService
     public NrfQueue<BleGapEvtT> GapAdvertisementResponseQueue { get; } = new();
     public NrfQueue<BleGapEvtT> GapConnectResponseQueue { get; } = new();
     public NrfQueue<BleGattcEvtT> PrimaryServiceDiscoveryResponseQueue { get; } = new();
+    public NrfQueue<BleGattcEvtT> CharacteristicDiscoveryResponseQueue { get; } = new();
     
     private readonly ILogger? _logger;
     public AdapterT Adapter { get; }
@@ -117,14 +119,13 @@ public sealed class NrfBluetoothService : IBluetoothService
             AdvDirReport = 0,
             UseWhitelist = 0
         };
-        IAsyncEnumerator<BleGapEvtT> enumerator = GapConnectResponseQueue.GetAsyncEnumerator(cancellationToken);
         if (ble_gap.SdBleGapConnect(Adapter, addr, scanParam, mConnectionParam, _configId)
             .IsFailed(_logger, "Ble gap connection failed"))
         {
             return null;
         }
         _logger?.Information("Connecting ...");
-        BleGapEvtT? evt = await enumerator.NextAsync(default);
+        BleGapEvtT? evt = await GapConnectResponseQueue.NextValueAsync(default);
         _connectionInProgress = false;
         if (evt == null)
         {
@@ -189,6 +190,10 @@ public sealed class NrfBluetoothService : IBluetoothService
             case (ushort)BLE_GATTC_EVTS.BLE_GATTC_EVT_PRIM_SRVC_DISC_RSP:
                 _logger?.Debug("Service discovery response");
                 PrimaryServiceDiscoveryResponseQueue.Enqueue(bleEvt.evt.GattcEvt);
+                break;
+            case (ushort)BLE_GATTC_EVTS.BLE_GATTC_EVT_CHAR_DISC_RSP:
+                _logger?.Debug("Characteristic discovery response");
+                CharacteristicDiscoveryResponseQueue.Enqueue(bleEvt.evt.GattcEvt);
                 break;
             case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_DATA_LENGTH_UPDATE_REQUEST:
                 _logger?.Debug("length update request {@Request}",
