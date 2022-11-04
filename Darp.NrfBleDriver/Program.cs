@@ -266,6 +266,25 @@ unsafe
 
         // Configure the connection roles.
         var bleCfg = default(BleCfgT);
+        bleCfg.ConnCfg = new BleConnCfgT
+        {
+            ConnCfgTag = conn_cfg_tag,
+            @params = new BleConnCfgT.Params
+            {
+                GattConnCfg = new BleGattConnCfgT
+                {
+                    AttMtu = 250
+                }
+            }
+        };
+
+        error_code = ble.SdBleCfgSet(adapter, (uint)BLE_CONN_CFGS.BLE_CONN_CFG_GATT, bleCfg, ram_start);
+        if (error_code != NrfError.NRF_SUCCESS)
+        {
+            Console.WriteLine($"sd_ble_cfg_set() failed when attempting to set BLE_CONN_CFG_GATT. Error code: 0x{error_code:X}");
+            return error_code;
+        }
+        /*
         bleCfg.GapCfg.RoleCountCfg = new BleGapCfgRoleCountT
         {
             PeriphRoleCount = 0,
@@ -301,25 +320,7 @@ unsafe
             return error_code;
         }
 
-        /*bleCfg = default;
-        bleCfg.ConnCfg = new BleConnCfgT
-        {
-            ConnCfgTag = conn_cfg_tag,
-            @params = new BleConnCfgT.Params
-            {
-                GattConnCfg = new BleGattConnCfgT
-                {
-                    AttMtu = 150
-                }
-            }
-        };
-
-        error_code = ble.SdBleCfgSet(adapter, (uint)BLE_CONN_CFGS.BLE_CONN_CFG_GATT, bleCfg, ram_start);
-        if (error_code != NrfError.NRF_SUCCESS)
-        {
-            Console.WriteLine($"sd_ble_cfg_set() failed when attempting to set BLE_CONN_CFG_GATT. Error code: 0x{error_code:X}");
-            return error_code;
-        }*/
+        bleCfg = default;*/
 
         return NrfError.NRF_SUCCESS;
     }
@@ -399,7 +400,7 @@ unsafe
         return;
     }
 
-    Thread.Sleep(5000);
+    Thread.Sleep(10000);
 
     Console.WriteLine($"Closed code: 0x{sd_rpc.SdRpcClose(m_adapter):X}");
 
