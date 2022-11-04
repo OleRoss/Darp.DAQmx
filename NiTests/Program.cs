@@ -44,7 +44,9 @@ s.Token.Register(() =>
 {
     Log.Logger.Debug("hu");
 });
-var services = await device.GetServicesAsync(CacheMode.Cached, s.Token).ToArrayAsync();
+var services = await device.GetServicesAsync(CacheMode.Uncached, s.Token)
+    .Select(x => x.Uuid)
+    .ToArrayAsync();
 Log.Logger.Information("{Count} Services {@Services}", services.Length, services);
 return;
 

@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System.Collections.Concurrent;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Bluetooth;
 using Bluetooth.Advertisement;
@@ -10,12 +12,42 @@ using Serilog.Events;
 
 namespace Darp.NrfBleDriver.Bluetooth;
 
-public class NrfBluetoothService : IBluetoothService
+public sealed class NrfQueue<T> : IAsyncEnumerable<T>
 {
+    private readonly ConcurrentQueue<T> _queue = new();
+    private bool _connected;
+    public void Enqueue(T value) => _queue.Enqueue(value);
+
+    public async IAsyncEnumerable<T> EnumerateAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        if (_connected)
+            throw new Exception("Invalid connection at queue. Only one member is allowed to listen at the same time");
+        _connected = true;
+        _queue.Clear();
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            if (_queue.Count > 0 && _queue.TryDequeue(out T? value))
+                yield return value;
+            await Task.Delay(10, cancellationToken).WithoutThrowing();
+        }
+        _connected = false;
+    }
+
+    public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+    {
+        return EnumerateAsync(cancellationToken).GetAsyncEnumerator(cancellationToken);
+    }
+}
+
+public sealed class NrfBluetoothService : IBluetoothService
+{
+    public NrfQueue<BleGapEvtT> AdvertisementResponseQueue { get; } = new();
+    public NrfQueue<BleGapEvtT> ConnectedResponseQueue { get; } = new();
+    public NrfQueue<BleGattcEvtT> PrimaryServiceDiscoveryResponseQueue { get; } = new();
     public event Action<BleGapEvtT>? OnAdvertisementReceived;
     public event Action<BleGapEvtT>? OnConnected;
     public event Action<BleGattcEvtT>? OnPrimaryServiceDiscoveryResponse;
-
+    
     private readonly ILogger? _logger;
     public AdapterT Adapter { get; }
     // ReSharper disable once CollectionNeverQueried.Local
@@ -48,7 +80,11 @@ public class NrfBluetoothService : IBluetoothService
     {
         _logger?.Information("Attempting connection with {BluetoothId:X}", bluetoothId);
         // Wait until running connections are finished
-        while (_connectionInProgress) await Task.Delay(10);
+        while (_connectionInProgress)
+        {
+            bool cancelled = await Task.Delay(10, cancellationToken).WithoutThrowing();
+            if (cancelled) return null;
+        }
         _connectionInProgress = true;
         // Determines minimum connection interval in milliseconds
         const ushort minConnectionInterval = 7500 / 1250;
@@ -58,7 +94,7 @@ public class NrfBluetoothService : IBluetoothService
         const ushort slaveLatency = 0;
         const ushort timeoutMs = 4000;
         // Determines supervision time-out in units of 10 milliseconds
-        var connectionSupervisionTimeout = (ushort) (timeoutMs / 10);
+        const ushort connectionSupervisionTimeout = timeoutMs / 10;
         const ushort scanInterval = 0x00A0;
         const ushort scanWindow = 0x0050;
 
@@ -105,12 +141,16 @@ public class NrfBluetoothService : IBluetoothService
 
     public void Clear()
     {
-        throw new NotImplementedException();
+        foreach (NrfDevice nrfDevice in _devices)
+        {
+            nrfDevice.Dispose();
+        }
     }
 
     public void Dispose()
     {
         _logger?.Debug("Disposing of nrf bluetooth service");
+        Clear();
         sd_rpc.SdRpcClose(Adapter).IsFailed(_logger, "Failed to close nRF BLE Driver");
     }
 
@@ -151,7 +191,7 @@ public class NrfBluetoothService : IBluetoothService
                 break;
             case (ushort)BLE_GATTC_EVTS.BLE_GATTC_EVT_PRIM_SRVC_DISC_RSP:
                 _logger?.Debug("Service discovery response");
-                OnPrimaryServiceDiscoveryResponse?.Invoke(bleEvt.evt.GattcEvt);
+                PrimaryServiceDiscoveryResponseQueue.Enqueue(bleEvt.evt.GattcEvt);
                 break;
             case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_DATA_LENGTH_UPDATE_REQUEST:
                 _logger?.Debug("length update request {@Request}",

@@ -31,8 +31,9 @@ public sealed class NrfDevice : IBleDevice
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         _logger?.Information("Discovering services ...");
-        _service.OnPrimaryServiceDiscoveryResponse += EventSubscription<BleGattcEvtT>
-            .Create(out IAsyncEnumerator<BleGattcEvtT> subscription, cancellationToken);
+        await using IAsyncEnumerator<BleGattcEvtT> enumerator = _service.PrimaryServiceDiscoveryResponseQueue
+            .GetAsyncEnumerator(cancellationToken);
+
         ushort startHandle = 0x01;
         while (true)
         {
@@ -41,7 +42,7 @@ public sealed class NrfDevice : IBleDevice
             {
                 yield break;
             }
-            BleGattcEvtT? evt = await subscription.NextAsync(cancellationToken);
+            BleGattcEvtT? evt = await enumerator.NextAsync(cancellationToken);
             if (evt is null)
             {
                 _logger?.Warning("Primary service discovery timed out");
@@ -65,6 +66,7 @@ public sealed class NrfDevice : IBleDevice
 
     public void Dispose()
     {
+        _logger?.Verbose("Disconnecting from device {DeviceAddress}", AddressString);
         ble_gap.SdBleGapDisconnect(_service.Adapter, ConnectionHandle,
             (byte)BLE_HCI_STATUS_CODES.BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION)
             .IsFailed(_logger, $"Disconnection of device 0x{AddressString} ({ConnectionHandle}) failed");
