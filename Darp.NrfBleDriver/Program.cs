@@ -20,7 +20,7 @@ unsafe
         if (libraryName != "NrfBleDriver" || libHandle != IntPtr.Zero)
             return libHandle;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            NativeLibrary.TryLoad(@"C:\Users\OleRosskamp\RiderProjects\NiTests\Darp.NrfBleDriver\Nrf\NrfBleDriverV6.dll", assembly, new DllImportSearchPath?(), out libHandle);
+            NativeLibrary.TryLoad(@"C:\Users\OleRosskamp\RiderProjects\NiTests\Darp.NrfBleDriver\Nrf\NrfBleDriver.dll", assembly, new DllImportSearchPath?(), out libHandle);
         return libHandle;
     }
 
@@ -35,15 +35,12 @@ unsafe
 
     var m_scan_param = new BleGapScanParamsT
     {
-        Extended = 0,
-        ReportIncompleteEvts = 0,
         Active = 0,                       // Set if active scanning.
-        FilterPolicy = BLE_GAP_SCAN_FILTER_POLICIES.BLE_GAP_SCAN_FP_ACCEPT_ALL,
-        ScanPhys = BLE_GAP_PHYS.BLE_GAP_PHY_1MBPS,
         Interval = scanInterval,
         Window = scanWindow,
         Timeout = scanTimeout,
-        ChannelMask = new byte[] {0, 0, 0, 0, 0}
+        UseWhitelist = 0,
+        AdvDirReport = 0
     };
 
     const ushort timeoutMs = 4000;
@@ -100,12 +97,8 @@ unsafe
         //Console.WriteLine($"Received advertisement report with device address: 0x{str}");
 
         BleGapEvtAdvReportT report = gapEvt.@params.AdvReport;
-        if (report.Type.Status == (ushort) BLE_GAP_ADV_DATA_STATUS.BLE_GAP_ADV_DATA_STATUS_INCOMPLETE_MORE_DATA)
-        {
-            Console.WriteLine("Waiting for more data! Skipping ...");
-            return;
-        }
-        IReadOnlyList<(SectionType, byte[])> dataSections = report.Data.ParseAdvertisementReports();
+        
+        IReadOnlyList<(SectionType, byte[])> dataSections = report.ParseAdvertisementReports();
         Guid guid = Guid.Parse("0000fd4c-0000-1000-8000-00805f9b34fb");
         var guids = dataSections.GetServiceGuids();
         //Console.WriteLine($"{string.Join(',', guids)}");
@@ -134,7 +127,7 @@ unsafe
             m_connection_is_in_progress = true;
         }
 
-        scan_start(m_adapter, null);
+        // scan_start(m_adapter, null);
     }
 
     void ble_evt_dispatch(IntPtr adapter, IntPtr p_ble_evt)
@@ -275,7 +268,6 @@ unsafe
         var bleCfg = default(BleCfgT);
         bleCfg.GapCfg.RoleCountCfg = new BleGapCfgRoleCountT
         {
-            AdvSetCount = BLE_GAP_ADV_SET.BLE_GAP_ADV_SET_COUNT_DEFAULT,
             PeriphRoleCount = 0,
             CentralRoleCount = 1,
             CentralSecCount  = 0
@@ -351,16 +343,16 @@ unsafe
         return errCode;
     }
 
-    var m_adv_report_buffer = new BleDataT();
+    //var m_adv_report_buffer = new BleDataT();
     const ushort dataLength = 1000;
     byte* mp_data = stackalloc byte[dataLength];
 
     uint scan_start(AdapterT adapter, BleGapScanParamsT? scan_param)
     {
-        m_adv_report_buffer!.PData = mp_data;
-        m_adv_report_buffer!.Len = dataLength;
+        //m_adv_report_buffer!.PData = mp_data;
+        //m_adv_report_buffer!.Len = dataLength;
 
-        uint error_code = ble_gap.SdBleGapScanStart(adapter, scan_param, m_adv_report_buffer);
+        uint error_code = ble_gap.SdBleGapScanStart(adapter, scan_param);
 
         if (error_code != NrfError.NRF_SUCCESS)
         {

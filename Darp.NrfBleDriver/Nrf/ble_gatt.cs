@@ -13,11 +13,11 @@ using __IntPtr = global::System.IntPtr;
 namespace NrfBleDriver
 {
     /// <summary>BLE GATT connection configuration parameters, set with</summary>
-    /// <remarks>::NRF_ERROR_INVALID_PARAM att_mtu is smaller than</remarks>
+    /// <remarks>NRF_ERROR_INVALID_PARAM att_mtu is smaller than</remarks>
     /// <summary>GATT Characteristic Properties.</summary>
     /// <summary>GATT Characteristic Extended Properties.</summary>
     /// <summary>BLE GATT connection configuration parameters, set with</summary>
-    /// <remarks>::NRF_ERROR_INVALID_PARAM att_mtu is smaller than</remarks>
+    /// <remarks>NRF_ERROR_INVALID_PARAM att_mtu is smaller than</remarks>
     public unsafe partial class BleGattConnCfgT : IDisposable
     {
         [StructLayout(LayoutKind.Sequential, Size = 2)]

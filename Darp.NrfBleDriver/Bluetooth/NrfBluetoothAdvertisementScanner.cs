@@ -116,15 +116,12 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
     {
         _scanParamsT = new BleGapScanParamsT
         {
-            Extended = 0,
-            ReportIncompleteEvts = 0,
             Active = _mode,                       // Set if active scanning.
-            FilterPolicy = BLE_GAP_SCAN_FILTER_POLICIES.BLE_GAP_SCAN_FP_ACCEPT_ALL,
-            ScanPhys = BLE_GAP_PHYS.BLE_GAP_PHY_AUTO,
             Interval = _scanInterval,
             Window = _scanWindow,
             Timeout = ScanTimeout,
-            ChannelMask = new byte[] {0, 0, 0, 0, 0}
+            UseWhitelist = 0,
+            AdvDirReport = 0
         };
         unsafe
         {
@@ -132,7 +129,7 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             {
                 _mAdvReportBuffer.PData = pData;
                 _mAdvReportBuffer.Len = (ushort) _data.Length;
-                return ble_gap.SdBleGapScanStart(_service.Adapter, _scanParamsT, _mAdvReportBuffer);
+                return ble_gap.SdBleGapScanStart(_service.Adapter, _scanParamsT);
             }
         }
     }
@@ -140,24 +137,20 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
     private void OnAdvertisementReport(BleGapEvtT gapEvt)
     {
         BleGapEvtAdvReportT report = gapEvt.@params.AdvReport;
-        if (report.Type.Status == (ushort) BLE_GAP_ADV_DATA_STATUS.BLE_GAP_ADV_DATA_STATUS_INCOMPLETE_MORE_DATA)
-        {
-            _logger?.Warning("Waiting for more data! Skipping ...");
-            return;
-        }
-        IReadOnlyList<(SectionType, byte[])> dataSections = report.Data.ParseAdvertisementReports();
+        IReadOnlyList<(SectionType, byte[])> dataSections = report.ParseAdvertisementReports();
+        var type = (AdvertisementType)report.Type;
         var advertisement = new BleAdvertisement(_service,
             DateTime.UtcNow,
-            report.Type.GetAddressType(),
+            (AdvertisementType)report.Type,//.GetAddressType(),
             report.PeerAddr.ToAddress(),
             false,
-            report.Type.Connectable > 0,
-            report.Type.Directed > 0,
-            report.Type.ScanResponse > 0,
-            report.Type.Scannable > 0,
+            type == AdvertisementType.ConnectableDirected || type == AdvertisementType.ConnectableUndirected,
+            false,
+            false,
+            false,
             report.PeerAddr.ToAddressType(),
             report.Rssi,
-            report.TxPower,
+            (short)1,//report.TxPower,
             dataSections.GetName(),
             dataSections,
             dataSections.GetManufactureSpecifics(),
@@ -165,8 +158,7 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             dataSections.GetServiceGuids()
         );
         _queue.Enqueue(advertisement);
-        ble_gap.SdBleGapScanStart(_service.Adapter, null, _mAdvReportBuffer)
-            .IsFailed(_logger, _ => "Scan restart failed");
+        // ble_gap.SdBleGapScanStart(_service.Adapter, null).IsFailed(_logger, _ => "Scan restart failed");
     }
 
     private uint BleStackInit()
@@ -196,7 +188,6 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
         var bleCfg = default(BleCfgT);
         bleCfg.GapCfg.RoleCountCfg = new BleGapCfgRoleCountT
         {
-            AdvSetCount = BLE_GAP_ADV_SET.BLE_GAP_ADV_SET_COUNT_DEFAULT,
             PeriphRoleCount = 10,
             CentralRoleCount = 10,
             CentralSecCount  = 10
@@ -232,8 +223,9 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
 
 public static class Extensions
 {
-    public static AdvertisementType GetAddressType(this BleGapAdvReportTypeT type)
+    public static AdvertisementType GetAddressType(this byte type)
     {
+        /*
         switch (type.Directed)
         {
             case > 0 when type.Connectable > 0:
@@ -248,7 +240,7 @@ public static class Extensions
         if (type.ScanResponse > 0)
             return AdvertisementType.ScanResponse;
         if (type.ExtendedPdu > 0)
-            return AdvertisementType.Extended;
+            return AdvertisementType.Extended;*/
         return 0;
     }
 
@@ -275,18 +267,18 @@ public static class Extensions
         };
     }
 
-    public static unsafe IReadOnlyList<(SectionType, byte[])> ParseAdvertisementReports(this BleDataT advData)
+    public static unsafe IReadOnlyList<(SectionType, byte[])> ParseAdvertisementReports(this BleGapEvtAdvReportT advData)
     {
         var list = new List<(SectionType, byte[])>();
         byte  index = 0;
-        byte* pData = advData.PData;
-
-        while (index < advData.Len)
+        byte[] pData = advData.Data;
+        
+        while (index < advData.Data.Length)
         {
             byte fieldLength = pData[index];
-            var fieldType   = (SectionType)pData[index + 1];
             if (fieldLength == 0)
                 break;
+            var fieldType   = (SectionType)pData[index + 1];
 
             var bytes = new byte[fieldLength - 1];
             for (var i = 0; i < fieldLength - 1; i++) bytes[i] = pData[index + 2 + i];

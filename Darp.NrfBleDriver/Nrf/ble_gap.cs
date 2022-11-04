@@ -27,8 +27,8 @@ namespace NrfBleDriver
         SD_BLE_GAP_PRIVACY_SET = 112,
         /// <summary>Get Privacy settings</summary>
         SD_BLE_GAP_PRIVACY_GET = 113,
-        /// <summary>Configure an advertising set.</summary>
-        SD_BLE_GAP_ADV_SET_CONFIGURE = 114,
+        /// <summary>Set Advertising Data.</summary>
+        SD_BLE_GAP_ADV_DATA_SET = 114,
         /// <summary>Start Advertising.</summary>
         SD_BLE_GAP_ADV_START = 115,
         /// <summary>Stop Advertising.</summary>
@@ -88,13 +88,7 @@ namespace NrfBleDriver
         /// <summary>Initiate or respond to a PHY Update Procedure.</summary>
         SD_BLE_GAP_PHY_UPDATE = 143,
         /// <summary>Initiate or respond to a Data Length Update Procedure.</summary>
-        SD_BLE_GAP_DATA_LENGTH_UPDATE = 144,
-        /// <summary>Start Quality of Service (QoS) channel survey module.</summary>
-        SD_BLE_GAP_QOS_CHANNEL_SURVEY_START = 145,
-        /// <summary>Stop Quality of Service (QoS) channel survey module.</summary>
-        SD_BLE_GAP_QOS_CHANNEL_SURVEY_STOP = 146,
-        /// <summary>Get the Address used on air while Advertising.</summary>
-        SD_BLE_GAP_ADV_ADDR_GET = 147
+        SD_BLE_GAP_DATA_LENGTH_UPDATE = 144
     }
 
     /// <summary>
@@ -103,7 +97,7 @@ namespace NrfBleDriver
     /// </summary>
     public enum BLE_GAP_EVTS
     {
-        /// <summary>Connected to peer.See</summary>
+        /// <summary>Connection established.See</summary>
         BLE_GAP_EVT_CONNECTED = 16,
         /// <summary>Disconnected from peer.See</summary>
         BLE_GAP_EVT_DISCONNECTED = 17,
@@ -144,11 +138,7 @@ namespace NrfBleDriver
         /// <summary>Data Length Update Request.Reply withSee</summary>
         BLE_GAP_EVT_DATA_LENGTH_UPDATE_REQUEST = 35,
         /// <summary>LL Data Channel PDU payload length updated.See</summary>
-        BLE_GAP_EVT_DATA_LENGTH_UPDATE = 36,
-        /// <summary>Channel survey report.See</summary>
-        BLE_GAP_EVT_QOS_CHANNEL_SURVEY_REPORT = 37,
-        /// <summary>Advertising set terminated.See</summary>
-        BLE_GAP_EVT_ADV_SET_TERMINATED = 38
+        BLE_GAP_EVT_DATA_LENGTH_UPDATE = 36
     }
 
     /// <summary>
@@ -163,12 +153,14 @@ namespace NrfBleDriver
         BLE_GAP_OPT_LOCAL_CONN_LATENCY = 33,
         /// <summary>Set passkey.</summary>
         BLE_GAP_OPT_PASSKEY = 34,
+        /// <summary>Scan request report.</summary>
+        BLE_GAP_OPT_SCAN_REQ_REPORT = 35,
         /// <summary>Compatibility mode.</summary>
-        BLE_GAP_OPT_COMPAT_MODE_1 = 35,
+        BLE_GAP_OPT_COMPAT_MODE_1 = 36,
         /// <summary>Set Authenticated payload timeout.</summary>
-        BLE_GAP_OPT_AUTH_PAYLOAD_TIMEOUT = 36,
+        BLE_GAP_OPT_AUTH_PAYLOAD_TIMEOUT = 37,
         /// <summary>Disable slave latency.</summary>
-        BLE_GAP_OPT_SLAVE_LATENCY_DISABLE = 37
+        BLE_GAP_OPT_SLAVE_LATENCY_DISABLE = 38
     }
 
     /// <summary>GAP Configuration IDs.</summary>
@@ -181,20 +173,6 @@ namespace NrfBleDriver
         BLE_GAP_CFG_DEVICE_NAME = 65
     }
 
-    /// <summary>GAP TX Power roles.</summary>
-    public enum BLE_GAP_TX_POWER_ROLES
-    {
-        /// <summary>Advertiser role.</summary>
-        BLE_GAP_TX_POWER_ROLE_ADV = 1,
-        /// <summary>Scanner and initiator role.</summary>
-        BLE_GAP_TX_POWER_ROLE_SCAN_INIT = 2,
-        /// <summary>Connection role.</summary>
-        BLE_GAP_TX_POWER_ROLE_CONN = 3
-    }
-
-    /// <summary>Advertising event properties.</summary>
-    /// <summary>Advertising report type.</summary>
-    /// <summary>Advertising Auxiliary Pointer.</summary>
     /// <summary>Bluetooth Low Energy address.</summary>
     /// <summary>GAP connection parameters.</summary>
     /// <remarks>
@@ -218,24 +196,8 @@ namespace NrfBleDriver
     /// </remarks>
     /// <summary>GAP connection security status.</summary>
     /// <summary>Identity Resolving Key.</summary>
-    /// <summary>
-    /// <para>Channel mask (40 bits).</para>
-    /// <para>Every channel is represented with a bit positioned as per channel index defined in Bluetooth Core Specification v5.0,</para>
-    /// <para>Vol 6, Part B, Section 1.4.1. The LSB contained in array element 0 represents channel index 0, and bit 39 represents</para>
-    /// <para>channel index 39. If a bit is set to 1, the channel is not used.</para>
-    /// </summary>
+    /// <summary>Channel mask for RF channels used in advertising.</summary>
     /// <summary>GAP advertising parameters.</summary>
-    /// <summary>GAP advertising data buffers.</summary>
-    /// <remarks>
-    /// <para>The application must provide the buffers for advertisement. The memory shall reside in application RAM, and</para>
-    /// <para>shall never be modified while advertising. The data shall be kept alive until either:</para>
-    /// <para>-is raised.</para>
-    /// <para>-is raised withset to the corresponding</para>
-    /// <para>advertising handle.</para>
-    /// <para>- Advertising is stopped.</para>
-    /// <para>- Advertising data is changed.</para>
-    /// <para>To update advertising data while advertising, provide new buffers to</para>
-    /// </remarks>
     /// <summary>GAP scanning parameters.</summary>
     /// <summary>Privacy.</summary>
     /// <remarks>
@@ -285,12 +247,6 @@ namespace NrfBleDriver
     /// <summary>Event structure for</summary>
     /// <summary>Event structure for</summary>
     /// <summary>Event structure for</summary>
-    /// <remarks>
-    /// <para>Ifis set tonot all fields in the advertising report may be available.</para>
-    /// <para>When ble_gap_adv_report_type_t::status is not set toscanning will be paused. To continue scanning, call</para>
-    /// </remarks>
-    /// <summary>Event structure for</summary>
-    /// <summary>Event structure for</summary>
     /// <summary>Event structure for</summary>
     /// <summary>Event structure for</summary>
     /// <summary>Event structure for</summary>
@@ -308,14 +264,10 @@ namespace NrfBleDriver
     /// <para>::NRF_ERROR_CONN_COUNT     The sum of periph_role_count and central_role_count is too</para>
     /// <para>large. The maximum supported sum of concurrent connections is</para>
     /// <para>::NRF_ERROR_INVALID_PARAM  central_sec_count is larger than central_role_count.</para>
-    /// <para>::NRF_ERROR_RESOURCES      The adv_set_count is too large. The maximum</para>
-    /// <para>supported advertising handles is</para>
     /// </remarks>
     /// <summary>Device name and its properties, set with</summary>
     /// <remarks>
-    /// <para>If the device name is not configured, the default device name will be</para>
-    /// <para>the maximum device name length will be</para>
-    /// <para>vloc will be set toand the device name</para>
+    /// <para>If the device name is not configured, the default device name will bethe maximum device name length will bevloc will be set toand the device name</para>
     /// <para>will have no write access.</para>
     /// <para>Ifis more thanand vloc is set tothe attribute table size must be increased to have room for the longer device name (see</para>
     /// <para>and</para>
@@ -333,24 +285,25 @@ namespace NrfBleDriver
     /// <para>::NRF_ERROR_NOT_SUPPORTED  Device name security mode is not supported.</para>
     /// </remarks>
     /// <summary>Configuration structure for GAP configurations.</summary>
-    /// <summary>Channel Map option.</summary>
-    /// <remarks>
+    /// <summary>
+    /// <para>Channel Map option.</para>
     /// <para>Used withto get the current channel map</para>
     /// <para>orto set a new channel map. When setting the</para>
     /// <para>channel map, it applies to all current and future connections. When getting the</para>
     /// <para>current channel map, it applies to a single connection and the connection handle</para>
     /// <para>must be supplied.</para>
+    /// </summary>
+    /// <remarks>
     /// <para>Setting the channel map may take some time, depending on connection parameters.</para>
     /// <para>The time taken may be different for each connection and the get operation will</para>
     /// <para>return the previous channel map until the new one has taken effect.</para>
     /// <para>After setting the channel map, by spec it can not be set again until at least 1 s has passed.</para>
     /// <para>See Bluetooth Specification Version 4.1 Volume 2, Part E, Section 7.3.46.</para>
     /// <para>::NRF_SUCCESS Get or set successful.</para>
-    /// <para>::NRF_ERROR_INVALID_PARAM One or more of the following is true:</para>
-    /// <para>- Less then two bits inare set.</para>
-    /// <para>- Bits for primary advertising channels (37-39) are set.</para>
     /// <para>::NRF_ERROR_BUSY Channel map was set again before enough time had passed.</para>
+    /// <para>::NRF_ERROR_INVALID_STATE Invalid state to perform operation.</para>
     /// <para>::BLE_ERROR_INVALID_CONN_HANDLE Invalid connection handle supplied for get.</para>
+    /// <para>::NRF_ERROR_NOT_SUPPORTED Returned by sd_ble_opt_set in peripheral-only SoftDevices.</para>
     /// </remarks>
     /// <summary>Local connection latency option.</summary>
     /// <remarks>
@@ -372,9 +325,8 @@ namespace NrfBleDriver
     /// </remarks>
     /// <summary>Disable slave latency</summary>
     /// <remarks>
-    /// <para>Used withto temporarily disable slave latency of a peripheral connection</para>
-    /// <para>(seeAnd to re-enable it again. When disabled, the</para>
-    /// <para>peripheral will ignore the slave_latency set by the central.</para>
+    /// <para>Used withto temporarily disable slave latency of a peripheral connection (seeAnd to re-enable it again.</para>
+    /// <para>When disabled, the peripheral will ignore the slave_latency set by the central.</para>
     /// <para>Shall only be called on peripheral links.</para>
     /// <para>::NRF_SUCCESS Set successfully.</para>
     /// <para>::NRF_ERROR_NOT_SUPPORTED Get is not supported.</para>
@@ -386,6 +338,16 @@ namespace NrfBleDriver
     /// <para>instead of generating a random one.</para>
     /// <para>Repeated pairing attempts using the same preprogrammed passkey makes pairing vulnerable to MITM attacks.</para>
     /// <para>is not supported for this option.</para>
+    /// </remarks>
+    /// <summary>Scan request report option.</summary>
+    /// <remarks>
+    /// <para>This can be used withto make the SoftDevice send</para>
+    /// <para>events.</para>
+    /// <para>Due to the limited space reserved for scan request report events,</para>
+    /// <para>not all received scan requests will be reported.</para>
+    /// <para>If whitelisting is used, only whitelisted requests are reported.</para>
+    /// <para>::NRF_SUCCESS Set successfully.</para>
+    /// <para>::NRF_ERROR_INVALID_STATE When advertising is ongoing while the option is set.</para>
     /// </remarks>
     /// <summary>Compatibility mode 1 option.</summary>
     /// <remarks>
@@ -417,526 +379,6 @@ namespace NrfBleDriver
     /// <para>::BLE_ERROR_INVALID_CONN_HANDLE Invalid connection handle parameter.</para>
     /// </remarks>
     /// <summary>Option structure for GAP options.</summary>
-    /// <summary>Advertising event properties.</summary>
-    public unsafe partial class BleGapAdvPropertiesT : IDisposable
-    {
-        [StructLayout(LayoutKind.Explicit, Size = 2)]
-        public partial struct __Internal
-        {
-            [FieldOffset(0)]
-            internal byte type;
-
-            [FieldOffset(1)]
-            internal byte anonymous;
-
-            [FieldOffset(1)]
-            internal byte include_tx_power;
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_adv_properties_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-        }
-
-        public __IntPtr __Instance { get; protected set; }
-
-        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAdvPropertiesT> NativeToManagedMap =
-            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAdvPropertiesT>();
-
-        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleGapAdvPropertiesT managed)
-        {
-            NativeToManagedMap[native] = managed;
-        }
-
-        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleGapAdvPropertiesT managed)
-        {
-    
-            return NativeToManagedMap.TryGetValue(native, out managed);
-        }
-
-        protected bool __ownsNativeInstance;
-
-        internal static BleGapAdvPropertiesT __CreateInstance(__IntPtr native, bool skipVTables = false)
-        {
-            return new BleGapAdvPropertiesT(native.ToPointer(), skipVTables);
-        }
-
-        internal static BleGapAdvPropertiesT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
-        {
-            if (native == __IntPtr.Zero)
-                return null;
-            if (__TryGetNativeToManagedMapping(native, out var managed))
-                return (BleGapAdvPropertiesT)managed;
-            var result = __CreateInstance(native, skipVTables);
-            if (saveInstance)
-                __RecordNativeToManagedMapping(native, result);
-            return result;
-        }
-
-        internal static BleGapAdvPropertiesT __CreateInstance(__Internal native, bool skipVTables = false)
-        {
-            return new BleGapAdvPropertiesT(native, skipVTables);
-        }
-
-        private static void* __CopyValue(__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
-            *(__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
-        private BleGapAdvPropertiesT(__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
-        {
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        protected BleGapAdvPropertiesT(void* native, bool skipVTables = false)
-        {
-            if (native == null)
-                return;
-            __Instance = new __IntPtr(native);
-        }
-
-        public BleGapAdvPropertiesT()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAdvPropertiesT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        public BleGapAdvPropertiesT(global::NrfBleDriver.BleGapAdvPropertiesT __0)
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAdvPropertiesT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-            *((global::NrfBleDriver.BleGapAdvPropertiesT.__Internal*) __Instance) = *((global::NrfBleDriver.BleGapAdvPropertiesT.__Internal*) __0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
-        }
-
-        partial void DisposePartial(bool disposing);
-
-        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            NativeToManagedMap.TryRemove(__Instance, out _);
-            DisposePartial(disposing);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
-        }
-
-        /// <summary>Advertising type. See</summary>
-        public byte Type
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->type;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->type = value;
-            }
-        }
-
-        /// <summary>Omit advertiser's address from all PDUs.</summary>
-        /// <remarks>
-        /// <para>Anonymous advertising is only available for</para>
-        /// <para>and</para>
-        /// </remarks>
-        public byte Anonymous
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->anonymous;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->anonymous = value;
-            }
-        }
-
-        /// <summary>This feature is not supported on this SoftDevice.</summary>
-        public byte IncludeTxPower
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->include_tx_power;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->include_tx_power = value;
-            }
-        }
-    }
-
-    /// <summary>Advertising report type.</summary>
-    public unsafe partial class BleGapAdvReportTypeT : IDisposable
-    {
-        [StructLayout(LayoutKind.Explicit, Size = 2)]
-        public partial struct __Internal
-        {
-            [FieldOffset(0)]
-            internal ushort connectable;
-
-            [FieldOffset(0)]
-            internal ushort scannable;
-
-            [FieldOffset(0)]
-            internal ushort directed;
-
-            [FieldOffset(0)]
-            internal ushort scan_response;
-
-            [FieldOffset(0)]
-            internal ushort extended_pdu;
-
-            [FieldOffset(0)]
-            internal ushort status;
-
-            [FieldOffset(0)]
-            internal ushort reserved;
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_adv_report_type_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-        }
-
-        public __IntPtr __Instance { get; protected set; }
-
-        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAdvReportTypeT> NativeToManagedMap =
-            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAdvReportTypeT>();
-
-        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleGapAdvReportTypeT managed)
-        {
-            NativeToManagedMap[native] = managed;
-        }
-
-        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleGapAdvReportTypeT managed)
-        {
-    
-            return NativeToManagedMap.TryGetValue(native, out managed);
-        }
-
-        protected bool __ownsNativeInstance;
-
-        internal static BleGapAdvReportTypeT __CreateInstance(__IntPtr native, bool skipVTables = false)
-        {
-            return new BleGapAdvReportTypeT(native.ToPointer(), skipVTables);
-        }
-
-        internal static BleGapAdvReportTypeT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
-        {
-            if (native == __IntPtr.Zero)
-                return null;
-            if (__TryGetNativeToManagedMapping(native, out var managed))
-                return (BleGapAdvReportTypeT)managed;
-            var result = __CreateInstance(native, skipVTables);
-            if (saveInstance)
-                __RecordNativeToManagedMapping(native, result);
-            return result;
-        }
-
-        internal static BleGapAdvReportTypeT __CreateInstance(__Internal native, bool skipVTables = false)
-        {
-            return new BleGapAdvReportTypeT(native, skipVTables);
-        }
-
-        private static void* __CopyValue(__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
-            *(__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
-        private BleGapAdvReportTypeT(__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
-        {
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        protected BleGapAdvReportTypeT(void* native, bool skipVTables = false)
-        {
-            if (native == null)
-                return;
-            __Instance = new __IntPtr(native);
-        }
-
-        public BleGapAdvReportTypeT()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAdvReportTypeT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        public BleGapAdvReportTypeT(global::NrfBleDriver.BleGapAdvReportTypeT __0)
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAdvReportTypeT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-            *((global::NrfBleDriver.BleGapAdvReportTypeT.__Internal*) __Instance) = *((global::NrfBleDriver.BleGapAdvReportTypeT.__Internal*) __0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
-        }
-
-        partial void DisposePartial(bool disposing);
-
-        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            NativeToManagedMap.TryRemove(__Instance, out _);
-            DisposePartial(disposing);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
-        }
-
-        /// <summary>Connectable advertising event type.</summary>
-        public ushort Connectable
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->connectable;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->connectable = value;
-            }
-        }
-
-        /// <summary>Scannable advertising event type.</summary>
-        public ushort Scannable
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->scannable;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->scannable = value;
-            }
-        }
-
-        /// <summary>Directed advertising event type.</summary>
-        public ushort Directed
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->directed;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->directed = value;
-            }
-        }
-
-        /// <summary>Received a scan response.</summary>
-        public ushort ScanResponse
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->scan_response;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->scan_response = value;
-            }
-        }
-
-        /// <summary>Received an extended advertising set.</summary>
-        public ushort ExtendedPdu
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->extended_pdu;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->extended_pdu = value;
-            }
-        }
-
-        /// <summary>Data status. See</summary>
-        public ushort Status
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->status;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->status = value;
-            }
-        }
-
-        /// <summary>Reserved for future use.</summary>
-        public ushort Reserved
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->reserved;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->reserved = value;
-            }
-        }
-    }
-
-    /// <summary>Advertising Auxiliary Pointer.</summary>
-    public unsafe partial class BleGapAuxPointerT : IDisposable
-    {
-        [StructLayout(LayoutKind.Sequential, Size = 4)]
-        public partial struct __Internal
-        {
-            internal ushort aux_offset;
-            internal byte aux_phy;
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_aux_pointer_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-        }
-
-        public __IntPtr __Instance { get; protected set; }
-
-        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAuxPointerT> NativeToManagedMap =
-            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAuxPointerT>();
-
-        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleGapAuxPointerT managed)
-        {
-            NativeToManagedMap[native] = managed;
-        }
-
-        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleGapAuxPointerT managed)
-        {
-    
-            return NativeToManagedMap.TryGetValue(native, out managed);
-        }
-
-        protected bool __ownsNativeInstance;
-
-        internal static BleGapAuxPointerT __CreateInstance(__IntPtr native, bool skipVTables = false)
-        {
-            return new BleGapAuxPointerT(native.ToPointer(), skipVTables);
-        }
-
-        internal static BleGapAuxPointerT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
-        {
-            if (native == __IntPtr.Zero)
-                return null;
-            if (__TryGetNativeToManagedMapping(native, out var managed))
-                return (BleGapAuxPointerT)managed;
-            var result = __CreateInstance(native, skipVTables);
-            if (saveInstance)
-                __RecordNativeToManagedMapping(native, result);
-            return result;
-        }
-
-        internal static BleGapAuxPointerT __CreateInstance(__Internal native, bool skipVTables = false)
-        {
-            return new BleGapAuxPointerT(native, skipVTables);
-        }
-
-        private static void* __CopyValue(__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
-            *(__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
-        private BleGapAuxPointerT(__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
-        {
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        protected BleGapAuxPointerT(void* native, bool skipVTables = false)
-        {
-            if (native == null)
-                return;
-            __Instance = new __IntPtr(native);
-        }
-
-        public BleGapAuxPointerT()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAuxPointerT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        public BleGapAuxPointerT(global::NrfBleDriver.BleGapAuxPointerT __0)
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAuxPointerT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-            *((global::NrfBleDriver.BleGapAuxPointerT.__Internal*) __Instance) = *((global::NrfBleDriver.BleGapAuxPointerT.__Internal*) __0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
-        }
-
-        partial void DisposePartial(bool disposing);
-
-        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            NativeToManagedMap.TryRemove(__Instance, out _);
-            DisposePartial(disposing);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
-        }
-
-        /// <summary>Time offset from the beginning of advertising packet to the auxiliary packet in 100 us units.</summary>
-        public ushort AuxOffset
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->aux_offset;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->aux_offset = value;
-            }
-        }
-
-        /// <summary>Indicates the PHY on which the auxiliary advertising packet is sent. See</summary>
-        public byte AuxPhy
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->aux_phy;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->aux_phy = value;
-            }
-        }
-    }
-
     /// <summary>Bluetooth Low Energy address.</summary>
     public unsafe partial class BleGapAddrT : IDisposable
     {
@@ -1052,11 +494,8 @@ namespace NrfBleDriver
 
         /// <summary>
         /// <para>Only valid for peer addresses.</para>
-        /// <para>This bit is set by the SoftDevice to indicate whether the address has been resolved from</para>
-        /// <para>a Resolvable Private Address (when the peer is using privacy).</para>
-        /// <para>If set to 1,andrefer to the identity address of the resolved address.</para>
+        /// <para>Reference to peer in device identities list (as set withwhen peer is using privacy.</para>
         /// </summary>
-        /// <remarks>This bit is ignored when a variable of typeis used as input to API functions.</remarks>
         public byte AddrIdPeer
         {
             get
@@ -1084,10 +523,7 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>
-        /// <para>48-bit address, LSB format.</para>
-        /// <para>is not used ifis</para>
-        /// </summary>
+        /// <summary>48-bit address, LSB format.</summary>
         public byte[] Addr
         {
             get
@@ -1108,8 +544,8 @@ namespace NrfBleDriver
 
     /// <summary>GAP connection parameters.</summary>
     /// <remarks>
-    /// <para>When ble_conn_params_t is received in an event, both min_conn_interval and
-    /// max_conn_interval will be equal to the connection interval set by the central.</para>
+    /// <para>When ble_conn_params_t is received in an event, both min_conn_interval and</para>
+    /// <para>max_conn_interval will be equal to the connection interval set by the central.</para>
     /// <para>If both conn_sup_timeout and max_conn_interval are specified, then the following constraint applies:</para>
     /// <para>conn_sup_timeout * 4 &gt; (1 + slave_latency) * max_conn_interval</para>
     /// <para>that corresponds to the following Bluetooth Spec requirement:</para>
@@ -1692,44 +1128,174 @@ namespace NrfBleDriver
         }
     }
 
-    /// <summary>GAP advertising parameters.</summary>
-    public unsafe partial class BleGapAdvParamsT : IDisposable
+    /// <summary>Channel mask for RF channels used in advertising.</summary>
+    public unsafe partial class BleGapAdvChMaskT : IDisposable
     {
-        [StructLayout(LayoutKind.Explicit, Size = 32)]
+        [StructLayout(LayoutKind.Explicit, Size = 1)]
         public partial struct __Internal
         {
             [FieldOffset(0)]
-            internal global::NrfBleDriver.BleGapAdvPropertiesT.__Internal properties;
+            internal byte ch_37_off;
 
-            [FieldOffset(8)]
+            [FieldOffset(0)]
+            internal byte ch_38_off;
+
+            [FieldOffset(0)]
+            internal byte ch_39_off;
+
+            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_adv_ch_mask_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
+            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
+        }
+
+        public __IntPtr __Instance { get; protected set; }
+
+        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAdvChMaskT> NativeToManagedMap =
+            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAdvChMaskT>();
+
+        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleGapAdvChMaskT managed)
+        {
+            NativeToManagedMap[native] = managed;
+        }
+
+        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleGapAdvChMaskT managed)
+        {
+    
+            return NativeToManagedMap.TryGetValue(native, out managed);
+        }
+
+        protected bool __ownsNativeInstance;
+
+        internal static BleGapAdvChMaskT __CreateInstance(__IntPtr native, bool skipVTables = false)
+        {
+            return new BleGapAdvChMaskT(native.ToPointer(), skipVTables);
+        }
+
+        internal static BleGapAdvChMaskT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
+        {
+            if (native == __IntPtr.Zero)
+                return null;
+            if (__TryGetNativeToManagedMapping(native, out var managed))
+                return (BleGapAdvChMaskT)managed;
+            var result = __CreateInstance(native, skipVTables);
+            if (saveInstance)
+                __RecordNativeToManagedMapping(native, result);
+            return result;
+        }
+
+        internal static BleGapAdvChMaskT __CreateInstance(__Internal native, bool skipVTables = false)
+        {
+            return new BleGapAdvChMaskT(native, skipVTables);
+        }
+
+        private static void* __CopyValue(__Internal native)
+        {
+            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
+            *(__Internal*) ret = native;
+            return ret.ToPointer();
+        }
+
+        private BleGapAdvChMaskT(__Internal native, bool skipVTables = false)
+            : this(__CopyValue(native), skipVTables)
+        {
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+        }
+
+        protected BleGapAdvChMaskT(void* native, bool skipVTables = false)
+        {
+            if (native == null)
+                return;
+            __Instance = new __IntPtr(native);
+        }
+
+        public BleGapAdvChMaskT()
+        {
+            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAdvChMaskT.__Internal));
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+        }
+
+        public BleGapAdvChMaskT(global::NrfBleDriver.BleGapAdvChMaskT __0)
+        {
+            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAdvChMaskT.__Internal));
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+            *((global::NrfBleDriver.BleGapAdvChMaskT.__Internal*) __Instance) = *((global::NrfBleDriver.BleGapAdvChMaskT.__Internal*) __0.__Instance);
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
+        }
+
+        partial void DisposePartial(bool disposing);
+
+        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
+        {
+            if (__Instance == IntPtr.Zero)
+                return;
+            NativeToManagedMap.TryRemove(__Instance, out _);
+            DisposePartial(disposing);
+            if (__ownsNativeInstance)
+                Marshal.FreeHGlobal(__Instance);
+            __Instance = IntPtr.Zero;
+        }
+
+        /// <summary>Setting this bit to 1 will turn off advertising on channel 37</summary>
+        public byte Ch37Off
+        {
+            get
+            {
+                return ((__Internal*)__Instance)->ch_37_off;
+            }
+
+            set
+            {
+                ((__Internal*)__Instance)->ch_37_off = value;
+            }
+        }
+
+        /// <summary>Setting this bit to 1 will turn off advertising on channel 38</summary>
+        public byte Ch38Off
+        {
+            get
+            {
+                return ((__Internal*)__Instance)->ch_38_off;
+            }
+
+            set
+            {
+                ((__Internal*)__Instance)->ch_38_off = value;
+            }
+        }
+
+        /// <summary>Setting this bit to 1 will turn off advertising on channel 39</summary>
+        public byte Ch39Off
+        {
+            get
+            {
+                return ((__Internal*)__Instance)->ch_39_off;
+            }
+
+            set
+            {
+                ((__Internal*)__Instance)->ch_39_off = value;
+            }
+        }
+    }
+
+    /// <summary>GAP advertising parameters.</summary>
+    public unsafe partial class BleGapAdvParamsT : IDisposable
+    {
+        [StructLayout(LayoutKind.Sequential, Size = 24)]
+        public partial struct __Internal
+        {
+            internal byte type;
             internal __IntPtr p_peer_addr;
-
-            [FieldOffset(16)]
-            internal uint interval;
-
-            [FieldOffset(20)]
-            internal ushort duration;
-
-            [FieldOffset(22)]
-            internal byte max_adv_evts;
-
-            [FieldOffset(23)]
-            internal fixed byte channel_mask[5];
-
-            [FieldOffset(28)]
-            internal byte filter_policy;
-
-            [FieldOffset(29)]
-            internal byte primary_phy;
-
-            [FieldOffset(30)]
-            internal byte secondary_phy;
-
-            [FieldOffset(31)]
-            internal byte set_id;
-
-            [FieldOffset(31)]
-            internal byte scan_req_notification;
+            internal byte fp;
+            internal ushort interval;
+            internal ushort timeout;
+            internal global::NrfBleDriver.BleGapAdvChMaskT.__Internal channel_mask;
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_adv_params_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
@@ -1829,36 +1395,27 @@ namespace NrfBleDriver
             __Instance = IntPtr.Zero;
         }
 
-        /// <summary>The properties of the advertising events.</summary>
-        public global::NrfBleDriver.BleGapAdvPropertiesT Properties
+        /// <summary>See</summary>
+        public byte Type
         {
             get
             {
-                return global::NrfBleDriver.BleGapAdvPropertiesT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->properties));
+                return ((__Internal*)__Instance)->type;
             }
 
             set
             {
-                if (ReferenceEquals(value, null))
-                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                ((__Internal*)__Instance)->properties = *(global::NrfBleDriver.BleGapAdvPropertiesT.__Internal*) value.__Instance;
+                ((__Internal*)__Instance)->type = value;
             }
         }
 
-        /// <summary>Address of a known peer.</summary>
-        /// <remarks>
-        /// <para>ble_gap_addr_t::addr_type cannot be</para>
-        /// <para>- When privacy is enabled and the local device uses</para>
-        /// <para>addresses,</para>
-        /// <para>the device identity list is searched for a matching entry. If</para>
-        /// <para>the local IRK for that device identity is set, the local IRK</para>
-        /// <para>for that device will be used to generate the advertiser address</para>
-        /// <para>field in the advertising packet.</para>
-        /// <para>- Ifis directed, this must be</para>
-        /// <para>set to the targeted scanner or initiator. If the peer address is</para>
-        /// <para>in the device identity list, the peer IRK for that device will be</para>
-        /// <para>used to generatetarget addresses used in the advertising event PDUs.</para>
-        /// </remarks>
+        /// <summary>
+        /// <para>Address of a known peer.</para>
+        /// <para>- When privacy is enabled and the local device useaddresses, the device identity list is searched for a matching</para>
+        /// <para>entry. If the local IRK for that device identity is set, the local IRK for that device will be used to generate the advertiser address field in the advertise packet.</para>
+        /// <para>- If type isthis must be set to the targeted initiator. If the initiator is in the device identity list,</para>
+        /// <para>the peer IRK for that device will be used to generate the initiator address field in the ADV_DIRECT_IND packet.</para>
+        /// </summary>
         public global::NrfBleDriver.BleGapAddrT PPeerAddr
         {
             get
@@ -1868,13 +1425,25 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>Advertising interval in 625 us units.</summary>
-        /// <remarks>
-        /// <para>BLE_GAP_ADV_INTERVALS.</para>
-        /// <para>Ifis set to</para>
-        /// <para>advertising, this parameter is ignored.</para>
-        /// </remarks>
-        public uint Interval
+        /// <summary>Filter Policy, see</summary>
+        public byte Fp
+        {
+            get
+            {
+                return ((__Internal*)__Instance)->fp;
+            }
+
+            set
+            {
+                ((__Internal*)__Instance)->fp = value;
+            }
+        }
+
+        /// <summary>
+        /// <para>Advertising interval between 0x0020 and 0x4000 in 0.625 ms units (20 ms to 10.24 s), see- If type equalsthis parameter must be set to 0 for high duty cycle directed advertising.</para>
+        /// <para>- If type equalsset&lt;= interval&lt;=for low duty cycle advertising.</para>
+        /// </summary>
+        public ushort Interval
         {
             get
             {
@@ -1887,330 +1456,33 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>
-        /// <para>Advertising duration in 10 ms units. When timeout is reached,</para>
-        /// <para>an event of typeis raised.</para>
-        /// </summary>
-        /// <remarks>
-        /// <para>BLE_GAP_ADV_TIMEOUT_VALUES.</para>
-        /// <para>The SoftDevice will always complete at least one advertising</para>
-        /// <para>event even if the duration is set too low.</para>
-        /// </remarks>
-        public ushort Duration
+        /// <summary>Advertising timeout between 0x0001 and 0x3FFF in seconds, 0x0000 disables timeout. See alsoIf type equalsthis parameter must be set to 0 for High duty cycle directed advertising.</summary>
+        public ushort Timeout
         {
             get
             {
-                return ((__Internal*)__Instance)->duration;
+                return ((__Internal*)__Instance)->timeout;
             }
 
             set
             {
-                ((__Internal*)__Instance)->duration = value;
+                ((__Internal*)__Instance)->timeout = value;
             }
         }
 
-        /// <summary>
-        /// <para>Maximum advertising events that shall be sent prior to disabling</para>
-        /// <para>advertising. Setting the value to 0 disables the limitation. When</para>
-        /// <para>the count of advertising events specified by this parameter</para>
-        /// <para>(if not 0) is reached, advertising will be automatically stopped</para>
-        /// <para>and an event of typeis raised</para>
-        /// </summary>
-        /// <remarks>
-        /// <para>Ifis set to</para>
-        /// <para>this parameter is ignored.</para>
-        /// </remarks>
-        public byte MaxAdvEvts
+        /// <summary>Advertising channel mask. See</summary>
+        public global::NrfBleDriver.BleGapAdvChMaskT ChannelMask
         {
             get
             {
-                return ((__Internal*)__Instance)->max_adv_evts;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->max_adv_evts = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Channel mask for primary and secondary advertising channels.</para>
-        /// <para>At least one of the primary channels, that is channel index 37-39, must be used.</para>
-        /// <para>Masking away secondary advertising channels is not supported.</para>
-        /// </summary>
-        public byte[] ChannelMask
-        {
-            get
-            {
-                return CppSharp.Runtime.MarshalUtil.GetArray<byte>(((__Internal*)__Instance)->channel_mask, 5);
-            }
-
-            set
-            {
-                if (value != null)
-                {
-                    for (int i = 0; i < 5; i++)
-                        ((__Internal*)__Instance)->channel_mask[i] = value[i];
-                }
-            }
-        }
-
-        /// <summary>Filter Policy.</summary>
-        /// <remarks>BLE_GAP_ADV_FILTER_POLICIES.</remarks>
-        public byte FilterPolicy
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->filter_policy;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->filter_policy = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Indicates the PHY on which the primary advertising channel packets</para>
-        /// <para>are transmitted. If set towill be used.</para>
-        /// <para>Valid values areand</para>
-        /// </summary>
-        /// <remarks>
-        /// <para>The primary_phy shall indicateif</para>
-        /// <para>is not an extended advertising type.</para>
-        /// </remarks>
-        public byte PrimaryPhy
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->primary_phy;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->primary_phy = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Indicates the PHY on which the secondary advertising channel packets</para>
-        /// <para>are transmitted.</para>
-        /// <para>If set towill be used.</para>
-        /// <para>Valid values are</para>
-        /// <para>andIfis an extended advertising type</para>
-        /// <para>and connectable, this is the PHY that will be used to establish a</para>
-        /// <para>connection and send AUX_ADV_IND packets on.</para>
-        /// </summary>
-        /// <remarks>
-        /// <para>This parameter will be ignored when</para>
-        /// <para>is not an extended advertising type.</para>
-        /// </remarks>
-        public byte SecondaryPhy
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->secondary_phy;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->secondary_phy = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>The advertising set identifier distinguishes this advertising set from other</para>
-        /// <para>advertising sets transmitted by this and other devices.</para>
-        /// </summary>
-        /// <remarks>
-        /// <para>This parameter will be ignored when</para>
-        /// <para>is not an extended advertising type.</para>
-        /// </remarks>
-        public byte SetId
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->set_id;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->set_id = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Enable scan request notifications for this advertising set. When a</para>
-        /// <para>scan request is received and the scanner address is allowed</para>
-        /// <para>by the filter policy,is raised.</para>
-        /// </summary>
-        /// <remarks>
-        /// <para>This parameter will be ignored when</para>
-        /// <para>is a non-scannable</para>
-        /// <para>advertising type.</para>
-        /// </remarks>
-        public byte ScanReqNotification
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->scan_req_notification;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->scan_req_notification = value;
-            }
-        }
-    }
-
-    /// <summary>GAP advertising data buffers.</summary>
-    /// <remarks>
-    /// <para>The application must provide the buffers for advertisement. The memory shall reside in application RAM, and</para>
-    /// <para>shall never be modified while advertising. The data shall be kept alive until either:</para>
-    /// <para>-is raised.</para>
-    /// <para>-is raised withset to the corresponding</para>
-    /// <para>advertising handle.</para>
-    /// <para>- Advertising is stopped.</para>
-    /// <para>- Advertising data is changed.</para>
-    /// <para>To update advertising data while advertising, provide new buffers to</para>
-    /// </remarks>
-    public unsafe partial class BleGapAdvDataT : IDisposable
-    {
-        [StructLayout(LayoutKind.Sequential, Size = 32)]
-        public partial struct __Internal
-        {
-            internal global::NrfBleDriver.BleDataT.__Internal adv_data;
-            internal global::NrfBleDriver.BleDataT.__Internal scan_rsp_data;
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_adv_data_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-        }
-
-        public __IntPtr __Instance { get; protected set; }
-
-        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAdvDataT> NativeToManagedMap =
-            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapAdvDataT>();
-
-        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleGapAdvDataT managed)
-        {
-            NativeToManagedMap[native] = managed;
-        }
-
-        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleGapAdvDataT managed)
-        {
-    
-            return NativeToManagedMap.TryGetValue(native, out managed);
-        }
-
-        protected bool __ownsNativeInstance;
-
-        internal static BleGapAdvDataT __CreateInstance(__IntPtr native, bool skipVTables = false)
-        {
-            return new BleGapAdvDataT(native.ToPointer(), skipVTables);
-        }
-
-        internal static BleGapAdvDataT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
-        {
-            if (native == __IntPtr.Zero)
-                return null;
-            if (__TryGetNativeToManagedMapping(native, out var managed))
-                return (BleGapAdvDataT)managed;
-            var result = __CreateInstance(native, skipVTables);
-            if (saveInstance)
-                __RecordNativeToManagedMapping(native, result);
-            return result;
-        }
-
-        internal static BleGapAdvDataT __CreateInstance(__Internal native, bool skipVTables = false)
-        {
-            return new BleGapAdvDataT(native, skipVTables);
-        }
-
-        private static void* __CopyValue(__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
-            *(__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
-        private BleGapAdvDataT(__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
-        {
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        protected BleGapAdvDataT(void* native, bool skipVTables = false)
-        {
-            if (native == null)
-                return;
-            __Instance = new __IntPtr(native);
-        }
-
-        public BleGapAdvDataT()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAdvDataT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        public BleGapAdvDataT(global::NrfBleDriver.BleGapAdvDataT __0)
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapAdvDataT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-            *((global::NrfBleDriver.BleGapAdvDataT.__Internal*) __Instance) = *((global::NrfBleDriver.BleGapAdvDataT.__Internal*) __0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
-        }
-
-        partial void DisposePartial(bool disposing);
-
-        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            NativeToManagedMap.TryRemove(__Instance, out _);
-            DisposePartial(disposing);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
-        }
-
-        /// <summary>Advertising data.</summary>
-        /// <remarks>Advertising data can only be specified for athat is allowed to contain advertising data.</remarks>
-        public global::NrfBleDriver.BleDataT AdvData
-        {
-            get
-            {
-                return global::NrfBleDriver.BleDataT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->adv_data));
+                return global::NrfBleDriver.BleGapAdvChMaskT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->channel_mask));
             }
 
             set
             {
                 if (ReferenceEquals(value, null))
                     throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                ((__Internal*)__Instance)->adv_data = *(global::NrfBleDriver.BleDataT.__Internal*) value.__Instance;
-            }
-        }
-
-        /// <summary>Scan response data.</summary>
-        /// <remarks>Scan response data can only be specified for athat is scannable.</remarks>
-        public global::NrfBleDriver.BleDataT ScanRspData
-        {
-            get
-            {
-                return global::NrfBleDriver.BleDataT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->scan_rsp_data));
-            }
-
-            set
-            {
-                if (ReferenceEquals(value, null))
-                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                ((__Internal*)__Instance)->scan_rsp_data = *(global::NrfBleDriver.BleDataT.__Internal*) value.__Instance;
+                ((__Internal*)__Instance)->channel_mask = *(global::NrfBleDriver.BleGapAdvChMaskT.__Internal*) value.__Instance;
             }
         }
     }
@@ -2218,23 +1490,17 @@ namespace NrfBleDriver
     /// <summary>GAP scanning parameters.</summary>
     public unsafe partial class BleGapScanParamsT : IDisposable
     {
-        [StructLayout(LayoutKind.Explicit, Size = 14)]
+        [StructLayout(LayoutKind.Explicit, Size = 8)]
         public partial struct __Internal
         {
-            [FieldOffset(0)]
-            internal byte extended;
-
-            [FieldOffset(0)]
-            internal byte report_incomplete_evts;
-
             [FieldOffset(0)]
             internal byte active;
 
             [FieldOffset(0)]
-            internal byte filter_policy;
+            internal byte use_whitelist;
 
-            [FieldOffset(1)]
-            internal byte scan_phys;
+            [FieldOffset(0)]
+            internal byte adv_dir_report;
 
             [FieldOffset(2)]
             internal ushort interval;
@@ -2244,9 +1510,6 @@ namespace NrfBleDriver
 
             [FieldOffset(6)]
             internal ushort timeout;
-
-            [FieldOffset(8)]
-            internal fixed byte channel_mask[5];
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_scan_params_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
@@ -2346,53 +1609,7 @@ namespace NrfBleDriver
             __Instance = IntPtr.Zero;
         }
 
-        /// <summary>
-        /// <para>If 1, the scanner will accept extended advertising packets.</para>
-        /// <para>If set to 0, the scanner will not receive advertising packets</para>
-        /// <para>on secondary advertising channels, and will not be able</para>
-        /// <para>to receive long advertising PDUs.</para>
-        /// </summary>
-        public byte Extended
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->extended;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->extended = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>If 1, events of typemay have</para>
-        /// <para>set to</para>
-        /// <para>This parameter is ignored when used with</para>
-        /// </summary>
-        /// <remarks>
-        /// <para>This may be used to abort receiving more packets from an extended</para>
-        /// <para>advertising event, and is only available for extended</para>
-        /// <para>scanning, see</para>
-        /// <para>This feature is not supported by this SoftDevice.</para>
-        /// </remarks>
-        public byte ReportIncompleteEvts
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->report_incomplete_evts;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->report_incomplete_evts = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>If 1, perform active scanning by sending scan requests.</para>
-        /// <para>This parameter is ignored when used with</para>
-        /// </summary>
+        /// <summary>If 1, perform active scanning (scan requests).</summary>
         public byte Active
         {
             get
@@ -2406,52 +1623,39 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>Scanning filter policy.</summary>
-        /// <remarks>
-        /// <para>BLE_GAP_SCAN_FILTER_POLICIES.</para>
-        /// <para>Onlyand</para>
-        /// <para>are valid when used with</para>
-        /// </remarks>
-        public byte FilterPolicy
+        /// <summary>If 1, filter advertisers using current active whitelist.</summary>
+        public byte UseWhitelist
         {
             get
             {
-                return ((__Internal*)__Instance)->filter_policy;
+                return ((__Internal*)__Instance)->use_whitelist;
             }
 
             set
             {
-                ((__Internal*)__Instance)->filter_policy = value;
+                ((__Internal*)__Instance)->use_whitelist = value;
             }
         }
 
         /// <summary>
-        /// <para>Bitfield of PHYs to scan on. If set toscan_phys will default to- Ifis set to 0, the only</para>
-        /// <para>supported PHY is- When used withthe bitfield indicates the PHYs the scanner will use for scanning</para>
-        /// <para>on primary advertising channels. The scanner will accept</para>
-        /// <para>as secondary advertising channel PHYs.</para>
-        /// <para>- When used withthe</para>
-        /// <para>bitfield indicates the PHYs on where a connection may be initiated.</para>
-        /// <para>If scan_phys containsand/orthe primary scan PHY isIf scan_phys also containsthe primary scan</para>
-        /// <para>PHY will also containIf the only scan PHY is</para>
-        /// <para>the primary scan PHY is</para>
-        /// <para>only.</para>
+        /// <para>If 1, also report directed advertisements where the initiator field is set to a private resolvable address,</para>
+        /// <para>even if the address did not resolve to an entry in the device identity list. A report will be generated</para>
+        /// <para>even if the peer is not in the whitelist.</para>
         /// </summary>
-        public byte ScanPhys
+        public byte AdvDirReport
         {
             get
             {
-                return ((__Internal*)__Instance)->scan_phys;
+                return ((__Internal*)__Instance)->adv_dir_report;
             }
 
             set
             {
-                ((__Internal*)__Instance)->scan_phys = value;
+                ((__Internal*)__Instance)->adv_dir_report = value;
             }
         }
 
-        /// <summary>Scan interval in 625 us units.</summary>
-        /// <remarks>BLE_GAP_SCAN_INTERVALS.</remarks>
+        /// <summary>Scan interval between 0x0004 and 0x4000 in 0.625 ms units (2.5 ms to 10.24 s).</summary>
         public ushort Interval
         {
             get
@@ -2465,13 +1669,7 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>Scan window in 625 us units.</summary>
-        /// <remarks>
-        /// <para>BLE_GAP_SCAN_WINDOW.</para>
-        /// <para>If scan_phys contains bothand</para>
-        /// <para>interval shall be larger than or</para>
-        /// <para>equal to twice the scan window.</para>
-        /// </remarks>
+        /// <summary>Scan window between 0x0004 and 0x4000 in 0.625 ms units (2.5 ms to 10.24 s).</summary>
         public ushort Window
         {
             get
@@ -2485,8 +1683,7 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>Scan timeout in 10 ms units.</summary>
-        /// <remarks>BLE_GAP_SCAN_TIMEOUT.</remarks>
+        /// <summary>Scan timeout between 0x0001 and 0xFFFF in seconds, 0x0000 disables timeout.</summary>
         public ushort Timeout
         {
             get
@@ -2497,29 +1694,6 @@ namespace NrfBleDriver
             set
             {
                 ((__Internal*)__Instance)->timeout = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Channel mask for primary and secondary advertising channels.</para>
-        /// <para>At least one of the primary channels, that is channel index 37-39, must be</para>
-        /// <para>set to 0.</para>
-        /// <para>Masking away secondary channels is not supported.</para>
-        /// </summary>
-        public byte[] ChannelMask
-        {
-            get
-            {
-                return CppSharp.Runtime.MarshalUtil.GetArray<byte>(((__Internal*)__Instance)->channel_mask, 5);
-            }
-
-            set
-            {
-                if (value != null)
-                {
-                    for (int i = 0; i < 5; i++)
-                        ((__Internal*)__Instance)->channel_mask[i] = value[i];
-                }
             }
         }
     }
@@ -4158,14 +3332,12 @@ namespace NrfBleDriver
     /// <summary>Event structure for</summary>
     public unsafe partial class BleGapEvtConnectedT : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Size = 56)]
+        [StructLayout(LayoutKind.Sequential, Size = 16)]
         public partial struct __Internal
         {
             internal global::NrfBleDriver.BleGapAddrT.__Internal peer_addr;
             internal byte role;
             internal global::NrfBleDriver.BleGapConnParamsT.__Internal conn_params;
-            internal byte adv_handle;
-            internal global::NrfBleDriver.BleGapAdvDataT.__Internal adv_data;
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_evt_connected_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
@@ -4311,44 +3483,6 @@ namespace NrfBleDriver
                 if (ReferenceEquals(value, null))
                     throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
                 ((__Internal*)__Instance)->conn_params = *(global::NrfBleDriver.BleGapConnParamsT.__Internal*) value.__Instance;
-            }
-        }
-
-        /// <summary>
-        /// <para>Advertising handle in which advertising has ended.</para>
-        /// <para>This variable is only set if role is set to</para>
-        /// </summary>
-        public byte AdvHandle
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->adv_handle;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->adv_handle = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Advertising buffers corresponding to the terminated</para>
-        /// <para>advertising set. The advertising buffers provided in</para>
-        /// <para>are now released.</para>
-        /// <para>This variable is only set if role is set to</para>
-        /// </summary>
-        public global::NrfBleDriver.BleGapAdvDataT AdvData
-        {
-            get
-            {
-                return global::NrfBleDriver.BleGapAdvDataT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->adv_data));
-            }
-
-            set
-            {
-                if (ReferenceEquals(value, null))
-                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                ((__Internal*)__Instance)->adv_data = *(global::NrfBleDriver.BleGapAdvDataT.__Internal*) value.__Instance;
             }
         }
     }
@@ -7172,81 +6306,13 @@ namespace NrfBleDriver
     /// <summary>Event structure for</summary>
     public unsafe partial class BleGapEvtTimeoutT : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Size = 24)]
+        [StructLayout(LayoutKind.Sequential, Size = 1)]
         public partial struct __Internal
         {
             internal byte src;
-            internal global::NrfBleDriver.BleGapEvtTimeoutT.Params.__Internal @params;
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_evt_timeout_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-        }
-
-        public unsafe partial struct Params
-        {
-            [StructLayout(LayoutKind.Explicit, Size = 16)]
-            public partial struct __Internal
-            {
-                [FieldOffset(0)]
-                internal global::NrfBleDriver.BleDataT.__Internal adv_report_buffer;
-
-                [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0<unnamed-type-params>@ble_gap_evt_timeout_t@@QEAA@AEBT01@@Z", CallingConvention = __CallingConvention.Cdecl)]
-                internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-            }
-
-            private Params.__Internal __instance;
-            internal Params.__Internal __Instance => __instance;
-
-            internal static Params __CreateInstance(__IntPtr native, bool skipVTables = false)
-            {
-                return new Params(native.ToPointer(), skipVTables);
-            }
-
-            internal static Params __CreateInstance(__Internal native, bool skipVTables = false)
-            {
-                return new Params(native, skipVTables);
-            }
-
-            private Params(__Internal native, bool skipVTables = false)
-                : this()
-            {
-                __instance = native;
-            }
-
-            private Params(void* native, bool skipVTables = false) : this()
-            {
-                __instance = *(global::NrfBleDriver.BleGapEvtTimeoutT.Params.__Internal*) native;
-            }
-
-            public Params(global::NrfBleDriver.BleGapEvtTimeoutT.Params __0)
-                : this()
-            {
-                var ____arg0 = __0.__Instance;
-                var __arg0 = new __IntPtr(&____arg0);
-                fixed (__Internal* __instancePtr = &__instance)
-                {
-                    __Internal.cctor(new __IntPtr(__instancePtr), __arg0);
-                }
-            }
-
-            /// <summary>
-            /// <para>If source is set tothe released</para>
-            /// <para>scan buffer is contained in this field.</para>
-            /// </summary>
-            public global::NrfBleDriver.BleDataT AdvReportBuffer
-            {
-                get
-                {
-                    return global::NrfBleDriver.BleDataT.__CreateInstance(__instance.adv_report_buffer);
-                }
-
-                set
-                {
-                    if (ReferenceEquals(value, null))
-                        throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                    __instance.adv_report_buffer = *(global::NrfBleDriver.BleDataT.__Internal*) value.__Instance;
-                }
-            }
         }
 
         public __IntPtr __Instance { get; protected set; }
@@ -7356,30 +6422,15 @@ namespace NrfBleDriver
                 ((__Internal*)__Instance)->src = value;
             }
         }
-
-        /// <summary>Event Parameters.</summary>
-        public global::NrfBleDriver.BleGapEvtTimeoutT.Params @params
-        {
-            get
-            {
-                return global::NrfBleDriver.BleGapEvtTimeoutT.Params.__CreateInstance(((__Internal*)__Instance)->@params);
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->@params = value.__Instance;
-            }
-        }
     }
 
     /// <summary>Event structure for</summary>
     public unsafe partial class BleGapEvtRssiChangedT : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Size = 2)]
+        [StructLayout(LayoutKind.Sequential, Size = 1)]
         public partial struct __Internal
         {
             internal sbyte rssi;
-            internal byte ch_index;
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_evt_rssi_changed_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
@@ -7480,7 +6531,6 @@ namespace NrfBleDriver
         }
 
         /// <summary>Received Signal Strength Indication in dBm.</summary>
-        /// <remarks>ERRATA-153 requires the rssi sample to be compensated based on a temperature measurement.</remarks>
         public sbyte Rssi
         {
             get
@@ -7493,219 +6543,34 @@ namespace NrfBleDriver
                 ((__Internal*)__Instance)->rssi = value;
             }
         }
-
-        /// <summary>Data Channel Index on which the Signal Strength is measured (0-36).</summary>
-        public byte ChIndex
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->ch_index;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->ch_index = value;
-            }
-        }
     }
 
     /// <summary>Event structure for</summary>
-    public unsafe partial class BleGapEvtAdvSetTerminatedT : IDisposable
-    {
-        [StructLayout(LayoutKind.Sequential, Size = 40)]
-        public partial struct __Internal
-        {
-            internal byte reason;
-            internal byte adv_handle;
-            internal byte num_completed_adv_events;
-            internal global::NrfBleDriver.BleGapAdvDataT.__Internal adv_data;
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_evt_adv_set_terminated_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-        }
-
-        public __IntPtr __Instance { get; protected set; }
-
-        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapEvtAdvSetTerminatedT> NativeToManagedMap =
-            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapEvtAdvSetTerminatedT>();
-
-        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleGapEvtAdvSetTerminatedT managed)
-        {
-            NativeToManagedMap[native] = managed;
-        }
-
-        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleGapEvtAdvSetTerminatedT managed)
-        {
-    
-            return NativeToManagedMap.TryGetValue(native, out managed);
-        }
-
-        protected bool __ownsNativeInstance;
-
-        internal static BleGapEvtAdvSetTerminatedT __CreateInstance(__IntPtr native, bool skipVTables = false)
-        {
-            return new BleGapEvtAdvSetTerminatedT(native.ToPointer(), skipVTables);
-        }
-
-        internal static BleGapEvtAdvSetTerminatedT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
-        {
-            if (native == __IntPtr.Zero)
-                return null;
-            if (__TryGetNativeToManagedMapping(native, out var managed))
-                return (BleGapEvtAdvSetTerminatedT)managed;
-            var result = __CreateInstance(native, skipVTables);
-            if (saveInstance)
-                __RecordNativeToManagedMapping(native, result);
-            return result;
-        }
-
-        internal static BleGapEvtAdvSetTerminatedT __CreateInstance(__Internal native, bool skipVTables = false)
-        {
-            return new BleGapEvtAdvSetTerminatedT(native, skipVTables);
-        }
-
-        private static void* __CopyValue(__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
-            *(__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
-        private BleGapEvtAdvSetTerminatedT(__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
-        {
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        protected BleGapEvtAdvSetTerminatedT(void* native, bool skipVTables = false)
-        {
-            if (native == null)
-                return;
-            __Instance = new __IntPtr(native);
-        }
-
-        public BleGapEvtAdvSetTerminatedT()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapEvtAdvSetTerminatedT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        public BleGapEvtAdvSetTerminatedT(global::NrfBleDriver.BleGapEvtAdvSetTerminatedT __0)
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapEvtAdvSetTerminatedT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-            *((global::NrfBleDriver.BleGapEvtAdvSetTerminatedT.__Internal*) __Instance) = *((global::NrfBleDriver.BleGapEvtAdvSetTerminatedT.__Internal*) __0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
-        }
-
-        partial void DisposePartial(bool disposing);
-
-        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            NativeToManagedMap.TryRemove(__Instance, out _);
-            DisposePartial(disposing);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
-        }
-
-        /// <summary>Reason for why the advertising set terminated. See</summary>
-        public byte Reason
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->reason;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->reason = value;
-            }
-        }
-
-        /// <summary>Advertising handle in which advertising has ended.</summary>
-        public byte AdvHandle
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->adv_handle;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->adv_handle = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Ifwas not set to 0,</para>
-        /// <para>this field indicates the number of completed advertising events.</para>
-        /// </summary>
-        public byte NumCompletedAdvEvents
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->num_completed_adv_events;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->num_completed_adv_events = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Advertising buffers corresponding to the terminated</para>
-        /// <para>advertising set. The advertising buffers provided in</para>
-        /// <para>are now released.</para>
-        /// </summary>
-        public global::NrfBleDriver.BleGapAdvDataT AdvData
-        {
-            get
-            {
-                return global::NrfBleDriver.BleGapAdvDataT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->adv_data));
-            }
-
-            set
-            {
-                if (ReferenceEquals(value, null))
-                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                ((__Internal*)__Instance)->adv_data = *(global::NrfBleDriver.BleGapAdvDataT.__Internal*) value.__Instance;
-            }
-        }
-    }
-
-    /// <summary>Event structure for</summary>
-    /// <remarks>
-    /// <para>Ifis set tonot all fields in the advertising report may be available.</para>
-    /// <para>When ble_gap_adv_report_type_t::status is not set toscanning will be paused. To continue scanning, call</para>
-    /// </remarks>
     public unsafe partial class BleGapEvtAdvReportT : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Size = 48)]
+        [StructLayout(LayoutKind.Explicit, Size = 47)]
         public partial struct __Internal
         {
-            internal global::NrfBleDriver.BleGapAdvReportTypeT.__Internal type;
+            [FieldOffset(0)]
             internal global::NrfBleDriver.BleGapAddrT.__Internal peer_addr;
+
+            [FieldOffset(7)]
             internal global::NrfBleDriver.BleGapAddrT.__Internal direct_addr;
-            internal byte primary_phy;
-            internal byte secondary_phy;
-            internal sbyte tx_power;
+
+            [FieldOffset(14)]
             internal sbyte rssi;
-            internal byte ch_index;
-            internal byte set_id;
-            internal ushort data_id;
-            internal global::NrfBleDriver.BleDataT.__Internal data;
-            internal global::NrfBleDriver.BleGapAuxPointerT.__Internal aux_pointer;
+
+            [FieldOffset(15)]
+            internal byte scan_rsp;
+
+            [FieldOffset(15)]
+            internal byte type;
+
+            [FieldOffset(15)]
+            internal byte dlen;
+
+            [FieldOffset(16)]
+            internal fixed byte data[31];
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_evt_adv_report_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
@@ -7805,26 +6670,9 @@ namespace NrfBleDriver
             __Instance = IntPtr.Zero;
         }
 
-        /// <summary>Advertising report type. See</summary>
-        public global::NrfBleDriver.BleGapAdvReportTypeT Type
-        {
-            get
-            {
-                return global::NrfBleDriver.BleGapAdvReportTypeT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->type));
-            }
-
-            set
-            {
-                if (ReferenceEquals(value, null))
-                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                ((__Internal*)__Instance)->type = *(global::NrfBleDriver.BleGapAdvReportTypeT.__Internal*) value.__Instance;
-            }
-        }
-
         /// <summary>
-        /// <para>Bluetooth address of the peer device. If the peer_addr is resolved:</para>
-        /// <para>is set to 1 and the address is the</para>
-        /// <para>peer's identity address.</para>
+        /// <para>Bluetooth address of the peer device. If the peer_addr resolved:is set to 1</para>
+        /// <para>and the address is the device's identity address.</para>
         /// </summary>
         public global::NrfBleDriver.BleGapAddrT PeerAddr
         {
@@ -7842,14 +6690,8 @@ namespace NrfBleDriver
         }
 
         /// <summary>
-        /// <para>Contains the target address of the advertising event if</para>
-        /// <para>is set to 1. If the</para>
-        /// <para>SoftDevice was able to resolve the address,</para>
-        /// <para>is set to 1 and the direct_addr</para>
-        /// <para>contains the local identity address. If the target address of the</para>
-        /// <para>advertising event isand the SoftDevice was unable to resolve it, the application may try</para>
-        /// <para>to resolve this address to find out if the advertising event was</para>
-        /// <para>directed to us.</para>
+        /// <para>Set when the scanner is unable to resolve the private resolvable address of the initiator</para>
+        /// <para>field of a directed advertisement packet and the scanner has been enabled to report this in</para>
         /// </summary>
         public global::NrfBleDriver.BleGapAddrT DirectAddr
         {
@@ -7866,62 +6708,7 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>
-        /// <para>Indicates the PHY on which the primary advertising packet was received.</para>
-        /// <para>See</para>
-        /// </summary>
-        public byte PrimaryPhy
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->primary_phy;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->primary_phy = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>Indicates the PHY on which the secondary advertising packet was received.</para>
-        /// <para>SeeThis field is set toif no packets</para>
-        /// <para>were received on a secondary advertising channel.</para>
-        /// </summary>
-        public byte SecondaryPhy
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->secondary_phy;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->secondary_phy = value;
-            }
-        }
-
-        /// <summary>
-        /// <para>TX Power reported by the advertiser in the last packet header received.</para>
-        /// <para>This field is set toif the</para>
-        /// <para>last received packet did not contain the Tx Power field.</para>
-        /// </summary>
-        /// <remarks>TX Power is only included in extended advertising packets.</remarks>
-        public sbyte TxPower
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->tx_power;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->tx_power = value;
-            }
-        }
-
-        /// <summary>Received Signal Strength Indication in dBm of the last packet received.</summary>
-        /// <remarks>ERRATA-153 requires the rssi sample to be compensated based on a temperature measurement.</remarks>
+        /// <summary>Received Signal Strength Indication in dBm.</summary>
         public sbyte Rssi
         {
             get
@@ -7935,92 +6722,63 @@ namespace NrfBleDriver
             }
         }
 
-        /// <summary>Channel Index on which the last advertising packet is received (0-39).</summary>
-        public byte ChIndex
+        /// <summary>If 1, the report corresponds to a scan response and the type field may be ignored.</summary>
+        public byte ScanRsp
         {
             get
             {
-                return ((__Internal*)__Instance)->ch_index;
+                return ((__Internal*)__Instance)->scan_rsp;
             }
 
             set
             {
-                ((__Internal*)__Instance)->ch_index = value;
+                ((__Internal*)__Instance)->scan_rsp = value;
             }
         }
 
-        /// <summary>
-        /// <para>Set ID of the received advertising data. Set ID is not present</para>
-        /// <para>if set to</para>
-        /// </summary>
-        public byte SetId
+        /// <summary>SeeOnly valid if the scan_rsp field is 0.</summary>
+        public byte Type
         {
             get
             {
-                return ((__Internal*)__Instance)->set_id;
+                return ((__Internal*)__Instance)->type;
             }
 
             set
             {
-                ((__Internal*)__Instance)->set_id = value;
+                ((__Internal*)__Instance)->type = value;
             }
         }
 
-        /// <summary>
-        /// <para>The advertising data ID of the received advertising data. Data ID</para>
-        /// <para>is not present ifis set to</para>
-        /// </summary>
-        public ushort DataId
+        /// <summary>Advertising or scan response data length.</summary>
+        public byte Dlen
         {
             get
             {
-                return ((__Internal*)__Instance)->data_id;
+                return ((__Internal*)__Instance)->dlen;
             }
 
             set
             {
-                ((__Internal*)__Instance)->data_id = value;
+                ((__Internal*)__Instance)->dlen = value;
             }
         }
 
-        /// <summary>
-        /// <para>Received advertising or scan response data. If</para>
-        /// <para>is not set to</para>
-        /// <para>the data buffer provided</para>
-        /// <para>inis now released.</para>
-        /// </summary>
-        public global::NrfBleDriver.BleDataT Data
+        /// <summary>Advertising or scan response data.</summary>
+        public byte[] Data
         {
             get
             {
-                return global::NrfBleDriver.BleDataT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->data));
+                return CppSharp.Runtime.MarshalUtil.GetArray<byte>(((__Internal*)__Instance)->data, 31);
             }
 
             set
             {
-                if (ReferenceEquals(value, null))
-                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                ((__Internal*)__Instance)->data = *(global::NrfBleDriver.BleDataT.__Internal*) value.__Instance;
-            }
-        }
-
-        /// <summary>
-        /// <para>The offset and PHY of the next advertising packet in this extended advertising</para>
-        /// <para>event.</para>
-        /// </summary>
-        /// <remarks>This field is only set ifis set to</remarks>
-        public global::NrfBleDriver.BleGapAuxPointerT AuxPointer
-        {
-            get
-            {
-                return global::NrfBleDriver.BleGapAuxPointerT.__CreateInstance(new __IntPtr(&((__Internal*)__Instance)->aux_pointer));
-            }
-
-            set
-            {
-                if (ReferenceEquals(value, null))
-                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                ((__Internal*)__Instance)->aux_pointer = *(global::NrfBleDriver.BleGapAuxPointerT.__Internal*) value.__Instance;
+                if (value != null)
+                {
+                    for (int i = 0; i < 31; i++)
+                        ((__Internal*)__Instance)->data[i] = value[i];
+                }
             }
         }
     }
@@ -8324,10 +7082,9 @@ namespace NrfBleDriver
     /// <summary>Event structure for</summary>
     public unsafe partial class BleGapEvtScanReqReportT : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Size = 9)]
+        [StructLayout(LayoutKind.Sequential, Size = 8)]
         public partial struct __Internal
         {
-            internal byte adv_handle;
             internal sbyte rssi;
             internal global::NrfBleDriver.BleGapAddrT.__Internal peer_addr;
 
@@ -8429,22 +7186,7 @@ namespace NrfBleDriver
             __Instance = IntPtr.Zero;
         }
 
-        /// <summary>Advertising handle for the advertising set which received the Scan Request</summary>
-        public byte AdvHandle
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->adv_handle;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->adv_handle = value;
-            }
-        }
-
         /// <summary>Received Signal Strength Indication in dBm.</summary>
-        /// <remarks>ERRATA-153 requires the rssi sample to be compensated based on a temperature measurement.</remarks>
         public sbyte Rssi
         {
             get
@@ -8724,139 +7466,10 @@ namespace NrfBleDriver
         }
     }
 
-    /// <summary>Event structure for</summary>
-    public unsafe partial class BleGapEvtQosChannelSurveyReportT : IDisposable
-    {
-        [StructLayout(LayoutKind.Sequential, Size = 40)]
-        public partial struct __Internal
-        {
-            internal fixed sbyte channel_energy[40];
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_evt_qos_channel_survey_report_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
-        }
-
-        public __IntPtr __Instance { get; protected set; }
-
-        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT> NativeToManagedMap =
-            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT>();
-
-        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT managed)
-        {
-            NativeToManagedMap[native] = managed;
-        }
-
-        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT managed)
-        {
-    
-            return NativeToManagedMap.TryGetValue(native, out managed);
-        }
-
-        protected bool __ownsNativeInstance;
-
-        internal static BleGapEvtQosChannelSurveyReportT __CreateInstance(__IntPtr native, bool skipVTables = false)
-        {
-            return new BleGapEvtQosChannelSurveyReportT(native.ToPointer(), skipVTables);
-        }
-
-        internal static BleGapEvtQosChannelSurveyReportT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
-        {
-            if (native == __IntPtr.Zero)
-                return null;
-            if (__TryGetNativeToManagedMapping(native, out var managed))
-                return (BleGapEvtQosChannelSurveyReportT)managed;
-            var result = __CreateInstance(native, skipVTables);
-            if (saveInstance)
-                __RecordNativeToManagedMapping(native, result);
-            return result;
-        }
-
-        internal static BleGapEvtQosChannelSurveyReportT __CreateInstance(__Internal native, bool skipVTables = false)
-        {
-            return new BleGapEvtQosChannelSurveyReportT(native, skipVTables);
-        }
-
-        private static void* __CopyValue(__Internal native)
-        {
-            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
-            *(__Internal*) ret = native;
-            return ret.ToPointer();
-        }
-
-        private BleGapEvtQosChannelSurveyReportT(__Internal native, bool skipVTables = false)
-            : this(__CopyValue(native), skipVTables)
-        {
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        protected BleGapEvtQosChannelSurveyReportT(void* native, bool skipVTables = false)
-        {
-            if (native == null)
-                return;
-            __Instance = new __IntPtr(native);
-        }
-
-        public BleGapEvtQosChannelSurveyReportT()
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-        }
-
-        public BleGapEvtQosChannelSurveyReportT(global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT __0)
-        {
-            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT.__Internal));
-            __ownsNativeInstance = true;
-            __RecordNativeToManagedMapping(__Instance, this);
-            *((global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT.__Internal*) __Instance) = *((global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT.__Internal*) __0.__Instance);
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
-        }
-
-        partial void DisposePartial(bool disposing);
-
-        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
-        {
-            if (__Instance == IntPtr.Zero)
-                return;
-            NativeToManagedMap.TryRemove(__Instance, out _);
-            DisposePartial(disposing);
-            if (__ownsNativeInstance)
-                Marshal.FreeHGlobal(__Instance);
-            __Instance = IntPtr.Zero;
-        }
-
-        /// <summary>
-        /// <para>The measured energy on the Bluetooth Low Energy</para>
-        /// <para>channels, in dBm, indexed by Channel Index.</para>
-        /// <para>If no measurement is available for the given channel, channel_energy is set to</para>
-        /// </summary>
-        public sbyte[] ChannelEnergy
-        {
-            get
-            {
-                return CppSharp.Runtime.MarshalUtil.GetArray<sbyte>(((__Internal*)__Instance)->channel_energy, 40);
-            }
-
-            set
-            {
-                if (value != null)
-                {
-                    for (int i = 0; i < 40; i++)
-                        ((__Internal*)__Instance)->channel_energy[i] = value[i];
-                }
-            }
-        }
-    }
-
     /// <summary>GAP event structure.</summary>
     public unsafe partial class BleGapEvtT : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Size = 64)]
+        [StructLayout(LayoutKind.Sequential, Size = 56)]
         public partial struct __Internal
         {
             internal ushort conn_handle;
@@ -8868,7 +7481,7 @@ namespace NrfBleDriver
 
         public unsafe partial struct Params
         {
-            [StructLayout(LayoutKind.Explicit, Size = 56)]
+            [StructLayout(LayoutKind.Explicit, Size = 48)]
             public partial struct __Internal
             {
                 [FieldOffset(0)]
@@ -8914,9 +7527,6 @@ namespace NrfBleDriver
                 internal global::NrfBleDriver.BleGapEvtAdvReportT.__Internal adv_report;
 
                 [FieldOffset(0)]
-                internal global::NrfBleDriver.BleGapEvtAdvSetTerminatedT.__Internal adv_set_terminated;
-
-                [FieldOffset(0)]
                 internal global::NrfBleDriver.BleGapEvtSecRequestT.__Internal sec_request;
 
                 [FieldOffset(0)]
@@ -8936,9 +7546,6 @@ namespace NrfBleDriver
 
                 [FieldOffset(0)]
                 internal global::NrfBleDriver.BleGapEvtDataLengthUpdateT.__Internal data_length_update;
-
-                [FieldOffset(0)]
-                internal global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT.__Internal qos_channel_survey_report;
 
                 [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0<unnamed-type-params>@ble_gap_evt_t@@QEAA@AEBT01@@Z", CallingConvention = __CallingConvention.Cdecl)]
                 internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
@@ -9203,22 +7810,6 @@ namespace NrfBleDriver
                 }
             }
 
-            /// <summary>Advertising Set Terminated Event Parameters.</summary>
-            public global::NrfBleDriver.BleGapEvtAdvSetTerminatedT AdvSetTerminated
-            {
-                get
-                {
-                    return global::NrfBleDriver.BleGapEvtAdvSetTerminatedT.__CreateInstance(__instance.adv_set_terminated);
-                }
-
-                set
-                {
-                    if (ReferenceEquals(value, null))
-                        throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                    __instance.adv_set_terminated = *(global::NrfBleDriver.BleGapEvtAdvSetTerminatedT.__Internal*) value.__Instance;
-                }
-            }
-
             /// <summary>Security Request Event Parameters.</summary>
             public global::NrfBleDriver.BleGapEvtSecRequestT SecRequest
             {
@@ -9328,22 +7919,6 @@ namespace NrfBleDriver
                     if (ReferenceEquals(value, null))
                         throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
                     __instance.data_length_update = *(global::NrfBleDriver.BleGapEvtDataLengthUpdateT.__Internal*) value.__Instance;
-                }
-            }
-
-            /// <summary>Quality of Service (QoS) Channel Survey Report Parameters.</summary>
-            public global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT QosChannelSurveyReport
-            {
-                get
-                {
-                    return global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT.__CreateInstance(__instance.qos_channel_survey_report);
-                }
-
-                set
-                {
-                    if (ReferenceEquals(value, null))
-                        throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
-                    __instance.qos_channel_survey_report = *(global::NrfBleDriver.BleGapEvtQosChannelSurveyReportT.__Internal*) value.__Instance;
                 }
             }
         }
@@ -9626,19 +8201,15 @@ namespace NrfBleDriver
     /// <para>::NRF_ERROR_CONN_COUNT     The sum of periph_role_count and central_role_count is too</para>
     /// <para>large. The maximum supported sum of concurrent connections is</para>
     /// <para>::NRF_ERROR_INVALID_PARAM  central_sec_count is larger than central_role_count.</para>
-    /// <para>::NRF_ERROR_RESOURCES      The adv_set_count is too large. The maximum</para>
-    /// <para>supported advertising handles is</para>
     /// </remarks>
     public unsafe partial class BleGapCfgRoleCountT : IDisposable
     {
-        [StructLayout(LayoutKind.Sequential, Size = 5)]
+        [StructLayout(LayoutKind.Sequential, Size = 3)]
         public partial struct __Internal
         {
-            internal byte adv_set_count;
             internal byte periph_role_count;
             internal byte central_role_count;
             internal byte central_sec_count;
-            internal byte qos_channel_survey_role_available;
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_cfg_role_count_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
@@ -9738,20 +8309,6 @@ namespace NrfBleDriver
             __Instance = IntPtr.Zero;
         }
 
-        /// <summary>Maximum number of advertising sets. Default value is</summary>
-        public byte AdvSetCount
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->adv_set_count;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->adv_set_count = value;
-            }
-        }
-
         /// <summary>Maximum number of connections concurrently acting as a peripheral. Default value is</summary>
         public byte PeriphRoleCount
         {
@@ -9793,30 +8350,11 @@ namespace NrfBleDriver
                 ((__Internal*)__Instance)->central_sec_count = value;
             }
         }
-
-        /// <summary>
-        /// <para>If set, the Quality of Service (QoS) channel survey module is available to the</para>
-        /// <para>application using</para>
-        /// </summary>
-        public byte QosChannelSurveyRoleAvailable
-        {
-            get
-            {
-                return ((__Internal*)__Instance)->qos_channel_survey_role_available;
-            }
-
-            set
-            {
-                ((__Internal*)__Instance)->qos_channel_survey_role_available = value;
-            }
-        }
     }
 
     /// <summary>Device name and its properties, set with</summary>
     /// <remarks>
-    /// <para>If the device name is not configured, the default device name will be</para>
-    /// <para>the maximum device name length will be</para>
-    /// <para>vloc will be set toand the device name</para>
+    /// <para>If the device name is not configured, the default device name will bethe maximum device name length will bevloc will be set toand the device name</para>
     /// <para>will have no write access.</para>
     /// <para>Ifis more thanand vloc is set tothe attribute table size must be increased to have room for the longer device name (see</para>
     /// <para>and</para>
@@ -10099,24 +8637,25 @@ namespace NrfBleDriver
         }
     }
 
-    /// <summary>Channel Map option.</summary>
-    /// <remarks>
+    /// <summary>
+    /// <para>Channel Map option.</para>
     /// <para>Used withto get the current channel map</para>
     /// <para>orto set a new channel map. When setting the</para>
     /// <para>channel map, it applies to all current and future connections. When getting the</para>
     /// <para>current channel map, it applies to a single connection and the connection handle</para>
     /// <para>must be supplied.</para>
+    /// </summary>
+    /// <remarks>
     /// <para>Setting the channel map may take some time, depending on connection parameters.</para>
     /// <para>The time taken may be different for each connection and the get operation will</para>
     /// <para>return the previous channel map until the new one has taken effect.</para>
     /// <para>After setting the channel map, by spec it can not be set again until at least 1 s has passed.</para>
     /// <para>See Bluetooth Specification Version 4.1 Volume 2, Part E, Section 7.3.46.</para>
     /// <para>::NRF_SUCCESS Get or set successful.</para>
-    /// <para>::NRF_ERROR_INVALID_PARAM One or more of the following is true:</para>
-    /// <para>- Less then two bits inare set.</para>
-    /// <para>- Bits for primary advertising channels (37-39) are set.</para>
     /// <para>::NRF_ERROR_BUSY Channel map was set again before enough time had passed.</para>
+    /// <para>::NRF_ERROR_INVALID_STATE Invalid state to perform operation.</para>
     /// <para>::BLE_ERROR_INVALID_CONN_HANDLE Invalid connection handle supplied for get.</para>
+    /// <para>::NRF_ERROR_NOT_SUPPORTED Returned by sd_ble_opt_set in peripheral-only SoftDevices.</para>
     /// </remarks>
     public unsafe partial class BleGapOptChMapT : IDisposable
     {
@@ -10427,9 +8966,8 @@ namespace NrfBleDriver
 
     /// <summary>Disable slave latency</summary>
     /// <remarks>
-    /// <para>Used withto temporarily disable slave latency of a peripheral connection</para>
-    /// <para>(seeAnd to re-enable it again. When disabled, the</para>
-    /// <para>peripheral will ignore the slave_latency set by the central.</para>
+    /// <para>Used withto temporarily disable slave latency of a peripheral connection (seeAnd to re-enable it again.</para>
+    /// <para>When disabled, the peripheral will ignore the slave_latency set by the central.</para>
     /// <para>Shall only be called on peripheral links.</para>
     /// <para>::NRF_SUCCESS Set successfully.</para>
     /// <para>::NRF_ERROR_NOT_SUPPORTED Get is not supported.</para>
@@ -10688,6 +9226,136 @@ namespace NrfBleDriver
             get
             {
                 return (byte*) ((__Internal*)__Instance)->p_passkey;
+            }
+        }
+    }
+
+    /// <summary>Scan request report option.</summary>
+    /// <remarks>
+    /// <para>This can be used withto make the SoftDevice send</para>
+    /// <para>events.</para>
+    /// <para>Due to the limited space reserved for scan request report events,</para>
+    /// <para>not all received scan requests will be reported.</para>
+    /// <para>If whitelisting is used, only whitelisted requests are reported.</para>
+    /// <para>::NRF_SUCCESS Set successfully.</para>
+    /// <para>::NRF_ERROR_INVALID_STATE When advertising is ongoing while the option is set.</para>
+    /// </remarks>
+    public unsafe partial class BleGapOptScanReqReportT : IDisposable
+    {
+        [StructLayout(LayoutKind.Sequential, Size = 1)]
+        public partial struct __Internal
+        {
+            internal byte enable;
+
+            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "??0ble_gap_opt_scan_req_report_t@@QEAA@AEBU0@@Z", CallingConvention = __CallingConvention.Cdecl)]
+            internal static extern __IntPtr cctor(__IntPtr __instance, __IntPtr __0);
+        }
+
+        public __IntPtr __Instance { get; protected set; }
+
+        internal static readonly new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapOptScanReqReportT> NativeToManagedMap =
+            new global::System.Collections.Concurrent.ConcurrentDictionary<IntPtr, global::NrfBleDriver.BleGapOptScanReqReportT>();
+
+        internal static void __RecordNativeToManagedMapping(IntPtr native, global::NrfBleDriver.BleGapOptScanReqReportT managed)
+        {
+            NativeToManagedMap[native] = managed;
+        }
+
+        internal static bool __TryGetNativeToManagedMapping(IntPtr native, out global::NrfBleDriver.BleGapOptScanReqReportT managed)
+        {
+    
+            return NativeToManagedMap.TryGetValue(native, out managed);
+        }
+
+        protected bool __ownsNativeInstance;
+
+        internal static BleGapOptScanReqReportT __CreateInstance(__IntPtr native, bool skipVTables = false)
+        {
+            return new BleGapOptScanReqReportT(native.ToPointer(), skipVTables);
+        }
+
+        internal static BleGapOptScanReqReportT __GetOrCreateInstance(__IntPtr native, bool saveInstance = false, bool skipVTables = false)
+        {
+            if (native == __IntPtr.Zero)
+                return null;
+            if (__TryGetNativeToManagedMapping(native, out var managed))
+                return (BleGapOptScanReqReportT)managed;
+            var result = __CreateInstance(native, skipVTables);
+            if (saveInstance)
+                __RecordNativeToManagedMapping(native, result);
+            return result;
+        }
+
+        internal static BleGapOptScanReqReportT __CreateInstance(__Internal native, bool skipVTables = false)
+        {
+            return new BleGapOptScanReqReportT(native, skipVTables);
+        }
+
+        private static void* __CopyValue(__Internal native)
+        {
+            var ret = Marshal.AllocHGlobal(sizeof(__Internal));
+            *(__Internal*) ret = native;
+            return ret.ToPointer();
+        }
+
+        private BleGapOptScanReqReportT(__Internal native, bool skipVTables = false)
+            : this(__CopyValue(native), skipVTables)
+        {
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+        }
+
+        protected BleGapOptScanReqReportT(void* native, bool skipVTables = false)
+        {
+            if (native == null)
+                return;
+            __Instance = new __IntPtr(native);
+        }
+
+        public BleGapOptScanReqReportT()
+        {
+            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapOptScanReqReportT.__Internal));
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+        }
+
+        public BleGapOptScanReqReportT(global::NrfBleDriver.BleGapOptScanReqReportT __0)
+        {
+            __Instance = Marshal.AllocHGlobal(sizeof(global::NrfBleDriver.BleGapOptScanReqReportT.__Internal));
+            __ownsNativeInstance = true;
+            __RecordNativeToManagedMapping(__Instance, this);
+            *((global::NrfBleDriver.BleGapOptScanReqReportT.__Internal*) __Instance) = *((global::NrfBleDriver.BleGapOptScanReqReportT.__Internal*) __0.__Instance);
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true, callNativeDtor : __ownsNativeInstance );
+        }
+
+        partial void DisposePartial(bool disposing);
+
+        internal protected virtual void Dispose(bool disposing, bool callNativeDtor )
+        {
+            if (__Instance == IntPtr.Zero)
+                return;
+            NativeToManagedMap.TryRemove(__Instance, out _);
+            DisposePartial(disposing);
+            if (__ownsNativeInstance)
+                Marshal.FreeHGlobal(__Instance);
+            __Instance = IntPtr.Zero;
+        }
+
+        /// <summary>Enable scan request reports.</summary>
+        public byte Enable
+        {
+            get
+            {
+                return ((__Internal*)__Instance)->enable;
+            }
+
+            set
+            {
+                ((__Internal*)__Instance)->enable = value;
             }
         }
     }
@@ -10992,6 +9660,9 @@ namespace NrfBleDriver
             internal global::NrfBleDriver.BleGapOptPasskeyT.__Internal passkey;
 
             [FieldOffset(0)]
+            internal global::NrfBleDriver.BleGapOptScanReqReportT.__Internal scan_req_report;
+
+            [FieldOffset(0)]
             internal global::NrfBleDriver.BleGapOptCompatMode1T.__Internal compat_mode_1;
 
             [FieldOffset(0)]
@@ -11087,6 +9758,22 @@ namespace NrfBleDriver
             }
         }
 
+        /// <summary>Parameters for the scan request report option.</summary>
+        public global::NrfBleDriver.BleGapOptScanReqReportT ScanReqReport
+        {
+            get
+            {
+                return global::NrfBleDriver.BleGapOptScanReqReportT.__CreateInstance(__instance.scan_req_report);
+            }
+
+            set
+            {
+                if (ReferenceEquals(value, null))
+                    throw new global::System.ArgumentNullException("value", "Cannot be null because it is passed by value.");
+                __instance.scan_req_report = *(global::NrfBleDriver.BleGapOptScanReqReportT.__Internal*) value.__Instance;
+            }
+        }
+
         /// <summary>Parameters for the compatibility mode 1 option.</summary>
         public global::NrfBleDriver.BleGapOptCompatMode1T CompatMode1
         {
@@ -11146,9 +9833,6 @@ namespace NrfBleDriver
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_addr_get", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGapAddrGet(__IntPtr adapter, __IntPtr p_addr);
 
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_adv_addr_get", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapAdvAddrGet(__IntPtr adapter, byte adv_handle, __IntPtr p_addr);
-
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_whitelist_set", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGapWhitelistSet(__IntPtr adapter, __IntPtr pp_wl_addrs, byte len);
 
@@ -11161,14 +9845,14 @@ namespace NrfBleDriver
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_privacy_get", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGapPrivacyGet(__IntPtr adapter, __IntPtr p_privacy_params);
 
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_adv_set_configure", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapAdvSetConfigure(__IntPtr adapter, byte* p_adv_handle, __IntPtr p_adv_data, __IntPtr p_adv_params);
+            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_adv_data_set", CallingConvention = __CallingConvention.Cdecl)]
+            internal static extern uint SdBleGapAdvDataSet(__IntPtr adapter, byte* p_adv_data, byte dlen, byte* p_sr_data, byte srdlen);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_adv_start", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapAdvStart(__IntPtr adapter, byte adv_handle, byte conn_cfg_tag);
+            internal static extern uint SdBleGapAdvStart(__IntPtr adapter, __IntPtr p_adv_params, byte conn_cfg_tag);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_adv_stop", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapAdvStop(__IntPtr adapter, byte adv_handle);
+            internal static extern uint SdBleGapAdvStop(__IntPtr adapter);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_conn_param_update", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGapConnParamUpdate(__IntPtr adapter, ushort conn_handle, __IntPtr p_conn_params);
@@ -11177,7 +9861,7 @@ namespace NrfBleDriver
             internal static extern uint SdBleGapDisconnect(__IntPtr adapter, ushort conn_handle, byte hci_status_code);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_tx_power_set", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapTxPowerSet(__IntPtr adapter, byte role, ushort handle, sbyte tx_power);
+            internal static extern uint SdBleGapTxPowerSet(__IntPtr adapter, sbyte tx_power);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_appearance_set", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGapAppearanceSet(__IntPtr adapter, ushort appearance);
@@ -11195,7 +9879,7 @@ namespace NrfBleDriver
             internal static extern uint SdBleGapDeviceNameSet(__IntPtr adapter, __IntPtr p_write_perm, byte* p_dev_name, ushort len);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_device_name_get", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapDeviceNameGet(__IntPtr adapter, byte* p_dev_name, ushort* p_len);
+            internal static extern uint SdBleGapDeviceNameGet(__IntPtr adapter, byte* p_dev_name, ushort* p_dev_name_len);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_authenticate", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGapAuthenticate(__IntPtr adapter, ushort conn_handle, __IntPtr p_sec_params);
@@ -11234,10 +9918,10 @@ namespace NrfBleDriver
             internal static extern uint SdBleGapRssiStop(__IntPtr adapter, ushort conn_handle);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_rssi_get", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapRssiGet(__IntPtr adapter, ushort conn_handle, sbyte* p_rssi, byte* p_ch_index);
+            internal static extern uint SdBleGapRssiGet(__IntPtr adapter, ushort conn_handle, sbyte* p_rssi);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_scan_start", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapScanStart(__IntPtr adapter, __IntPtr p_scan_params, __IntPtr p_adv_report_buffer);
+            internal static extern uint SdBleGapScanStart(__IntPtr adapter, __IntPtr p_scan_params);
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_scan_stop", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGapScanStop(__IntPtr adapter);
@@ -11253,12 +9937,6 @@ namespace NrfBleDriver
 
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_data_length_update", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGapDataLengthUpdate(__IntPtr adapter, ushort conn_handle, __IntPtr p_dl_params, __IntPtr p_dl_limitation);
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_qos_channel_survey_start", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapQosChannelSurveyStart(__IntPtr adapter, uint interval_us);
-
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gap_qos_channel_survey_stop", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGapQosChannelSurveyStop(__IntPtr adapter);
         }
 
         public static uint SdBleGapAddrSet(global::NrfBleDriver.AdapterT adapter, global::NrfBleDriver.BleGapAddrT p_addr)
@@ -11274,14 +9952,6 @@ namespace NrfBleDriver
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
             var __arg1 = p_addr is null ? __IntPtr.Zero : p_addr.__Instance;
             var __ret = __Internal.SdBleGapAddrGet(__arg0, __arg1);
-            return __ret;
-        }
-
-        public static uint SdBleGapAdvAddrGet(global::NrfBleDriver.AdapterT adapter, byte adv_handle, global::NrfBleDriver.BleGapAddrT p_addr)
-        {
-            var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __arg2 = p_addr is null ? __IntPtr.Zero : p_addr.__Instance;
-            var __ret = __Internal.SdBleGapAdvAddrGet(__arg0, adv_handle, __arg2);
             return __ret;
         }
 
@@ -11321,26 +9991,25 @@ namespace NrfBleDriver
             return __ret;
         }
 
-        public static uint SdBleGapAdvSetConfigure(global::NrfBleDriver.AdapterT adapter, byte* p_adv_handle, global::NrfBleDriver.BleGapAdvDataT p_adv_data, global::NrfBleDriver.BleGapAdvParamsT p_adv_params)
+        public static uint SdBleGapAdvDataSet(global::NrfBleDriver.AdapterT adapter, byte* p_adv_data, byte dlen, byte* p_sr_data, byte srdlen)
         {
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __arg2 = p_adv_data is null ? __IntPtr.Zero : p_adv_data.__Instance;
-            var __arg3 = p_adv_params is null ? __IntPtr.Zero : p_adv_params.__Instance;
-            var __ret = __Internal.SdBleGapAdvSetConfigure(__arg0, p_adv_handle, __arg2, __arg3);
+            var __ret = __Internal.SdBleGapAdvDataSet(__arg0, p_adv_data, dlen, p_sr_data, srdlen);
             return __ret;
         }
 
-        public static uint SdBleGapAdvStart(global::NrfBleDriver.AdapterT adapter, byte adv_handle, byte conn_cfg_tag)
+        public static uint SdBleGapAdvStart(global::NrfBleDriver.AdapterT adapter, global::NrfBleDriver.BleGapAdvParamsT p_adv_params, byte conn_cfg_tag)
         {
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __ret = __Internal.SdBleGapAdvStart(__arg0, adv_handle, conn_cfg_tag);
+            var __arg1 = p_adv_params is null ? __IntPtr.Zero : p_adv_params.__Instance;
+            var __ret = __Internal.SdBleGapAdvStart(__arg0, __arg1, conn_cfg_tag);
             return __ret;
         }
 
-        public static uint SdBleGapAdvStop(global::NrfBleDriver.AdapterT adapter, byte adv_handle)
+        public static uint SdBleGapAdvStop(global::NrfBleDriver.AdapterT adapter)
         {
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __ret = __Internal.SdBleGapAdvStop(__arg0, adv_handle);
+            var __ret = __Internal.SdBleGapAdvStop(__arg0);
             return __ret;
         }
 
@@ -11359,10 +10028,10 @@ namespace NrfBleDriver
             return __ret;
         }
 
-        public static uint SdBleGapTxPowerSet(global::NrfBleDriver.AdapterT adapter, byte role, ushort handle, sbyte tx_power)
+        public static uint SdBleGapTxPowerSet(global::NrfBleDriver.AdapterT adapter, sbyte tx_power)
         {
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __ret = __Internal.SdBleGapTxPowerSet(__arg0, role, handle, tx_power);
+            var __ret = __Internal.SdBleGapTxPowerSet(__arg0, tx_power);
             return __ret;
         }
 
@@ -11408,12 +10077,12 @@ namespace NrfBleDriver
             return __ret;
         }
 
-        public static uint SdBleGapDeviceNameGet(global::NrfBleDriver.AdapterT adapter, byte* p_dev_name, ref ushort p_len)
+        public static uint SdBleGapDeviceNameGet(global::NrfBleDriver.AdapterT adapter, byte* p_dev_name, ref ushort p_dev_name_len)
         {
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            fixed (ushort* __p_len2 = &p_len)
+            fixed (ushort* __p_dev_name_len2 = &p_dev_name_len)
             {
-                var __arg2 = __p_len2;
+                var __arg2 = __p_dev_name_len2;
                 var __ret = __Internal.SdBleGapDeviceNameGet(__arg0, p_dev_name, __arg2);
                 return __ret;
             }
@@ -11517,19 +10186,18 @@ namespace NrfBleDriver
             return __ret;
         }
 
-        public static uint SdBleGapRssiGet(global::NrfBleDriver.AdapterT adapter, ushort conn_handle, sbyte* p_rssi, byte* p_ch_index)
+        public static uint SdBleGapRssiGet(global::NrfBleDriver.AdapterT adapter, ushort conn_handle, sbyte* p_rssi)
         {
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __ret = __Internal.SdBleGapRssiGet(__arg0, conn_handle, p_rssi, p_ch_index);
+            var __ret = __Internal.SdBleGapRssiGet(__arg0, conn_handle, p_rssi);
             return __ret;
         }
 
-        public static uint SdBleGapScanStart(global::NrfBleDriver.AdapterT adapter, global::NrfBleDriver.BleGapScanParamsT p_scan_params, global::NrfBleDriver.BleDataT p_adv_report_buffer)
+        public static uint SdBleGapScanStart(global::NrfBleDriver.AdapterT adapter, global::NrfBleDriver.BleGapScanParamsT p_scan_params)
         {
             var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
             var __arg1 = p_scan_params is null ? __IntPtr.Zero : p_scan_params.__Instance;
-            var __arg2 = p_adv_report_buffer is null ? __IntPtr.Zero : p_adv_report_buffer.__Instance;
-            var __ret = __Internal.SdBleGapScanStart(__arg0, __arg1, __arg2);
+            var __ret = __Internal.SdBleGapScanStart(__arg0, __arg1);
             return __ret;
         }
 
@@ -11571,20 +10239,6 @@ namespace NrfBleDriver
             var __arg2 = p_dl_params is null ? __IntPtr.Zero : p_dl_params.__Instance;
             var __arg3 = p_dl_limitation is null ? __IntPtr.Zero : p_dl_limitation.__Instance;
             var __ret = __Internal.SdBleGapDataLengthUpdate(__arg0, conn_handle, __arg2, __arg3);
-            return __ret;
-        }
-
-        public static uint SdBleGapQosChannelSurveyStart(global::NrfBleDriver.AdapterT adapter, uint interval_us)
-        {
-            var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __ret = __Internal.SdBleGapQosChannelSurveyStart(__arg0, interval_us);
-            return __ret;
-        }
-
-        public static uint SdBleGapQosChannelSurveyStop(global::NrfBleDriver.AdapterT adapter)
-        {
-            var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __ret = __Internal.SdBleGapQosChannelSurveyStop(__arg0);
             return __ret;
         }
     }

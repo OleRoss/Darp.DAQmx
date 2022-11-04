@@ -76,15 +76,12 @@ public class NrfBluetoothService : IBluetoothService
         };
         var scanParam = new BleGapScanParamsT
         {
-            Extended = 0,
-            ReportIncompleteEvts = 0,
             Active = 0,
-            FilterPolicy = BLE_GAP_SCAN_FILTER_POLICIES.BLE_GAP_SCAN_FP_ACCEPT_ALL,
-            ScanPhys = BLE_GAP_PHYS.BLE_GAP_PHY_AUTO,
             Interval = scanInterval,
             Window = scanWindow,
             Timeout = 0,
-            ChannelMask = new byte[] {0, 0, 0, 0, 0}
+            AdvDirReport = 0,
+            UseWhitelist = 0
         };
         _logger?.Information("aa {@Address}, {@ScanParam}, {@ConnectionParam}, {ConfigId}", addr, scanParam, mConnectionParam, _configId);
         if (ble_gap.SdBleGapConnect(Adapter, addr, scanParam, mConnectionParam, _configId)
@@ -210,7 +207,7 @@ public class NrfBluetoothService : IBluetoothService
             return _libHandle;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             NativeLibrary.TryLoad(
-                @"C:\Users\OleRosskamp\RiderProjects\NiTests\Darp.NrfBleDriver\Nrf\NrfBleDriverV6.dll", assembly,
+                @"Nrf\NrfBleDriver.dll", assembly,
                 new DllImportSearchPath?(), out _libHandle);
         else
             throw new PlatformNotSupportedException();

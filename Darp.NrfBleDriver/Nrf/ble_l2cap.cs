@@ -16,15 +16,15 @@ namespace NrfBleDriver
     public enum BLE_L2CAP_SVCS
     {
         /// <summary>Set up an L2CAP channel.</summary>
-        SD_BLE_L2CAP_CH_SETUP = 184,
+        SD_BLE_L2CAP_CH_SETUP = 176,
         /// <summary>Release an L2CAP channel.</summary>
-        SD_BLE_L2CAP_CH_RELEASE = 185,
+        SD_BLE_L2CAP_CH_RELEASE = 177,
         /// <summary>Receive an SDU on an L2CAP channel.</summary>
-        SD_BLE_L2CAP_CH_RX = 186,
+        SD_BLE_L2CAP_CH_RX = 178,
         /// <summary>Transmit an SDU on an L2CAP channel.</summary>
-        SD_BLE_L2CAP_CH_TX = 187,
+        SD_BLE_L2CAP_CH_TX = 179,
         /// <summary>Advanced SDU reception flow control.</summary>
-        SD_BLE_L2CAP_CH_FLOW_CONTROL = 188
+        SD_BLE_L2CAP_CH_FLOW_CONTROL = 180
     }
 
     /// <summary>L2CAP Event IDs.</summary>
@@ -86,7 +86,7 @@ namespace NrfBleDriver
     /// <summary>L2CAP Channel Setup Request event.</summary>
     /// <summary>L2CAP Channel Setup Refused event.</summary>
     /// <summary>L2CAP Channel Setup Completed event.</summary>
-    /// <summary>L2CAP Channel SDU Data Buffer Released event.</summary>
+    /// <summary>L2CAP Channel SDU Data Duffer Released event.</summary>
     /// <summary>L2CAP Channel Credit received event.</summary>
     /// <summary>L2CAP Channel received SDU event.</summary>
     /// <summary>L2CAP Channel transmitted SDU event.</summary>
@@ -1201,7 +1201,7 @@ namespace NrfBleDriver
         }
     }
 
-    /// <summary>L2CAP Channel SDU Data Buffer Released event.</summary>
+    /// <summary>L2CAP Channel SDU Data Duffer Released event.</summary>
     public unsafe partial class BleL2capEvtChSduBufReleasedT : IDisposable
     {
         [StructLayout(LayoutKind.Sequential, Size = 16)]

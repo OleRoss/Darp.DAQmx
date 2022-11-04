@@ -16,27 +16,27 @@ namespace NrfBleDriver
     public enum BLE_GATTC_SVCS
     {
         /// <summary>Primary Service Discovery.</summary>
-        SD_BLE_GATTC_PRIMARY_SERVICES_DISCOVER = 155,
+        SD_BLE_GATTC_PRIMARY_SERVICES_DISCOVER = 148,
         /// <summary>Relationship Discovery.</summary>
-        SD_BLE_GATTC_RELATIONSHIPS_DISCOVER = 156,
+        SD_BLE_GATTC_RELATIONSHIPS_DISCOVER = 149,
         /// <summary>Characteristic Discovery.</summary>
-        SD_BLE_GATTC_CHARACTERISTICS_DISCOVER = 157,
+        SD_BLE_GATTC_CHARACTERISTICS_DISCOVER = 150,
         /// <summary>Characteristic Descriptor Discovery.</summary>
-        SD_BLE_GATTC_DESCRIPTORS_DISCOVER = 158,
+        SD_BLE_GATTC_DESCRIPTORS_DISCOVER = 151,
         /// <summary>Attribute Information Discovery.</summary>
-        SD_BLE_GATTC_ATTR_INFO_DISCOVER = 159,
+        SD_BLE_GATTC_ATTR_INFO_DISCOVER = 152,
         /// <summary>Read Characteristic Value by UUID.</summary>
-        SD_BLE_GATTC_CHAR_VALUE_BY_UUID_READ = 160,
+        SD_BLE_GATTC_CHAR_VALUE_BY_UUID_READ = 153,
         /// <summary>Generic read.</summary>
-        SD_BLE_GATTC_READ = 161,
+        SD_BLE_GATTC_READ = 154,
         /// <summary>Read multiple Characteristic Values.</summary>
-        SD_BLE_GATTC_CHAR_VALUES_READ = 162,
+        SD_BLE_GATTC_CHAR_VALUES_READ = 155,
         /// <summary>Generic write.</summary>
-        SD_BLE_GATTC_WRITE = 163,
+        SD_BLE_GATTC_WRITE = 156,
         /// <summary>Handle Value Confirmation.</summary>
-        SD_BLE_GATTC_HV_CONFIRM = 164,
+        SD_BLE_GATTC_HV_CONFIRM = 157,
         /// <summary>Exchange MTU Request.</summary>
-        SD_BLE_GATTC_EXCHANGE_MTU_REQUEST = 165
+        SD_BLE_GATTC_EXCHANGE_MTU_REQUEST = 158
     }
 
     /// <summary>GATT Client Event IDs.</summary>
@@ -4146,8 +4146,8 @@ namespace NrfBleDriver
             [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "sd_ble_gattc_exchange_mtu_request", CallingConvention = __CallingConvention.Cdecl)]
             internal static extern uint SdBleGattcExchangeMtuRequest(__IntPtr adapter, ushort conn_handle, ushort client_rx_mtu);
 
-            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "?sd_ble_gattc_evt_char_val_by_uuid_read_rsp_iter@@YAIPEAUadapter_t@@PEAUble_gattc_evt_t@@PEAUble_gattc_handle_value_t@@@Z", CallingConvention = __CallingConvention.Cdecl)]
-            internal static extern uint SdBleGattcEvtCharValByUuidReadRspIter(__IntPtr adapter, __IntPtr p_gattc_evt, __IntPtr p_iter);
+            [SuppressUnmanagedCodeSecurity, DllImport("NrfBleDriver", EntryPoint = "?sd_ble_gattc_evt_char_val_by_uuid_read_rsp_iter@@YAIPEAUble_gattc_evt_t@@PEAUble_gattc_handle_value_t@@@Z", CallingConvention = __CallingConvention.Cdecl)]
+            internal static extern uint SdBleGattcEvtCharValByUuidReadRspIter(__IntPtr p_gattc_evt, __IntPtr p_iter);
         }
 
         public static uint SdBleGattcPrimaryServicesDiscover(global::NrfBleDriver.AdapterT adapter, ushort conn_handle, ushort start_handle, global::NrfBleDriver.BleUuidT p_srvc_uuid)
@@ -4253,12 +4253,11 @@ namespace NrfBleDriver
         /// <para>::NRF_SUCCESS Successfully retrieved the next Handle-Value pair.</para>
         /// <para>::NRF_ERROR_NOT_FOUND No more Handle-Value pairs available in the list.</para>
         /// </remarks>
-        public static uint SdBleGattcEvtCharValByUuidReadRspIter(global::NrfBleDriver.AdapterT adapter, global::NrfBleDriver.BleGattcEvtT p_gattc_evt, global::NrfBleDriver.BleGattcHandleValueT p_iter)
+        public static uint SdBleGattcEvtCharValByUuidReadRspIter(global::NrfBleDriver.BleGattcEvtT p_gattc_evt, global::NrfBleDriver.BleGattcHandleValueT p_iter)
         {
-            var __arg0 = adapter is null ? __IntPtr.Zero : adapter.__Instance;
-            var __arg1 = p_gattc_evt is null ? __IntPtr.Zero : p_gattc_evt.__Instance;
-            var __arg2 = p_iter is null ? __IntPtr.Zero : p_iter.__Instance;
-            var __ret = __Internal.SdBleGattcEvtCharValByUuidReadRspIter(__arg0, __arg1, __arg2);
+            var __arg0 = p_gattc_evt is null ? __IntPtr.Zero : p_gattc_evt.__Instance;
+            var __arg1 = p_iter is null ? __IntPtr.Zero : p_iter.__Instance;
+            var __ret = __Internal.SdBleGattcEvtCharValByUuidReadRspIter(__arg0, __arg1);
             return __ret;
         }
     }
