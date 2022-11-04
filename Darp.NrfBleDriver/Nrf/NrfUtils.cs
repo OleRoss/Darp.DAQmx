@@ -13,10 +13,10 @@ public static class NrfUtils
             return false;
         if (string.IsNullOrWhiteSpace(message))
         {
-            logger?.Error("Received unknown error code 0x{ErrorCode:X}", error);
+            logger?.Error("Received unknown error code 0x{ErrorCode:X} ({NrfError})", error, NrfError.GetName(error));
             return true;
         }
-        logger?.Warning("{Message}. Error code 0x{ErrorCode:X}", message, error);
+        logger?.Warning("{Message}. Error code 0x{ErrorCode:X} ({NrfError})", message, error, NrfError.GetName(error));
         return true;
     }
 
@@ -34,7 +34,7 @@ public static class NrfUtils
             return;
         if (string.IsNullOrWhiteSpace(message))
         {
-            throw new Exception($"Received unknown error code 0x{error:X}");
+            throw new Exception($"Received unknown error code 0x{error:X} ({NrfError.GetName(error)})");
         }
         throw new Exception(message);
     }

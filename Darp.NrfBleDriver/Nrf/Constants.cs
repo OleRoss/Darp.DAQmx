@@ -1,4 +1,6 @@
-﻿namespace NrfBleDriver;
+﻿using System.Reflection;
+
+namespace NrfBleDriver;
 
 public static class BleConnHandles
 {
@@ -63,6 +65,18 @@ public static class NrfError
     public const ushort NRF_ERROR_CONN_COUNT = NrfErrorBase.NRF_ERROR_BASE_NUM + 18;
     /// Not enough resources for operation
     public const ushort NRF_ERROR_RESOURCES = NrfErrorBase.NRF_ERROR_BASE_NUM + 19;
+
+    public static string GetName(uint nrfError)
+    {
+        foreach (FieldInfo field in typeof(NrfError).GetFields(
+                     BindingFlags.Static | BindingFlags.Public))
+        {
+            if (field.GetValue(null) is not ushort value) continue;
+            if (value == nrfError)
+                return field.Name;
+        }
+        return $"Unknown({nrfError:X})";
+    }
 }
 
 public static class BLE_GAP_SCAN_FILTER_POLICIES

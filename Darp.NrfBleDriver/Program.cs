@@ -2,24 +2,16 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Bluetooth.Advertisement;
+using Darp.NrfBleDriver.Bluetooth;
 using NrfBleDriver;
-
-static byte[] StringToByteArray(string hex) {
-    return Enumerable.Range(0, hex.Length)
-        .Where(x => x % 2 == 0)
-        .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-        .ToArray();
-}
-// 6FFD027FA4EB5A95167ABA35382CC05B69C53591C46900
-//var bytes = StringToByteArray("2CFE0030000000114300");
-var bytes = StringToByteArray("6FFD00");
-
-return;
 
 unsafe
 {
     IntPtr libHandle = IntPtr.Zero;
     const byte ConfigId = 1;
+    byte m_connected_devices = 0;
+    bool m_connection_is_in_progress = false;
 
     NativeLibrary.SetDllImportResolver(typeof(Program).Assembly, ImportResolver);
 
@@ -28,11 +20,49 @@ unsafe
         if (libraryName != "NrfBleDriver" || libHandle != IntPtr.Zero)
             return libHandle;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            NativeLibrary.TryLoad(@"C:\Users\VakuO\RiderProjects\NiTests\Darp.NrfBleDriver\Nrf\NrfBleDriverV6.dll", assembly, new DllImportSearchPath?(), out libHandle);
+            NativeLibrary.TryLoad(@"C:\Users\OleRosskamp\RiderProjects\NiTests\Darp.NrfBleDriver\Nrf\NrfBleDriverV6.dll", assembly, new DllImportSearchPath?(), out libHandle);
         return libHandle;
     }
 
     AdapterT m_adapter;
+
+// Determines scan interval in units of 0.625 milliseconds
+    const ushort scanInterval = 0x00A0;
+// Determines scan window in units of 0.625 milliseconds
+    const ushort scanWindow = 0x00A0;
+// Scan timeout between 0x01 and 0xFFFF in seconds, 0x0 disables timeout
+    const ushort scanTimeout = 0x0;
+
+    var m_scan_param = new BleGapScanParamsT
+    {
+        Extended = 0,
+        ReportIncompleteEvts = 0,
+        Active = 0,                       // Set if active scanning.
+        FilterPolicy = BLE_GAP_SCAN_FILTER_POLICIES.BLE_GAP_SCAN_FP_ACCEPT_ALL,
+        ScanPhys = BLE_GAP_PHYS.BLE_GAP_PHY_1MBPS,
+        Interval = scanInterval,
+        Window = scanWindow,
+        Timeout = scanTimeout,
+        ChannelMask = new byte[] {0, 0, 0, 0, 0}
+    };
+
+    const ushort timeoutMs = 4000;
+    // Determines minimum connection interval in milliseconds
+    const ushort minConnectionInterval = 7500 / 1250;
+    // Determines maximum connection interval in milliseconds
+    const ushort maxConnectionInterval = 7500 / 1250;
+    // Slave Latency in number of connection events
+    const ushort slaveLatency = 0;
+    // Determines supervision time-out in units of 10 milliseconds
+    var connectionSupervisionTimeout = (ushort) (timeoutMs / 10);
+
+    var m_connection_param = new BleGapConnParamsT
+    {
+        MinConnInterval = minConnectionInterval,
+        MaxConnInterval = maxConnectionInterval,
+        SlaveLatency = slaveLatency,
+        ConnSupTimeout = connectionSupervisionTimeout
+    };
 
     static AdapterT AdapterInit(string serialPort, uint baudRate)
     {
@@ -60,37 +90,49 @@ unsafe
 
     const int STRING_BUFFER_SIZE = 50;
 
-    void on_adv_report(BleGapEvtT p_ble_gap_evt)
+    void on_adv_report(BleGapEvtT gapEvt)
     {
         uint err_code;
         var str = new byte[STRING_BUFFER_SIZE];
 
         // Log the Bluetooth device address of advertisement packet received.
         //ble_address_to_string_convert(p_ble_gap_evt->params.adv_report.peer_addr, str);
-        Console.WriteLine($"Received advertisement report with device address: 0x{str}");
+        //Console.WriteLine($"Received advertisement report with device address: 0x{str}");
 
-        /*if (find_adv_name(&p_ble_gap_evt->params.adv_report, TARGET_DEV_NAME))
+        BleGapEvtAdvReportT report = gapEvt.@params.AdvReport;
+        if (report.Type.Status == (ushort) BLE_GAP_ADV_DATA_STATUS.BLE_GAP_ADV_DATA_STATUS_INCOMPLETE_MORE_DATA)
         {
-            if (m_connected_devices >= MAX_PEER_COUNT || m_connection_is_in_progress)
+            Console.WriteLine("Waiting for more data! Skipping ...");
+            return;
+        }
+        IReadOnlyList<(SectionType, byte[])> dataSections = report.Data.ParseAdvertisementReports();
+        Guid guid = Guid.Parse("0000fd4c-0000-1000-8000-00805f9b34fb");
+        var guids = dataSections.GetServiceGuids();
+        //Console.WriteLine($"{string.Join(',', guids)}");
+        if (guids.Contains(guid))
+        {
+            Console.WriteLine("Got matching guid");
+            if (m_connected_devices >= 1 || m_connection_is_in_progress)
             {
                 return;
             }
 
-            err_code = sd_ble_gap_connect(m_adapter,
-                &(p_ble_gap_evt->params.adv_report.peer_addr),
-            &m_scan_param,
-            &m_connection_param
-                                     , m_config_id
-                );
-            if (err_code != NRF_SUCCESS)
+            Console.WriteLine("Valid");
+            err_code = ble_gap.SdBleGapConnect(m_adapter,
+                gapEvt.@params.AdvReport.PeerAddr,
+                m_scan_param,
+                m_connection_param,
+                ConfigId);
+            Console.WriteLine("Started connection");
+            if (err_code != NrfError.NRF_SUCCESS)
             {
-                printf("Connection Request Failed, reason %d\n", err_code);
-                fflush(stdout);
+                Console.WriteLine($"Connection Request Failed, reason {err_code}");
                 return;
             }
 
+            Console.WriteLine("In progress");
             m_connection_is_in_progress = true;
-        }*/
+        }
 
         scan_start(m_adapter, null);
     }
@@ -127,7 +169,7 @@ unsafe
                 m_advertisement_timed_out = true;
                 break;
             case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_ADV_REPORT:
-                Console.WriteLine("Received Advertisement");
+                // Console.WriteLine("Received Advertisement");
                 on_adv_report(ble_evt.evt.GapEvt);
                 break;
             /*case (ushort)BLE_GATTS_EVTS.BLE_GATTS_EVT_SYS_ATTR_MISSING:
@@ -252,6 +294,27 @@ unsafe
             ConnCfgTag = conn_cfg_tag,
             @params = new BleConnCfgT.Params
             {
+                GapConnCfg = new BleGapConnCfgT
+                {
+                    ConnCount = 10,
+                    EventLength = 320
+                }
+            }
+        };
+
+        error_code = ble.SdBleCfgSet(adapter, (uint)BLE_CONN_CFGS.BLE_CONN_CFG_GAP, bleCfg, ram_start);
+        if (error_code != NrfError.NRF_SUCCESS)
+        {
+            Console.WriteLine($"sd_ble_cfg_set() failed when attempting to set BLE_CONN_CFG_GAP. Error code: 0x{error_code:X}");
+            return error_code;
+        }
+
+        /*bleCfg = default;
+        bleCfg.ConnCfg = new BleConnCfgT
+        {
+            ConnCfgTag = conn_cfg_tag,
+            @params = new BleConnCfgT.Params
+            {
                 GattConnCfg = new BleGattConnCfgT
                 {
                     AttMtu = 150
@@ -264,7 +327,7 @@ unsafe
         {
             Console.WriteLine($"sd_ble_cfg_set() failed when attempting to set BLE_CONN_CFG_GATT. Error code: 0x{error_code:X}");
             return error_code;
-        }
+        }*/
 
         return NrfError.NRF_SUCCESS;
     }
@@ -287,25 +350,6 @@ unsafe
 
         return errCode;
     }
-// Determines scan interval in units of 0.625 milliseconds
-    const ushort scanInterval = 0x00A0;
-// Determines scan window in units of 0.625 milliseconds
-    const ushort scanWindow = 0x0050;
-// Scan timeout between 0x01 and 0xFFFF in seconds, 0x0 disables timeout
-    const ushort scanTimeout = 0x0;
-
-    var m_scan_param = new BleGapScanParamsT
-    {
-        Extended = 0,
-        ReportIncompleteEvts = 0,
-        Active = 0,                       // Set if active scanning.
-        FilterPolicy = BLE_GAP_SCAN_FILTER_POLICIES.BLE_GAP_SCAN_FP_ACCEPT_ALL,
-        ScanPhys = BLE_GAP_PHYS.BLE_GAP_PHY_1MBPS,
-        Interval = scanInterval,
-        Window = scanWindow,
-        Timeout = scanTimeout,
-        ChannelMask = new byte[] {0, 0, 0, 0, 0}
-    };
 
     var m_adv_report_buffer = new BleDataT();
     const ushort dataLength = 1000;
@@ -324,13 +368,13 @@ unsafe
             return error_code;
         }
 
-        Console.WriteLine("Scan started");
+        // Console.WriteLine("Scan started");
         return error_code;
     }
 
     Console.WriteLine("Hello, World!");
 
-    const string serialPort = "COM3";
+    const string serialPort = "COM5";
     const uint baudRate = 1000000;
     Console.WriteLine($"Serial port used: {serialPort}");
     Console.WriteLine($"Baud rate used: {baudRate}");

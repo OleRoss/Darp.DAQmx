@@ -92,7 +92,7 @@ public class NrfBluetoothService : IBluetoothService
         {
             return null;
         }
-
+        _logger?.Information("hm????");
         OnConnected += NrfUtils.CreateEventSubscription(out Func<BleGapEvtT> action, timeoutMs, out CancellationToken token);
         BleGapEvtT evt = await NrfUtils.FirstEventAsync(action, token);
         _connectionInProgress = false;
@@ -209,7 +209,13 @@ public class NrfBluetoothService : IBluetoothService
         if (libraryName != "NrfBleDriver" || _libHandle != IntPtr.Zero)
             return _libHandle;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            NativeLibrary.TryLoad(@"C:\Users\VakuO\RiderProjects\NiTests\Darp.NrfBleDriver\Nrf\NrfBleDriverV6.dll", assembly, new DllImportSearchPath?(), out _libHandle);
+            NativeLibrary.TryLoad(
+                @"C:\Users\OleRosskamp\RiderProjects\NiTests\Darp.NrfBleDriver\Nrf\NrfBleDriverV6.dll", assembly,
+                new DllImportSearchPath?(), out _libHandle);
+        else
+            throw new PlatformNotSupportedException();
+        if (_libHandle == IntPtr.Zero)
+            throw new Exception("Could not load native library!");
         return _libHandle;
     }
 }

@@ -62,7 +62,7 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
 
     public IBluetoothAdvertisementScanner SetMaxRssi(short rssi) => throw new NotImplementedException();
 
-    public IBluetoothAdvertisementScanner SetSampleInterval(ushort scanIntervalMs, ushort scanWindowMs)
+    public IBluetoothAdvertisementScanner SetSampleInterval(int scanIntervalMs, int scanWindowMs)
     {
         if (scanWindowMs > scanIntervalMs)
             throw new ArgumentOutOfRangeException(nameof(scanWindowMs),
@@ -197,9 +197,9 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
         bleCfg.GapCfg.RoleCountCfg = new BleGapCfgRoleCountT
         {
             AdvSetCount = BLE_GAP_ADV_SET.BLE_GAP_ADV_SET_COUNT_DEFAULT,
-            PeriphRoleCount = 0,
-            CentralRoleCount = 1,
-            CentralSecCount  = 0
+            PeriphRoleCount = 10,
+            CentralRoleCount = 10,
+            CentralSecCount  = 10
         };
 
         if (ble.SdBleCfgSet(_service.Adapter, (uint)BLE_GAP_CFGS.BLE_GAP_CFG_ROLE_COUNT, bleCfg, ramStart)
