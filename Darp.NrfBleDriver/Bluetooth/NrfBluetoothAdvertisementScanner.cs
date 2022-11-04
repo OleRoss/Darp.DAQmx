@@ -87,21 +87,9 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             yield break;
         }
         _logger?.Debug("Scan started");
-        Action<BleGapEvtT> action = OnAdvertisementReport;
-        _service.OnAdvertisementReceived += action;
-        while (!linkedToken.IsCancellationRequested)
+        await foreach (BleGapEvtT bleGapEvtT in _service.GapAdvertisementResponseQueue.WithCancellation(linkedToken))
         {
-            if (!_queue.IsEmpty)
-            {
-                bool res = _queue.TryDequeue(out BleAdvertisement? bleAdvertisement);
-                if (res && bleAdvertisement != null)
-                {
-                    _logger?.Information("Dequeued advertisement");
-                    yield return bleAdvertisement;
-                    continue;
-                }
-            }
-            await Task.Delay(100, linkedToken).WithoutThrowing();
+            yield return OnAdvertisementReport(bleGapEvtT);
         }
     }
 
@@ -127,7 +115,7 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
         }
     }
 
-    private void OnAdvertisementReport(BleGapEvtT gapEvt)
+    private BleAdvertisement OnAdvertisementReport(BleGapEvtT gapEvt)
     {
         BleGapEvtAdvReportT report = gapEvt.@params.AdvReport;
         IReadOnlyList<(SectionType, byte[])> dataSections = report.ParseAdvertisementReports();
@@ -143,16 +131,14 @@ public class NrfBluetoothAdvertisementScanner : IBluetoothAdvertisementScanner
             false,
             report.PeerAddr.ToAddressType(),
             report.Rssi,
-            (short)1,//report.TxPower,
+            1,//report.TxPower,
             dataSections.GetName(),
             dataSections,
             dataSections.GetManufactureSpecifics(),
             dataSections.GetFlags(),
             dataSections.GetServiceGuids()
         );
-        _queue.Enqueue(advertisement);
-        _logger?.Information("Advertisement enqueued");
-        // ble_gap.SdBleGapScanStart(_service.Adapter, null).IsFailed(_logger, _ => "Scan restart failed");
+        return advertisement;
     }
 
     private uint BleStackInit()

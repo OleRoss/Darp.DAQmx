@@ -19,10 +19,10 @@ Log.Logger.Verbose("aaaa");
 Log.Logger.Information("Hi");
 
 NrfBluetoothService.Setup();
-Guid guid = Guid.Parse("0000fd4c-0000-1000-8000-00805f9b34fb");
+Guid guid = Guid.Parse("0000fd4c-0000-1000-8000-00805f9b34fc");
 using var bleController = new NrfBluetoothService("COM5", logger:Log.Logger);
 var source = new CancellationTokenSource();
-source.CancelAfter(40000);
+source.CancelAfter(5000);
 var startTime = DateTime.UtcNow;
 
 

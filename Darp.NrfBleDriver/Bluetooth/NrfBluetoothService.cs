@@ -41,12 +41,9 @@ public sealed class NrfQueue<T> : IAsyncEnumerable<T>
 
 public sealed class NrfBluetoothService : IBluetoothService
 {
-    public NrfQueue<BleGapEvtT> AdvertisementResponseQueue { get; } = new();
-    public NrfQueue<BleGapEvtT> ConnectedResponseQueue { get; } = new();
+    public NrfQueue<BleGapEvtT> GapAdvertisementResponseQueue { get; } = new();
+    public NrfQueue<BleGapEvtT> GapConnectResponseQueue { get; } = new();
     public NrfQueue<BleGattcEvtT> PrimaryServiceDiscoveryResponseQueue { get; } = new();
-    public event Action<BleGapEvtT>? OnAdvertisementReceived;
-    public event Action<BleGapEvtT>? OnConnected;
-    public event Action<BleGattcEvtT>? OnPrimaryServiceDiscoveryResponse;
     
     private readonly ILogger? _logger;
     public AdapterT Adapter { get; }
@@ -120,14 +117,14 @@ public sealed class NrfBluetoothService : IBluetoothService
             AdvDirReport = 0,
             UseWhitelist = 0
         };
-        OnConnected += EventSubscription<BleGapEvtT>.Create(out IAsyncEnumerator<BleGapEvtT> eventSubscription, cancellationToken);
+        IAsyncEnumerator<BleGapEvtT> enumerator = GapConnectResponseQueue.GetAsyncEnumerator(cancellationToken);
         if (ble_gap.SdBleGapConnect(Adapter, addr, scanParam, mConnectionParam, _configId)
             .IsFailed(_logger, "Ble gap connection failed"))
         {
             return null;
         }
         _logger?.Information("Connecting ...");
-        BleGapEvtT? evt = await eventSubscription.NextAsync(default);
+        BleGapEvtT? evt = await enumerator.NextAsync(default);
         _connectionInProgress = false;
         if (evt == null)
         {
@@ -171,11 +168,11 @@ public sealed class NrfBluetoothService : IBluetoothService
         switch (bleEvt.Header.EvtId)
         {
             case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_ADV_REPORT:
-                OnAdvertisementReceived?.Invoke(bleEvt.evt.GapEvt);
+                GapAdvertisementResponseQueue.Enqueue(bleEvt.evt.GapEvt);
                 break;
             case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_CONNECTED:
                 _logger?.Debug("Device connected");
-                OnConnected?.Invoke(bleEvt.evt.GapEvt);
+                GapConnectResponseQueue.Enqueue(bleEvt.evt.GapEvt);
                 break;
             case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_DISCONNECTED:
                 _logger?.Debug("Device disconnected");
