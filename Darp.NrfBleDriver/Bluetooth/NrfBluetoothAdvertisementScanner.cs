@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Bluetooth;
 using Bluetooth.Advertisement;
+using Darp.NrfBleDriver.Nrf;
 using NrfBleDriver;
 using Serilog;
 

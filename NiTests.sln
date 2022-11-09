@@ -12,6 +12,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Darp.NrfBleDriver", "Darp.N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bluetooth", "..\Wbst\src\Bluetooth\Bluetooth.csproj", "{88BCE8B8-DC66-493F-90E6-558427980CEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ble", "Ble\Ble.csproj", "{193A5A91-B78B-4727-983D-76977A6D55A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ble.Nrf", "Ble.Nrf\Ble.Nrf.csproj", "{9E925274-B0E8-4EB5-8515-0879EA832A61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BleTests", "BleTests\BleTests.csproj", "{55A207BC-62AB-44BA-8FE9-E31F2E08F702}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +48,17 @@ Global
 		{88BCE8B8-DC66-493F-90E6-558427980CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88BCE8B8-DC66-493F-90E6-558427980CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88BCE8B8-DC66-493F-90E6-558427980CEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{193A5A91-B78B-4727-983D-76977A6D55A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{193A5A91-B78B-4727-983D-76977A6D55A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{193A5A91-B78B-4727-983D-76977A6D55A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{193A5A91-B78B-4727-983D-76977A6D55A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E925274-B0E8-4EB5-8515-0879EA832A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E925274-B0E8-4EB5-8515-0879EA832A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E925274-B0E8-4EB5-8515-0879EA832A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E925274-B0E8-4EB5-8515-0879EA832A61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55A207BC-62AB-44BA-8FE9-E31F2E08F702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55A207BC-62AB-44BA-8FE9-E31F2E08F702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55A207BC-62AB-44BA-8FE9-E31F2E08F702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55A207BC-62AB-44BA-8FE9-E31F2E08F702}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

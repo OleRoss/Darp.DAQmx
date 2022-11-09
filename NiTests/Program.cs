@@ -1,6 +1,7 @@
 ﻿using Bluetooth.Advertisement;
 using Bluetooth.Device;
 using Bluetooth.Gatt;
+using Darp.NrfBleDriver;
 using Darp.NrfBleDriver.Bluetooth;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -33,6 +34,8 @@ BleAdvertisement adv = await bleController
     .Where(x => x.ServiceUuids.Contains(guid))
     .FirstAsync();
 
+
+
 Log.Logger.Information("{Time} - {@Advertisement}", DateTime.UtcNow - startTime, adv);
 IBleDevice? device = await adv.ConnectAsync();
 //IBleDevice? device = null;
@@ -44,6 +47,16 @@ Log.Logger.Information("Found wcp service {@Service}", service);
 
 IGattCharacteristic[] characteristics = await service.GetCharacteristicsAsync(default).ToArrayAsync();
 Log.Logger.Information("Found {CharacteristicCount} characteristics {@Characteristics}", characteristics.Length, characteristics);
+
+IGattCharacteristic writeChar = characteristics.First(x => x.Property is Property.Write);
+IGattCharacteristic notifyChar = characteristics.First(x => x.Property is Property.Notify);
+await notifyChar.SubscribeToNotify(x =>
+{
+
+}, default);
+byte[] bytes = "5B000110005C005D".ToByteArray();
+await writeChar.WriteValueAsync(bytes, default);
+await Task.Delay(5000);
 return;
 
 await Task.Delay(100);

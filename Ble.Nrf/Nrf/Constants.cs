@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Darp.NrfBleDriver.Nrf;
+namespace Ble.Nrf.Nrf;
 
 public static class BleConnHandles
 {
@@ -66,6 +66,7 @@ public static class NrfError
     /// Not enough resources for operation
     public const ushort NRF_ERROR_RESOURCES = NrfErrorBase.NRF_ERROR_BASE_NUM + 19;
 
+    public const ushort BLE_ERROR_NOT_ENABLED = 0x3001;
     public static string GetName(uint nrfError)
     {
         foreach (FieldInfo field in typeof(NrfError).GetFields(
@@ -75,7 +76,7 @@ public static class NrfError
             if (value == nrfError)
                 return field.Name;
         }
-        return $"Unknown({nrfError:X})";
+        return $"Unknown({nrfError})";
     }
 }
 
@@ -367,4 +368,13 @@ public enum BLE_GATT_WRITE_OPS : byte
     BLE_GATT_OP_EXEC_WRITE_REQ = 0x05
     
 }
-/** @} */
+
+public enum BLE_GATT_HVX_TYPES
+{
+    /// Invalid Operation
+    BLE_GATT_HVX_INVALID = 0x00,
+    /// Handle Value Notification
+    BLE_GATT_HVX_NOTIFICATION = 0x01,
+    /// Handle Value Indication
+    BLE_GATT_HVX_INDICATION = 0x02
+}

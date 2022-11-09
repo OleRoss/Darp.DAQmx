@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Bluetooth.Advertisement;
 using Darp.NrfBleDriver.Bluetooth;
+using Darp.NrfBleDriver.Nrf;
 using NrfBleDriver;
 
 unsafe

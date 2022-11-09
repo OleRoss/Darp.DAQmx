@@ -1,6 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using Bluetooth.Device;
 using Bluetooth.Gatt;
+using Darp.NrfBleDriver.Nrf;
+using ErrorOr;
 using NrfBleDriver;
 using Serilog;
 
@@ -36,7 +38,7 @@ public sealed class NrfGattService : IGattService
     {
         ushort startHandle = _startHandle;
         while (true)
-        { 
+        {
             ble_gattc.SdBleGattcCharacteristicsDiscover(_service.Adapter,
                 _device.ConnectionHandle,
                 new BleGattcHandleRangeT { StartHandle = startHandle, EndHandle = _endHandle });
@@ -57,7 +59,11 @@ public sealed class NrfGattService : IGattService
             }
             foreach (BleGattcCharT bleGattcCharT in res.@params.CharDiscRsp.Chars)
             {
-                yield return new NrfGattCharacteristic(_logger, bleGattcCharT);
+                ErrorOr<NrfGattCharacteristic> errorOrCharacteristic = await NrfGattCharacteristic
+                    .FromNrfGattcChar(_logger, _service, _device, bleGattcCharT);
+                if (!errorOrCharacteristic.IsError)
+                    yield return errorOrCharacteristic.Value;
+                _logger?.Warning("Could not get characteristic: {@Errors}", errorOrCharacteristic.Errors);
             }
             startHandle = (ushort)(res.@params.CharDiscRsp.Chars.Last().HandleDecl + 1);
         }

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>10</LangVersion>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Ble\Ble.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CppSharp.Runtime" Version="1.0.3" />    </ItemGroup>
+    <ItemGroup>
+      <ClCompile Include="Nrf\NrfBleDriver-symbols.cpp" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Nrf\NrfBleDriver.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

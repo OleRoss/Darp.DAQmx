@@ -1,7 +1,11 @@
-﻿using System.Runtime.CompilerServices;
-using Serilog;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
-namespace Darp.NrfBleDriver.Nrf;
+namespace Ble.Nrf.Nrf;
 
 public static class NrfUtils
 {
@@ -14,10 +18,10 @@ public static class NrfUtils
             return false;
         if (string.IsNullOrWhiteSpace(message))
         {
-            logger?.Error("Received unknown error code 0x{ErrorCode:X} ({NrfError})", error, NrfError.GetName(error));
+            logger?.LogError("Received unknown error code 0x{ErrorCode:X} ({NrfError})", error, NrfError.GetName(error));
             return true;
         }
-        logger?.Warning("{Message}. Error code 0x{ErrorCode:X} ({NrfError})", message, error, NrfError.GetName(error));
+        logger?.LogWarning("{Message}. Error code 0x{ErrorCode:X} ({NrfError})", message, error, NrfError.GetName(error));
         return true;
     }
 
@@ -37,7 +41,7 @@ public static class NrfUtils
         {
             throw new Exception($"Received unknown error code 0x{error:X} ({NrfError.GetName(error)})");
         }
-        throw new Exception(message);
+        throw new Exception($"{message}. Error code 0x{error:X} ({NrfError.GetName(error)})");
     }
 
     public static Task<bool> WithoutThrowing(this Task task)

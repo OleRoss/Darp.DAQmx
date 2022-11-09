@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Bluetooth.Device;
 using Bluetooth.Gatt;
+using Darp.NrfBleDriver.Nrf;
 using NrfBleDriver;
 using Serilog;
 
@@ -11,7 +12,7 @@ public sealed class NrfDevice : IBleDevice
     private readonly NrfBluetoothService _service;
     private readonly byte[] _addressBytes;
     private readonly ILogger? _logger;
-
+    private ICollection<NrfGattService>? _services;
     public NrfDevice(NrfBluetoothService service, ushort connectionHandle, byte[] addressBytes, ILogger? logger)
     {
         _service = service;
@@ -30,8 +31,15 @@ public sealed class NrfDevice : IBleDevice
     public async IAsyncEnumerable<IGattService> GetServicesAsync(CacheMode cacheMode,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {
+        if (cacheMode is CacheMode.Cached && _services is not null)
+        {
+            _logger?.Information("Using cached services ...");
+            foreach (NrfGattService nrfGattService in _services)
+                yield return nrfGattService;
+            yield break;
+        }
         _logger?.Information("Discovering services ...");
-
+        var gattServices = new List<NrfGattService>();
         ushort startHandle = 0x01;
         while (true)
         {
@@ -53,13 +61,16 @@ public sealed class NrfDevice : IBleDevice
                 break;
             foreach (BleGattcServiceT bleGattcServiceT in response.Services)
             {
-                yield return new NrfGattService(_logger, _service, this, bleGattcServiceT);
+                var gattService = new NrfGattService(_logger, _service, this, bleGattcServiceT);
+                gattServices.Add(gattService);
+                yield return gattService;
             }
             ushort endHandle = response.Services[^1].HandleRange.EndHandle;
             if (endHandle == 0xFFFF)
                 yield break;
             startHandle = (ushort)(response.Services[^1].HandleRange.EndHandle + 1);
         }
+        _services = gattServices;
     }
 
     public void Dispose()

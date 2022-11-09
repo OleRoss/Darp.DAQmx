@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Bluetooth;
 using Bluetooth.Advertisement;
 using Bluetooth.Device;
+using Darp.NrfBleDriver.Nrf;
 using ErrorOr;
 using NrfBleDriver;
 using Serilog;
@@ -46,6 +47,7 @@ public sealed class NrfBluetoothService : IBluetoothService
     public NrfQueue<BleGapEvtT> GapConnectResponseQueue { get; } = new();
     public NrfQueue<BleGattcEvtT> PrimaryServiceDiscoveryResponseQueue { get; } = new();
     public NrfQueue<BleGattcEvtT> CharacteristicDiscoveryResponseQueue { get; } = new();
+    public NrfQueue<BleGattcEvtT> WriteResponseQueue { get; } = new();
     
     private readonly ILogger? _logger;
     public AdapterT Adapter { get; }
@@ -198,6 +200,14 @@ public sealed class NrfBluetoothService : IBluetoothService
             case (ushort)BLE_GAP_EVTS.BLE_GAP_EVT_DATA_LENGTH_UPDATE_REQUEST:
                 _logger?.Debug("length update request {@Request}",
                     bleEvt.evt.GapEvt.@params.DataLengthUpdateRequest);
+                break;
+            case (ushort)BLE_GATTC_EVTS.BLE_GATTC_EVT_WRITE_RSP:
+                _logger?.Debug("Write response");
+                WriteResponseQueue.Enqueue(bleEvt.evt.GattcEvt);
+                break;
+            case (ushort)BLE_GATTC_EVTS.BLE_GATTC_EVT_HVX:
+                _logger?.Debug("Hvxxx response {@Response}",
+                    bleEvt.evt.GattcEvt.@params.Hvx);
                 break;
             default:
                 _logger?.Warning("Received an un-handled event with ID: {EventId}", bleEvt.Header.EvtId);
