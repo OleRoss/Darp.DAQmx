@@ -21,8 +21,7 @@ public class NrfGattService : IConnectedGattService
     private readonly BleGattcServiceT _gattcService;
     private readonly ILogger? _logger;
 
-    private readonly IDictionary<Guid, IConnectedGattCharacteristic>
-        _characteristicDictionary = new Dictionary<Guid, IConnectedGattCharacteristic>();
+    private readonly IDictionary<Guid, IConnectedGattCharacteristic> _characteristicDictionary = new Dictionary<Guid, IConnectedGattCharacteristic>();
 
     public NrfGattService(NrfAdapter adapter, NrfConnectedPeripheral connectedPeripheral, BleGattcServiceT gattcService, ILogger? logger)
     {
@@ -35,25 +34,11 @@ public class NrfGattService : IConnectedGattService
 
     public Guid Uuid { get; }
     public ICollection<IConnectedGattCharacteristic> Characteristics => _characteristicDictionary.Values;
-
     public IConnectedGattCharacteristic this[GattCharacteristic characteristic] => _characteristicDictionary[characteristic.Uuid];
-
     public IConnectedGattCharacteristic this[Guid characteristicGuid] => _characteristicDictionary[characteristicGuid];
-
     public bool ContainsCharacteristic(Guid guid) => _characteristicDictionary.ContainsKey(guid);
-
-    public bool ContainsCharacteristic(GattUuid guid) => _characteristicDictionary.Keys
-        .Any(x => x.ToDefaultUuid() == guid);
-
-    public ConnectedGattCharacteristic<TCharacteristic> Select<TCharacteristic>(TCharacteristic characteristic)
-        where TCharacteristic : GattCharacteristic
-    {
-        IConnectedGattCharacteristic connChar = this[characteristic.Uuid];
-        if (!characteristic.IsValid(connChar))
-            throw new ArgumentException($"Characteristic {characteristic} is not valid for service", nameof(characteristic));
-        return new ConnectedGattCharacteristic<TCharacteristic>(characteristic, connChar);
-    }
-
+    public bool ContainsCharacteristic(GattUuid guid) => _characteristicDictionary.ContainsKey(guid);
+    
     public override string ToString() => $"{nameof(NrfGattService)} (Uuid={_gattcService.Uuid.Uuid:X}, NumChars={Characteristics.Count}, StartHandle={_gattcService.HandleRange.StartHandle}, EndHandle={_gattcService.HandleRange.EndHandle})";
 
     public async Task<bool> DiscoverCharacteristics(CancellationToken cancellationToken)

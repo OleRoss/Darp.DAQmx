@@ -8,6 +8,7 @@ using Ble.Nrf;
 using Ble.Reactive;
 using Ble.Utils;
 using Ble.Uuid;
+using Ble.WinRT;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
@@ -30,16 +31,19 @@ Configuration configuration = new Configuration()
     .Services.Add(service)
     .Advertisement.Services.Add(service);
 
-using IBleAdapter adapter = new NrfAdapter("COM5", logger:logger);
+// using IBleAdapter adapter = new NrfAdapter("COM5", logger:logger);
+using IBleAdapter adapter = new WinBleAdapter(logger:logger);
 
-await adapter.Scan(ScanningMode.Passive, 1000, 1000)
+IConnectedPeripheral connectedPeripheral2 = await adapter
+    .ScanAndConnectFirstAsync(configuration);
+adapter.Scan(ScanningMode.Passive, 1000, 1000)
+    .Where(adv => adv.Services.Length > 0)
     .Where(adv => adv.Services.Contains(0xfd4c))
-    .FirstAsync()
-    .ToTask();
-await Task.Delay(5000);
-
+    .Subscribe(x => logger.LogInformation("{Adv}", x));
+await Task.Delay(50000);
+return;
 IAdvertisementScanner advObserver = adapter.Scanner();
-advObserver.Start();
+advObserver.Start(ScanningMode.Passive, 1000, 1000);
 advObserver.Subscribe(x => logger.LogDebug("Found"));
 advObserver.Stop();
 

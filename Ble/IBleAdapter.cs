@@ -9,10 +9,11 @@ namespace Ble;
 
 public interface IBleAdapter : IDisposable
 {
-    Task<IConnectedPeripheral?> ConnectAsync(ulong bluetoothId, Configuration? peripheral, CancellationToken cancellationToken = default);
+    Task<IConnectedPeripheral?> ConnectAsync(ulong bluetoothId, Configuration? configuration, CancellationToken cancellationToken = default);
 
     Task<IConnectedPeripheral?> ConnectAsync(ulong bluetoothId, CancellationToken cancellationToken) =>
         ConnectAsync(bluetoothId, null, cancellationToken);
-    void Clear();
+    bool Disconnect(IConnectedPeripheral bleDevice);
+    void DisconnectAll();
     IAdvertisementScanner Scanner();
 }

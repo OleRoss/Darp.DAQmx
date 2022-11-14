@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
+        <LangVersion>11</LangVersion>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
+        <ProjectReference Include="..\Ble\Ble.csproj" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+    </ItemGroup>
+
+</Project>

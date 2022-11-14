@@ -8,7 +8,7 @@ using Ble.Uuid;
 
 namespace Ble.Gap;
 
-public record GapGapAdvertisement(IBleAdapter Adapter,
+public record GapAdvertisement(IBleAdapter Adapter,
     DateTimeOffset Timestamp,
     AdvertisementType Type,
     ulong DeviceAddress,

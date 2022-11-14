@@ -54,15 +54,6 @@ public static class Extensions
         };
     }
 
-    public static GattUuid ToDefaultUuid(this Guid guid)
-    {
-        unsafe
-        {
-            ushort value = *(ushort*)&guid;
-            return (GattUuid)value;
-        }
-    }
-
     public static AddressType ToAddressType(this BleGapAddrT address)
     {
         return address.AddrType switch

@@ -61,6 +61,34 @@ public static class GuidExtensions
         return false;
     }
 
+    public static GattUuid ToDefaultUuid(this Guid guid)
+    {
+        unsafe
+        {
+            ushort value = *(ushort*)&guid;
+            return (GattUuid)value;
+        }
+    }
+
+    public static bool ContainsKey<T>(this IDictionary<Guid, T> dict, GattUuid uuid)
+    {
+        foreach ((Guid key, _) in dict)
+        {
+            if (key.ToDefaultUuid() == uuid)
+                return true;
+        }
+        return false;
+    }
+
+    public static T Get<T>(this IDictionary<Guid, T> dict, GattUuid uuid)
+    {
+        foreach ((Guid key, T? value) in dict)
+        {
+            if (key.ToDefaultUuid() == uuid)
+                return value;
+        }
+        throw new KeyNotFoundException($"Default guid {uuid} is not contained in characteristic");
+    }
     public static bool Contains(this IEnumerable<Guid> guids, GattUuid uuid) => guids.Contains((ushort)uuid);
 
 }

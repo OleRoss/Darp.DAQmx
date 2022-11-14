@@ -12,8 +12,6 @@ public static class BleAdapterExtensions
         CancellationToken cancellationToken = default)
     {
         return adapter.Scanner()
-            .SetScanMode(mode)
-            .SetScanParameters(scanIntervalMs, scanWindowMs)
-            .Start(cancellationToken);
+            .Start(mode, scanIntervalMs, scanWindowMs, cancellationToken);
     }
 }

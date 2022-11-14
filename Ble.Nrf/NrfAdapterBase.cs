@@ -6,6 +6,7 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Ble.Gatt;
+using Ble.Nrf.Gatt;
 using Ble.Nrf.Gatt.Response;
 using Ble.Nrf.Nrf;
 using Microsoft.Extensions.Logging;
@@ -24,7 +25,7 @@ public abstract class NrfAdapterBase
     // ReSharper disable once CollectionNeverQueried.Local
     private readonly ICollection<Delegate> _delegates = new List<Delegate>();
 
-    protected readonly IList<IConnectedPeripheral> Connections = new List<IConnectedPeripheral>();
+    protected readonly IList<NrfConnectedPeripheral> Connections = new List<NrfConnectedPeripheral>();
     private readonly Subject<BleGapEvtT> _gapAdvertisementReports = new();
     private readonly Subject<BleGapEvtT> _gapConnectResponses = new();
     private readonly Subject<BleGattcEvtT> _primaryServiceDiscoveryResponses = new();
@@ -109,6 +110,7 @@ public abstract class NrfAdapterBase
                     if (Connections[i].ConnectionHandle != bleEvt.evt.GapEvt.ConnHandle) continue;
                     Connections[i].Dispose();
                 }
+                
                 _logger?.LogTrace("Connection 0x{Handle:X} disconnected", bleEvt.evt.GapEvt.ConnHandle);
                 break;
             case (ushort)BLE_GATTC_EVTS.BLE_GATTC_EVT_PRIM_SRVC_DISC_RSP:

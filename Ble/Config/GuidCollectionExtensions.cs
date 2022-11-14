@@ -12,6 +12,6 @@ public static class GuidCollectionExtensions
 
     public static TReturn Add<TReturn>(this GenericCollection<Guid, TReturn> guidCollection, Service service)
     {
-        return guidCollection.Add(service.ServiceUuid);
+        return guidCollection.Add(service.Uuid);
     }
 }

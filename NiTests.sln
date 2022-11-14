@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ble.Tests", "Ble.Tests\Ble.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ble.Reactive", "Ble.Reactive\Ble.Reactive.csproj", "{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ble.WinRT", "Ble.WinRT\Ble.WinRT.csproj", "{756C4512-544A-4580-BFC6-066623A5BDFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,9 @@ Global
 		{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756C4512-544A-4580-BFC6-066623A5BDFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756C4512-544A-4580-BFC6-066623A5BDFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756C4512-544A-4580-BFC6-066623A5BDFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756C4512-544A-4580-BFC6-066623A5BDFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -7,6 +7,7 @@ using Ble.Config;
 using Ble.Gap;
 using Ble.Gatt;
 using Ble.Nrf.Gap;
+using Ble.Nrf.Gatt;
 using Ble.Nrf.Nrf;
 using Microsoft.Extensions.Logging;
 using NrfBleDriver;
@@ -23,7 +24,7 @@ public sealed class NrfAdapter : NrfAdapterBase, IBleAdapter
         _scanner = new NrfAdvertisementScanner(this, logger);
     }
 
-    public async Task<IConnectedPeripheral?> ConnectAsync(ulong bluetoothId, Configuration? peripheral, CancellationToken cancellationToken = default)
+    public async Task<IConnectedPeripheral?> ConnectAsync(ulong bluetoothId, Configuration? configuration, CancellationToken cancellationToken = default)
     {
         // Wait until running connections are finished
         if (_connectionInProgress)
@@ -89,14 +90,14 @@ public sealed class NrfAdapter : NrfAdapterBase, IBleAdapter
             var connection = new NrfConnectedPeripheral(this, evt.ConnHandle, _logger);
             Connections.Add(connection);
             
-            bool success = await connection.DiscoverServicesAsync(peripheral, cancellationToken);
+            bool success = await connection.DiscoverServicesAsync(configuration, cancellationToken);
             if (success)
             {
                 _logger?.LogDebug("Successfully connected");
                 return connection;
             }
 
-            _logger?.LogWarning("Service discovery with failed. Ignoring connection...");
+            _logger?.LogWarning("Service discovery with failed. Disconnecting from peripheral...");
             connection.Dispose();
             return null;
         }
@@ -108,14 +109,16 @@ public sealed class NrfAdapter : NrfAdapterBase, IBleAdapter
 
     public bool Disconnect(IConnectedPeripheral connectedPeripheral)
     {
-        _logger?.LogTrace("Disconnecting connection 0x{Connection:X}", connectedPeripheral.ConnectionHandle);
-        Connections.Remove(connectedPeripheral);
-        return ble_gap.SdBleGapDisconnect(AdapterHandle, connectedPeripheral.ConnectionHandle,
+        if (connectedPeripheral is not NrfConnectedPeripheral nrfPeripheral)
+            throw new ArgumentException("Cannot disconnect peripheral, which is not of type nrf peripheral");
+        _logger?.LogTrace("Disconnecting connection 0x{Connection:X}", nrfPeripheral.ConnectionHandle);
+        Connections.Remove(nrfPeripheral);
+        return ble_gap.SdBleGapDisconnect(AdapterHandle, nrfPeripheral.ConnectionHandle,
                 (byte)BLE_HCI_STATUS_CODES.BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION)
             .IsFailed(_logger, "Disconnection failed");
     }
 
-    public void Clear()
+    public void DisconnectAll()
     {
         _logger?.LogTrace("Clearing {ConnectionCount} connected devices", Connections.Count);
         for (int index = Connections.Count - 1; index >= 0; index--)
@@ -130,7 +133,7 @@ public sealed class NrfAdapter : NrfAdapterBase, IBleAdapter
     public void Dispose()
     {
         _logger?.LogDebug("Disposing of nrf bluetooth adapter");
-        Clear();
+        DisconnectAll();
         sd_rpc.SdRpcClose(AdapterHandle)
             .IsFailed(_logger, "Failed to close nRF BLE Driver");
         AdapterHandle.Dispose();

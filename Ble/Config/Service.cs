@@ -5,13 +5,13 @@ namespace Ble.Config;
 
 public sealed class Service
 {
-    public Service(Guid serviceUuid)
+    public Service(Guid uuid)
     {
-        ServiceUuid = serviceUuid;
+        Uuid = uuid;
         Characteristics = new GenericCollection<GattCharacteristic, Service>(this);
     }
 
-    public Guid ServiceUuid { get; }
+    public Guid Uuid { get; }
     public GenericCollection<GattCharacteristic, Service> Characteristics { get; }
 
     public Service(string serviceUuid) : this(serviceUuid.ToBleGuid()) {}

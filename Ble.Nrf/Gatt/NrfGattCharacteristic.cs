@@ -55,25 +55,10 @@ public class NrfGattCharacteristic : IConnectedGattCharacteristic
 
     public Guid Uuid { get; }
     public ICollection<IConnectedGattDescriptor> Descriptors => _descriptorDictionary.Values;
-
     public IConnectedGattDescriptor this[Guid guid] => _descriptorDictionary[guid];
-
-    public IConnectedGattDescriptor this[GattUuid guid]
-    {
-        get
-        {
-            foreach ((Guid key, IConnectedGattDescriptor? value) in _descriptorDictionary)
-            {
-                if (key.ToDefaultUuid() == guid)
-                    return value;
-            }
-            throw new KeyNotFoundException($"Default guid {guid} is not contained in characteristic");
-        }
-    }
-
+    public IConnectedGattDescriptor this[GattUuid guid] => _descriptorDictionary.Get(guid);
     public bool ContainsDescriptor(Guid guid) => _descriptorDictionary.ContainsKey(guid);
-
-    public bool ContainsDescriptor(GattUuid guid) => _descriptorDictionary.Keys.Any(x => x.ToDefaultUuid() == guid);
+    public bool ContainsDescriptor(GattUuid guid) => _descriptorDictionary.ContainsKey(guid);
 
     public Property Property {get;}
     public async Task<bool> WriteAsync(byte[] bytes, CancellationToken cancellationToken)

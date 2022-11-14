@@ -17,8 +17,6 @@ public class NrfAdvertisementScanner : IAdvertisementScanner
     private readonly ILogger? _logger;
     private readonly byte[] _data = new byte[100];
     private readonly BleDataT _mAdvReportBuffer = new();
-    private ushort _scanInterval;
-    private ushort _scanWindow;
     private CancellationToken? _cancellation;
     public NrfAdvertisementScanner(NrfAdapter adapter, ILogger? logger)
     {
@@ -26,16 +24,18 @@ public class NrfAdvertisementScanner : IAdvertisementScanner
         _logger = logger;
     }
     public bool IsScanning { get; private set; }
-    public ScanningMode ScanningMode { get; private set; }
     
     public IDisposable Subscribe(IObserver<IGapAdvertisement> observer) => _adapter.GapAdvertisementReports
         .TakeWhile(_ => _cancellation is not null && !_cancellation.Value.IsCancellationRequested)
         .Select(OnAdvertisementReport)
         .Subscribe(observer);
 
-    public IAdvertisementScanner Start(CancellationToken cancellationToken)
+    public IAdvertisementScanner Start(ScanningMode mode,
+        float scanIntervalMs,
+        float scanWindowMs,
+        CancellationToken cancellationToken)
     {
-        StartScan(ScanningMode, _scanInterval, _scanWindow).ThrowIfFailed("Scan start failed");
+        StartScan(mode, scanIntervalMs, scanWindowMs).ThrowIfFailed("Scan start failed");
         _logger?.LogDebug("Scan started");
         _cancellation = cancellationToken;
         IsScanning = true;
@@ -46,30 +46,6 @@ public class NrfAdvertisementScanner : IAdvertisementScanner
     {
         _cancellation = null;
         IsScanning = false;
-        return this;
-    }
-
-    public IAdvertisementScanner SetScanMode(ScanningMode mode)
-    {
-        ScanningMode = mode;
-        return this;
-    }
-
-    public IAdvertisementScanner SetScanInterval(float scanIntervalMs)
-    {
-        if (scanIntervalMs < 2.5f)
-            throw new ArgumentOutOfRangeException(nameof(scanIntervalMs),
-                $"Expected scanInterval to be greater than or equal to 2.5ms, but is {scanIntervalMs}");
-        _scanInterval = (ushort)(scanIntervalMs / 0.625f);
-        return this;
-    }
-
-    public IAdvertisementScanner SetScanWindow(float scanWindowMs)
-    {
-        if (scanWindowMs < 2.5f)
-            throw new ArgumentOutOfRangeException(nameof(scanWindowMs),
-                $"Expected scanWindow to be greater than or equal to 2.5ms, but is {scanWindowMs}");
-        _scanWindow = (ushort)(scanWindowMs / 0.625f);
         return this;
     }
 
@@ -99,12 +75,12 @@ public class NrfAdvertisementScanner : IAdvertisementScanner
         }
     }
 
-    private GapGapAdvertisement OnAdvertisementReport(BleGapEvtT gapEvt)
+    private GapAdvertisement OnAdvertisementReport(BleGapEvtT gapEvt)
     {
         BleGapEvtAdvReportT report = gapEvt.@params.AdvReport;
         IReadOnlyList<(SectionType, byte[])> dataSections = report.ParseAdvertisementReports();
         var type = (AdvertisementType)report.Type;
-        var advertisement = new GapGapAdvertisement(_adapter,
+        var advertisement = new GapAdvertisement(_adapter,
             DateTime.UtcNow,
             (AdvertisementType)report.Type,//.GetAddressType(),
             report.PeerAddr.ToAddress(),
