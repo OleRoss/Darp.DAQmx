@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ble.Connection;
+namespace Ble.Gatt;
 
 [Flags]
 public enum Property

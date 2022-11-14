@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Utils;
+using Ble.Config;
+using Ble.Uuid;
 
-namespace Ble.Connection;
+namespace Ble.Gatt;
 
 public interface IConnectedGattService
 {
@@ -15,7 +15,7 @@ public interface IConnectedGattService
     IConnectedGattCharacteristic this[GattCharacteristic characteristic] { get; }
     IConnectedGattCharacteristic this[Guid characteristicGuid] { get; }
     bool ContainsCharacteristic(Guid guid);
-    bool ContainsCharacteristic(DefaultUuid guid);
+    bool ContainsCharacteristic(GattUuid guid);
     ConnectedGattCharacteristic<TCharacteristic> Select<TCharacteristic>(TCharacteristic characteristic)
         where TCharacteristic : GattCharacteristic;
 

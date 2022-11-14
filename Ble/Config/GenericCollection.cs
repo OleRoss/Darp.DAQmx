@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Ble.Configuration;
+namespace Ble.Config;
 
 public sealed class GenericCollection<TValue, TParent> : ICollection<TValue>
 {

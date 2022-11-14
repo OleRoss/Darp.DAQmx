@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ble.Connection;
-using Ble.Utils;
+using Ble.Gatt;
+using Ble.Uuid;
 
-namespace Ble.Configuration;
+namespace Ble.Config;
 
 public interface IGattCharacteristic<out TPropOne>
 {
@@ -27,11 +27,11 @@ public abstract class GattCharacteristic
     protected abstract bool AreDescriptorsValid(IConnectedGattCharacteristic connChar);
 }
 
-public class GattCharacteristic<TPropOne> : GattCharacteristic, IGattCharacteristic<TPropOne>
+public class Characteristic<TPropOne> : GattCharacteristic, IGattCharacteristic<TPropOne>
     where TPropOne : IGattProperty, new()
 {
-    public GattCharacteristic(Guid characteristicUuid) => Uuid = characteristicUuid;
-    public GattCharacteristic(string characteristicUuid) : this(characteristicUuid.ToBleGuid()) { }
+    public Characteristic(Guid characteristicUuid) => Uuid = characteristicUuid;
+    public Characteristic(string characteristicUuid) : this(characteristicUuid.ToBleGuid()) { }
 
     public override Guid Uuid { get; }
     public override Property Property => PropertyOne.Property;
@@ -44,12 +44,12 @@ public class GattCharacteristic<TPropOne> : GattCharacteristic, IGattCharacteris
     }
 }
 
-public class GattCharacteristic<TPropOne, TPropTwo> : GattCharacteristic<TPropTwo>, IGattCharacteristic<TPropOne>
+public class Characteristic<TPropOne, TPropTwo> : Characteristic<TPropTwo>, IGattCharacteristic<TPropOne>
     where TPropOne : IGattProperty, new()
     where TPropTwo : IGattProperty, new()
 {
-    public GattCharacteristic(Guid characteristicUuid) : base(characteristicUuid) { }
-    public GattCharacteristic(string characteristicUuid) : this(characteristicUuid.ToBleGuid()) { }
+    public Characteristic(Guid characteristicUuid) : base(characteristicUuid) { }
+    public Characteristic(string characteristicUuid) : this(characteristicUuid.ToBleGuid()) { }
 
     public new TPropOne PropertyOne => new();
     public TPropTwo PropertyTwo => new();
@@ -60,13 +60,13 @@ public class GattCharacteristic<TPropOne, TPropTwo> : GattCharacteristic<TPropTw
     }
 }
 
-public class GattCharacteristic<TPropOne, TPropTwo, TPropThree> : GattCharacteristic<TPropTwo, TPropThree>, IGattCharacteristic<TPropOne>
+public class Characteristic<TPropOne, TPropTwo, TPropThree> : Characteristic<TPropTwo, TPropThree>, IGattCharacteristic<TPropOne>
     where TPropOne : IGattProperty, new()
     where TPropTwo : IGattProperty, new()
     where TPropThree : IGattProperty, new()
 {
-    public GattCharacteristic(Guid characteristicUuid) : base(characteristicUuid) { }
-    public GattCharacteristic(string characteristicUuid) : this(characteristicUuid.ToBleGuid()) { }
+    public Characteristic(Guid characteristicUuid) : base(characteristicUuid) { }
+    public Characteristic(string characteristicUuid) : this(characteristicUuid.ToBleGuid()) { }
  
     public new TPropOne PropertyOne => new();
     public new TPropTwo PropertyTwo => new();

@@ -5,22 +5,22 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Connection;
+using Ble.Config;
+using Ble.Gatt;
 using Ble.Nrf.Gatt;
 using Ble.Nrf.Nrf;
-using Ble.Utils;
+using Ble.Uuid;
 using Microsoft.Extensions.Logging;
 using NrfBleDriver;
 
 namespace Ble.Nrf;
 
-public sealed class NrfConnection : IConnection
+public sealed class NrfConnectedPeripheral : IConnectedPeripheral
 {
     private readonly NrfAdapter _adapter;
     private readonly ILogger? _logger;
     private readonly IDictionary<Guid, IConnectedGattService> _serviceDictionary = new Dictionary<Guid, IConnectedGattService>();
-    public NrfConnection(NrfAdapter adapter, ushort connectionHandle, ILogger? logger)
+    public NrfConnectedPeripheral(NrfAdapter adapter, ushort connectionHandle, ILogger? logger)
     {
         _adapter = adapter;
         _logger = logger;
@@ -64,7 +64,7 @@ public sealed class NrfConnection : IConnection
         return true;
     }
 
-    public async Task<bool> DiscoverServicesAsync(Peripheral? peripheral, CancellationToken cancellationToken)
+    public async Task<bool> DiscoverServicesAsync(Configuration? peripheral, CancellationToken cancellationToken)
     {
         if (peripheral is null || !peripheral.Services.Any())
         {
@@ -74,7 +74,7 @@ public sealed class NrfConnection : IConnection
         }
         else
         {
-            foreach (GattService peripheralService in peripheral.Services)
+            foreach (Service peripheralService in peripheral.Services)
             {
                 bool success = await DiscoverServicesAsync(peripheralService.ServiceUuid, cancellationToken);
                 if (!success)
@@ -87,7 +87,7 @@ public sealed class NrfConnection : IConnection
                 _logger?.LogWarning("Characteristic discovery with error - might be incomplete");
         }
         if (peripheral is null) return true;
-        foreach (GattService gattService in peripheral.Services)
+        foreach (Service gattService in peripheral.Services)
         {
             if (!_serviceDictionary.ContainsKey(gattService.ServiceUuid))
             {
@@ -127,12 +127,12 @@ public sealed class NrfConnection : IConnection
     public ushort ConnectionHandle { get; }
     public ICollection<IConnectedGattService> Services => _serviceDictionary.Values;
 
-    public IConnectedGattService this[GattService service] => _serviceDictionary[service.ServiceUuid];
+    public IConnectedGattService this[Service service] => _serviceDictionary[service.ServiceUuid];
 
     public IConnectedGattService this[Guid guid] => _serviceDictionary[guid];
 
-    public IConnectedGattService this[DefaultUuid guid] => _serviceDictionary[guid.ToBleGuid()];
-    public IConnectedGattService Select(GattService service) => _serviceDictionary[service.ServiceUuid];
+    public IConnectedGattService this[GattUuid guid] => _serviceDictionary[guid.ToBleGuid()];
+    public IConnectedGattService Select(Service service) => _serviceDictionary[service.ServiceUuid];
 
     public void Dispose()
     {

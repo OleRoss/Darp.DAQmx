@@ -1,11 +1,11 @@
-﻿namespace Ble.Gap;
+﻿namespace Ble.Uuid;
 
 /// <summary>
 /// TODO Update periodically
 ///
 /// State: 05.05.2022
 /// </summary>
-public enum CompanyId : ushort
+public enum CompanyUuid : ushort
 {
     // ReSharper disable IdentifierTypo
     EricssonTechnologyLicensing = 0x0000,

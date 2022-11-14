@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Connection;
+using Ble.Config;
+using Ble.Gatt;
+using Ble.Uuid;
 
 namespace Ble.Gap;
 
-public interface IAdvertisement
+public interface IGapAdvertisement
 {
     DateTimeOffset Timestamp { get; }
     AdvertisementType Type { get; }
@@ -24,10 +25,10 @@ public interface IAdvertisement
 
     string Name { get; }
     IReadOnlyList<(SectionType, byte[])> DataSections { get; }
-    IReadOnlyDictionary<CompanyId, byte[]> ManufacturerDatas { get; }
+    IReadOnlyDictionary<CompanyUuid, byte[]> ManufacturerDatas { get; }
     AdvertisementFlags AdvertisementFlags { get; }
-    Guid[] ServiceUuids { get; }
+    Guid[] Services { get; }
 
-    Task<IConnection?> ConnectAsync(Peripheral peripheral, CancellationToken cancellationToken = default);
-    Task<IConnection?> ConnectAsync(CancellationToken cancellationToken = default);
+    Task<IConnectedPeripheral?> ConnectAsync(Configuration configuration, CancellationToken cancellationToken = default);
+    Task<IConnectedPeripheral?> ConnectAsync(CancellationToken cancellationToken = default);
 }

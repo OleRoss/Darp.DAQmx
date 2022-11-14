@@ -1,6 +1,8 @@
-﻿namespace Ble.Utils;
+﻿namespace Ble.Uuid;
 
-public enum DefaultUuid
+// https://btprodspecificationrefs.blob.core.windows.net/assigned-values/16-bit%20UUID%20Numbers%20Document.pdf
+
+public enum GattUuid : ushort
 {
     /// GATT Declarations
     PrimaryService = 0x2800,
@@ -41,5 +43,5 @@ public enum DefaultUuid
     /// GATT Descriptor
     TimeTriggerSetting = 0x290E,
     /// GATT Descriptor
-    CompleteBrEdrTransportBlockData = 0x290F,
+    CompleteBrEdrTransportBlockData = 0x290F
 }

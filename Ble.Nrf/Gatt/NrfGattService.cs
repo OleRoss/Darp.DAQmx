@@ -5,10 +5,10 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Connection;
+using Ble.Config;
+using Ble.Gatt;
 using Ble.Nrf.Nrf;
-using Ble.Utils;
+using Ble.Uuid;
 using Microsoft.Extensions.Logging;
 using NrfBleDriver;
 
@@ -17,17 +17,17 @@ namespace Ble.Nrf.Gatt;
 public class NrfGattService : IConnectedGattService
 {
     private readonly NrfAdapter _adapter;
-    private readonly NrfConnection _connection;
+    private readonly NrfConnectedPeripheral _connectedPeripheral;
     private readonly BleGattcServiceT _gattcService;
     private readonly ILogger? _logger;
 
     private readonly IDictionary<Guid, IConnectedGattCharacteristic>
         _characteristicDictionary = new Dictionary<Guid, IConnectedGattCharacteristic>();
 
-    public NrfGattService(NrfAdapter adapter, NrfConnection connection, BleGattcServiceT gattcService, ILogger? logger)
+    public NrfGattService(NrfAdapter adapter, NrfConnectedPeripheral connectedPeripheral, BleGattcServiceT gattcService, ILogger? logger)
     {
         _adapter = adapter;
-        _connection = connection;
+        _connectedPeripheral = connectedPeripheral;
         _gattcService = gattcService;
         _logger = logger;
         Uuid = BitConverter.GetBytes(gattcService.Uuid.Uuid).ToBleGuid();
@@ -42,7 +42,7 @@ public class NrfGattService : IConnectedGattService
 
     public bool ContainsCharacteristic(Guid guid) => _characteristicDictionary.ContainsKey(guid);
 
-    public bool ContainsCharacteristic(DefaultUuid guid) => _characteristicDictionary.Keys
+    public bool ContainsCharacteristic(GattUuid guid) => _characteristicDictionary.Keys
         .Any(x => x.ToDefaultUuid() == guid);
 
     public ConnectedGattCharacteristic<TCharacteristic> Select<TCharacteristic>(TCharacteristic characteristic)
@@ -69,7 +69,7 @@ public class NrfGattService : IConnectedGattService
         {
             if (charHandleRange.StartHandle == charHandleRange.EndHandle)
                 break;
-            if (ble_gattc.SdBleGattcCharacteristicsDiscover(_adapter.AdapterHandle, _connection.ConnectionHandle, charHandleRange)
+            if (ble_gattc.SdBleGattcCharacteristicsDiscover(_adapter.AdapterHandle, _connectedPeripheral.ConnectionHandle, charHandleRange)
                 .IsFailed(_logger, $"Characteristic discovery failed from {charHandleRange.StartHandle} to {charHandleRange.EndHandle}"))
             {
                 return false;
@@ -116,7 +116,7 @@ public class NrfGattService : IConnectedGattService
             };
             while (true)
             {
-                if (ble_gattc.SdBleGattcDescriptorsDiscover(_adapter.AdapterHandle, _connection.ConnectionHandle, descHandleRange)
+                if (ble_gattc.SdBleGattcDescriptorsDiscover(_adapter.AdapterHandle, _connectedPeripheral.ConnectionHandle, descHandleRange)
                     .IsFailed(_logger, $"Descriptor discovery failed from {descHandleRange.StartHandle} to {descHandleRange.EndHandle}"))
                 {
                     return false;
@@ -142,7 +142,7 @@ public class NrfGattService : IConnectedGattService
                     break;
                 foreach (BleGattcDescT gattcDesc in response.Descs)
                 {
-                    characteristic.AddDescriptor(new NrfGattDescriptor(_adapter, _connection, gattcDesc, _logger));
+                    characteristic.AddDescriptor(new NrfGattDescriptor(_adapter, _connectedPeripheral, gattcDesc, _logger));
                 }
                 if (response.Descs[^1].Handle == characteristic.EndHandle)
                     break;

@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using Ble.Utils;
 
-namespace Ble.Utils;
+namespace Ble.Uuid;
 
 public static class GuidExtensions
 {
-    public static Guid ToBleGuid(this byte[] bytes) => new ReadOnlySpan<byte>(bytes).ToBleGuid();
-
     public static Guid ToBleGuid(this ReadOnlySpan<byte> bytes)
     {
         if (bytes.Length == 16)
@@ -29,9 +29,12 @@ public static class GuidExtensions
         return new Guid(baseUuidBytes);
     }
 
+    public static Guid ToBleGuid(this byte[] bytes) => new ReadOnlySpan<byte>(bytes).ToBleGuid();
+
     public static Guid ToBleGuid(this string bluetoothUuid)
     {
-        Span<byte> bytes = bluetoothUuid.ToByteArray();
+        Span<byte> bytes = stackalloc byte[bluetoothUuid.Length >> 1];
+        bluetoothUuid.ToByteArray(bytes);
         if (bytes.Length % 2 != 0)
             throw new ArgumentOutOfRangeException(nameof(bluetoothUuid), $"even number of bytes necessary, got {bytes.Length}");
         for (var i = 0; i < bytes.Length / 2; i++)
@@ -39,8 +42,25 @@ public static class GuidExtensions
         return ToBleGuid(bytes);
     }
 
-    public static Guid ToBleGuid(this DefaultUuid guid)
+    public static Guid ToBleGuid(this GattUuid guid)
     {
-        return BitConverter.GetBytes((ushort)guid).ToBleGuid();
+        ReadOnlySpan<byte> bytes = stackalloc byte[] { (byte)guid, (byte)((ushort)guid >> 8)};
+        return bytes.ToBleGuid();
     }
+    public static bool Contains(this IEnumerable<Guid> guids, ushort uuid)
+    {
+        foreach (Guid guid in guids)
+        {
+            unsafe
+            {
+                var pGuid = (ushort*)&guid;
+                if (*pGuid == uuid)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public static bool Contains(this IEnumerable<Guid> guids, GattUuid uuid) => guids.Contains((ushort)uuid);
+
 }

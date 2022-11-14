@@ -1,7 +1,7 @@
-﻿using Ble.Connection;
-using Ble.Utils;
+﻿using Ble.Gatt;
+using Ble.Uuid;
 
-namespace Ble.Configuration;
+namespace Ble.Config;
 
 public interface IGattProperty
 {
@@ -15,7 +15,7 @@ public sealed class WriteProperty : IGattProperty
 
     public bool AreDescriptorsValid(IConnectedGattCharacteristic connChar)
     {
-        return connChar.ContainsDescriptor(DefaultUuid.Characteristic);
+        return connChar.ContainsDescriptor(connChar.Uuid);
     }
 }
 
@@ -24,6 +24,6 @@ public sealed class NotifyProperty : IGattProperty
     public Property Property => Property.Notify;
     public bool AreDescriptorsValid(IConnectedGattCharacteristic connChar)
     {
-        return connChar.ContainsDescriptor(DefaultUuid.ClientCharacteristicConfiguration);
+        return connChar.ContainsDescriptor(GattUuid.ClientCharacteristicConfiguration);
     }
 }

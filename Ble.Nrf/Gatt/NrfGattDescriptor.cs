@@ -3,9 +3,9 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Connection;
+using Ble.Gatt;
 using Ble.Nrf.Nrf;
-using Ble.Utils;
+using Ble.Uuid;
 using Microsoft.Extensions.Logging;
 using NrfBleDriver;
 
@@ -14,14 +14,14 @@ namespace Ble.Nrf.Gatt;
 public class NrfGattDescriptor : IConnectedGattDescriptor
 {
     private readonly NrfAdapter _adapter;
-    private readonly NrfConnection _connection;
+    private readonly NrfConnectedPeripheral _connectedPeripheral;
     private readonly BleGattcDescT _gattcDesc;
     private readonly ILogger? _logger;
 
-    public NrfGattDescriptor(NrfAdapter adapter, NrfConnection connection, BleGattcDescT gattcDesc, ILogger? logger)
+    public NrfGattDescriptor(NrfAdapter adapter, NrfConnectedPeripheral connectedPeripheral, BleGattcDescT gattcDesc, ILogger? logger)
     {
         _adapter = adapter;
-        _connection = connection;
+        _connectedPeripheral = connectedPeripheral;
         _gattcDesc = gattcDesc;
         _logger = logger;
         Uuid = BitConverter.GetBytes(gattcDesc.Uuid.Uuid).ToBleGuid();
@@ -45,7 +45,7 @@ public class NrfGattDescriptor : IConnectedGattDescriptor
                     Len = (ushort)bytes.Length,
                     Offset = 0,
                 };
-                ble_gattc.SdBleGattcWrite(_adapter.AdapterHandle, _connection.ConnectionHandle, writeParams);
+                ble_gattc.SdBleGattcWrite(_adapter.AdapterHandle, _connectedPeripheral.ConnectionHandle, writeParams);
             }
         }
         BleGattcEvtT? result = await _adapter.WriteResponses.FirstOrDefaultAsync().ToTask(token);
@@ -63,7 +63,7 @@ public class NrfGattDescriptor : IConnectedGattDescriptor
 
     public async Task<byte[]> ReadAsync(CancellationToken token)
     {
-        ble_gattc.SdBleGattcRead(_adapter.AdapterHandle, _connection.ConnectionHandle, _gattcDesc.Handle, 0);
+        ble_gattc.SdBleGattcRead(_adapter.AdapterHandle, _connectedPeripheral.ConnectionHandle, _gattcDesc.Handle, 0);
         
         BleGattcEvtT? result = await _adapter.ReadResponses.FirstOrDefaultAsync().ToTask(token);
         if (result is null)

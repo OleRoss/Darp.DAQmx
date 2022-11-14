@@ -18,6 +18,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ble.Nrf", "Ble.Nrf\Ble.Nrf.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BleTests", "BleTests\BleTests.csproj", "{55A207BC-62AB-44BA-8FE9-E31F2E08F702}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ble.Tests", "Ble.Tests\Ble.Tests.csproj", "{C81CE197-498D-4C49-800A-CD6163583A7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ble.Reactive", "Ble.Reactive\Ble.Reactive.csproj", "{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +64,13 @@ Global
 		{55A207BC-62AB-44BA-8FE9-E31F2E08F702}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55A207BC-62AB-44BA-8FE9-E31F2E08F702}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55A207BC-62AB-44BA-8FE9-E31F2E08F702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C81CE197-498D-4C49-800A-CD6163583A7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81CE197-498D-4C49-800A-CD6163583A7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81CE197-498D-4C49-800A-CD6163583A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81CE197-498D-4C49-800A-CD6163583A7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F617F73-0E41-4B3D-90E7-76FEDB4F7BCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

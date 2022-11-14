@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Connection;
+using Ble.Config;
+using Ble.Gatt;
+using Ble.Uuid;
 
 namespace Ble.Gap;
 
-public class Advertisement<TData> : IAdvertisement
+public class GapAdvertisement<TData> : IGapAdvertisement
     where TData : struct
 {
-    private readonly IAdvertisement _advertisement;
+    private readonly IGapAdvertisement _advertisement;
 
-    public Advertisement(IAdvertisement advertisement, TData data)
+    public GapAdvertisement(IGapAdvertisement advertisement, TData data)
     {
         _advertisement = advertisement;
         ManufacturerData = data;
@@ -32,13 +33,13 @@ public class Advertisement<TData> : IAdvertisement
     public short? TransmitPowerLevel => _advertisement.TransmitPowerLevel;
     public string Name => _advertisement.Name;
     public IReadOnlyList<(SectionType, byte[])> DataSections => _advertisement.DataSections;
-    IReadOnlyDictionary<CompanyId, byte[]> IAdvertisement.ManufacturerDatas => _advertisement.ManufacturerDatas;
+    IReadOnlyDictionary<CompanyUuid, byte[]> IGapAdvertisement.ManufacturerDatas => _advertisement.ManufacturerDatas;
     public TData ManufacturerData { get; }
     public AdvertisementFlags AdvertisementFlags => _advertisement.AdvertisementFlags;
-    public Guid[] ServiceUuids => _advertisement.ServiceUuids;
+    public Guid[] Services => _advertisement.Services;
 
-    public Task<IConnection?> ConnectAsync(Peripheral peripheral, CancellationToken cancellationToken) =>
-        _advertisement.ConnectAsync(peripheral, cancellationToken);
-    public Task<IConnection?> ConnectAsync(CancellationToken cancellationToken = default) =>
+    public Task<IConnectedPeripheral?> ConnectAsync(Configuration configuration, CancellationToken cancellationToken) =>
+        _advertisement.ConnectAsync(configuration, cancellationToken);
+    public Task<IConnectedPeripheral?> ConnectAsync(CancellationToken cancellationToken = default) =>
         _advertisement.ConnectAsync(cancellationToken);
 }

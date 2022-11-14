@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Utils;
+using Ble.Config;
+using Ble.Uuid;
 
-namespace Ble.Connection;
+namespace Ble.Gatt;
 
 public interface IConnectedGattCharacteristic
 {
     Guid Uuid { get; }
     ICollection<IConnectedGattDescriptor> Descriptors { get; }
     IConnectedGattDescriptor this[Guid guid] { get; }
-    IConnectedGattDescriptor this[DefaultUuid guid] { get; }
+    IConnectedGattDescriptor this[GattUuid guid] { get; }
     bool ContainsDescriptor(Guid guid);
-    bool ContainsDescriptor(DefaultUuid guid);
+    bool ContainsDescriptor(GattUuid guid);
     Property Property { get; }
     public Task<bool> WriteAsync(byte[] bytes, CancellationToken cancellationToken);
     Task<IObservable<byte[]>> EnableNotificationsAsync(CancellationToken cancellationToken);

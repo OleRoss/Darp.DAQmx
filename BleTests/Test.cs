@@ -1,29 +1,29 @@
-﻿using System;
-using System.Linq;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
-using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Connection;
+using Ble;
+using Ble.Config;
 using Ble.Gap;
+using Ble.Gatt;
 
-namespace Ble;
+namespace BleTests;
 
 public static class Test
 {
     public static async Task ScanAsync()
     {
         IBleAdapter adapter = null!;
-        await foreach (IAdvertisement a in adapter.Observe(ScanningMode.None, 1000, 1000).ToAsyncEnumerable())
+        await foreach (IGapAdvertisement a in adapter
+                           .Scan(ScanningMode.None, 1000, 1000)
+                           .ToAsyncEnumerable())
         {
             
         }
 
-        IAdvertisement adv = await adapter.Observe(ScanningMode.None, 1000, 1000)
+        IGapAdvertisement adv = await adapter.Scan(ScanningMode.None, 1000, 1000)
             .FirstAsync()
             .ToTask();
 
-        IConnection? connection = await adv.ConnectAsync()!;
+        IConnectedPeripheral? connection = await adv.ConnectAsync()!;
         foreach (IConnectedGattService connectedGattService in connection!.Services)
         {
             Console.WriteLine(connectedGattService);
@@ -42,15 +42,15 @@ public static class Test
     {
         IBleAdapter adapter = null!;
 
-        var notifyCharacteristic = new GattCharacteristic<NotifyProperty>("1600");
-        var writeCharacteristic = new GattCharacteristic<WriteProperty>("1601");
-        GattService service = new GattService("fd4c")
+        var notifyCharacteristic = new Characteristic<NotifyProperty>("1600");
+        var writeCharacteristic = new Characteristic<WriteProperty>("1601");
+        Service service = new Service("fd4c")
             .Characteristics.Add(notifyCharacteristic)
             .Characteristics.Add(writeCharacteristic);
-        Peripheral peripheral = new Peripheral()
+        Configuration configuration = new Configuration()
             .Services.Add(service);
 
-        IConnection? connection = await adapter.ConnectAsync(1, peripheral);
+        IConnectedPeripheral? connection = await adapter.ConnectAsync(1, configuration);
         IConnectedGattService connectedService = connection!.Select(service);
         IObservable<byte[]> notifyObservable = await connectedService.Select(notifyCharacteristic)
             .EnableNotificationsAsync();

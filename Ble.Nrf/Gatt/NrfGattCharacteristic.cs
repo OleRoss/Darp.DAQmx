@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Connection;
+using Ble.Config;
+using Ble.Gatt;
 using Ble.Nrf.Nrf;
-using Ble.Utils;
+using Ble.Uuid;
 using Microsoft.Extensions.Logging;
 using NrfBleDriver;
 
@@ -58,7 +58,7 @@ public class NrfGattCharacteristic : IConnectedGattCharacteristic
 
     public IConnectedGattDescriptor this[Guid guid] => _descriptorDictionary[guid];
 
-    public IConnectedGattDescriptor this[DefaultUuid guid]
+    public IConnectedGattDescriptor this[GattUuid guid]
     {
         get
         {
@@ -73,7 +73,7 @@ public class NrfGattCharacteristic : IConnectedGattCharacteristic
 
     public bool ContainsDescriptor(Guid guid) => _descriptorDictionary.ContainsKey(guid);
 
-    public bool ContainsDescriptor(DefaultUuid guid) => _descriptorDictionary.Keys.Any(x => x.ToDefaultUuid() == guid);
+    public bool ContainsDescriptor(GattUuid guid) => _descriptorDictionary.Keys.Any(x => x.ToDefaultUuid() == guid);
 
     public Property Property {get;}
     public async Task<bool> WriteAsync(byte[] bytes, CancellationToken cancellationToken)
@@ -83,7 +83,7 @@ public class NrfGattCharacteristic : IConnectedGattCharacteristic
 
     public async Task<IObservable<byte[]>> EnableNotificationsAsync(CancellationToken cancellationToken)
     {
-        if (!await this[DefaultUuid.ClientCharacteristicConfiguration]
+        if (!await this[GattUuid.ClientCharacteristicConfiguration]
                 .WriteAsync(new byte[] { 1, 0 }, cancellationToken))
         {
             return Observable.Empty<byte[]>();

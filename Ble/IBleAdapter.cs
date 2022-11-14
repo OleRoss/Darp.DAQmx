@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Connection;
+using Ble.Config;
 using Ble.Gap;
+using Ble.Gatt;
 
 namespace Ble;
 
 public interface IBleAdapter : IDisposable
 {
-    Task<IConnection?> ConnectAsync(ulong bluetoothId, Peripheral? peripheral, CancellationToken cancellationToken = default);
+    Task<IConnectedPeripheral?> ConnectAsync(ulong bluetoothId, Configuration? peripheral, CancellationToken cancellationToken = default);
 
-    Task<IConnection?> ConnectAsync(ulong bluetoothId, CancellationToken cancellationToken) =>
+    Task<IConnectedPeripheral?> ConnectAsync(ulong bluetoothId, CancellationToken cancellationToken) =>
         ConnectAsync(bluetoothId, null, cancellationToken);
-    IObservable<IAdvertisement> Observe(ScanningMode mode,
-        float scanIntervalMs,
-        float scanWindowMs,
-        CancellationToken cancellationToken = default);
     void Clear();
+    IAdvertisementScanner Scanner();
 }

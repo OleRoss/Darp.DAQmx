@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <LangVersion>10</LangVersion>
+        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>11</LangVersion>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -13,7 +13,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CppSharp.Runtime" Version="1.0.3" />    </ItemGroup>
+        <PackageReference Include="CppSharp.Runtime" Version="1.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+        <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+        <PackageReference Include="System.Reactive" Version="5.0.0" />
+        <PackageReference Include="System.Reactive.Linq" Version="5.0.0" />
+    </ItemGroup>
     <ItemGroup>
       <ClCompile Include="Nrf\NrfBleDriver-symbols.cpp" />
     </ItemGroup>

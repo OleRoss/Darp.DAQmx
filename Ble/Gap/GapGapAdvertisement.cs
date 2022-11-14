@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ble.Configuration;
-using Ble.Connection;
+using Ble.Config;
+using Ble.Gatt;
+using Ble.Uuid;
 
 namespace Ble.Gap;
 
-public record Advertisement(IBleAdapter Adapter,
+public record GapGapAdvertisement(IBleAdapter Adapter,
     DateTimeOffset Timestamp,
     AdvertisementType Type,
     ulong DeviceAddress,
@@ -21,19 +22,19 @@ public record Advertisement(IBleAdapter Adapter,
     short? TransmitPowerLevel,
     string Name,
     IReadOnlyList<(SectionType, byte[])> DataSections,
-    IReadOnlyDictionary<CompanyId, byte[]> ManufacturerDatas,
+    IReadOnlyDictionary<CompanyUuid, byte[]> ManufacturerDatas,
     AdvertisementFlags AdvertisementFlags,
-    Guid[] ServiceUuids) : IAdvertisement
+    Guid[] Services) : IGapAdvertisement
 {
     internal IBleAdapter Adapter { get; init; } = Adapter;
     public string DeviceAddressString => $"{DeviceAddress:X12}";
 
-    public async Task<IConnection?> ConnectAsync(Peripheral peripheral, CancellationToken cancellationToken = default)
+    public async Task<IConnectedPeripheral?> ConnectAsync(Configuration configuration, CancellationToken cancellationToken = default)
     {
-        return await Adapter.ConnectAsync(DeviceAddress, peripheral, cancellationToken);
+        return await Adapter.ConnectAsync(DeviceAddress, configuration, cancellationToken);
     }
 
-    public async Task<IConnection?> ConnectAsync(CancellationToken cancellationToken = default)
+    public async Task<IConnectedPeripheral?> ConnectAsync(CancellationToken cancellationToken = default)
     {
         return await Adapter.ConnectAsync(DeviceAddress, cancellationToken);
     }
